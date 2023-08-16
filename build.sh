@@ -14,7 +14,7 @@ fi
 # Check if CMakeCache.txt already exists.
 if [ ! -f CMakeCache.txt ]; then
     cmake ..
-    cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE ..
 fi
 
+cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE ..
 cmake --build .
