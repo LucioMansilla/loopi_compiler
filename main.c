@@ -1,10 +1,8 @@
 #include <stdio.h>
 
 int main(void) {
-  printf(".");
-
-  int a = 10;
-
-  printf("%d", a);
-  return 0;
+    int var = 10;
+    printf(".");
+    printf("%d", var);
+    return 0;
 }
