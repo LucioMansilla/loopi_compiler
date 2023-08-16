@@ -1,1 +1,1 @@
-/usr/bin/cc CMakeFiles/Compiler.dir/main.c.o -o Compiler 
+/usr/bin/cc -g CMakeFiles/Compiler.dir/main.c.o -o Compiler 

@@ -5,7 +5,7 @@
             "name": "Debug",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/Tutorial",
+            "program": "${workspaceFolder}/build/Compiler",
             "args": ["64"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
