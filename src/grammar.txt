@@ -1,0 +1,33 @@
+GR: 
+
+P → S;
+
+S → C ; S | C      
+
+C → D | A | R    
+
+D → int ID = IV | bool ID = BV
+
+A → ID = E | ID = BV
+
+R → return E
+
+E → IV | ID
+     | E + E
+     | E * E
+     | E - E
+     | ( E )
+
+IV → 0IV | .. | 9IV | lambda
+ID → [A-Z | a-z]ID | lambda
+BV → true| false
+
+
+
+---
+ER:
+
+ID -> [A-Z | a-z]+
+IV -> [0-9]+
+BV -> true| false
+OP -> + | - | * | /
