@@ -6,21 +6,17 @@ S → C ; S | C
 
 C → D | A | R    
 
-D → int ID = IV | bool ID = BV
+D → int ID = nro | bool ID = c_bool 
 
-A → ID = E | ID = BV
+A → ID = E 
 
 R → return E
 
-E → IV | ID
+E → nro | c_bool | ID
      | E + E
      | E * E
      | E - E
      | ( E )
-
-IV → 0IV | .. | 9IV | lambda
-ID → [A-Z | a-z]ID | lambda
-BV → true| false
 
 
 
@@ -31,3 +27,19 @@ ID -> [A-Z | a-z]+
 IV -> [0-9]+
 BV -> true| false
 OP -> + | - | * | /
+
+
+
+
+P → S;
+
+S → C ; S | C      
+
+C → int ID = E | bool ID = E | ID = E | return E
+
+E → nro | c_bool | ID
+     | E + E
+     | E * E
+     | ( E )
+
+
