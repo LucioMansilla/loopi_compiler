@@ -12,7 +12,8 @@
 %option yylineno
 
 letra [a-zA-Z]      
-digito [0-9]   
+digito [0-9]
+
 
 
 %%

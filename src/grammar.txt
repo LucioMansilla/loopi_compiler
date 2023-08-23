@@ -31,15 +31,20 @@ OP -> + | - | * | /
 
 
 
-P → S;
+P → D;S;
+
+D → TYPE ID = E ; D | TYPE ID = E 
 
 S → C ; S | C      
 
-C → int ID = E | bool ID = E | ID = E | return E
+C -> ID = E | return E 
 
 E → nro | c_bool | ID
      | E + E
      | E * E
      | ( E )
+
+TYPE -> int | bool
+
 
 

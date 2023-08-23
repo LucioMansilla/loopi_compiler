@@ -8,7 +8,8 @@
 %token INT
 %token ID
 %token TMENOS
-
+%token INTEGER
+%token BOOL
 %type expr
 %type VALOR
     
@@ -30,11 +31,11 @@ expr: VALOR
 
     | '(' expr ')'      
     ;
+type: INTEGER | BOOL ;  
 
 
 VALOR : INT              
        ;
  
 %%
-
 
