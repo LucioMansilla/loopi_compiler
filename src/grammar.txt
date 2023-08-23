@@ -1,25 +1,3 @@
-GR: 
-
-P → S;
-
-S → C ; S | C      
-
-C → D | A | R    
-
-D → int ID = nro | bool ID = c_bool 
-
-A → ID = E 
-
-R → return E
-
-E → nro | c_bool | ID
-     | E + E
-     | E * E
-     | E - E
-     | ( E )
-
-
-
 ---
 ER:
 
@@ -45,6 +23,7 @@ E → nro | c_bool | ID
      | ( E )
 
 TYPE -> int | bool
+
 
 
 

@@ -13,14 +13,25 @@
 
 letra [a-zA-Z]      
 digito [0-9]
-
-
+v_bool true|false
 
 %%
 
 {digito}+                     { 
                                 printf("INT : %d\n",atoi(yytext)); 
                                 return INT;}
+
+"int"                          {  printf("%s\n",yytext);
+                                  return TINT;}
+
+{v_bool}                       {  printf("%s\n",yytext);
+                                  return BOOL;}
+								  
+"bool"                         {  printf("%s\n",yytext);
+                                  return TBOOL;}
+
+"return"                  		 {  printf("%s\n",yytext);
+                                  return RETURN;}
 
 {letra}({letra}|{digito})*    { 
                                 printf("ID : %s\n",yytext);
@@ -29,10 +40,14 @@ digito [0-9]
 "-"                       {  printf("%s\n",yytext);
                                   return TMENOS;}    
 
-[+*;()]                   {  printf("%s\n",yytext);
+[+*;()=]                   {  printf("%s\n",yytext);
                                   return *yytext;}
 
 .|\n                          ; /* ignore all the rest */
+
+
+
+
 
 %%
 

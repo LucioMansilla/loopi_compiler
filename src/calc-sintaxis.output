@@ -1,0 +1,398 @@
+Terminales no usados en la gramática
+
+    TMENOS
+
+
+La regla es inútil debido a los conflictos
+
+    3 decl: type ID '=' expr
+
+    5 sentence_list: sentence
+
+
+Estado 12 conflictos: 1 desplazamiento/reducción
+Estado 22 conflictos: 1 desplazamiento/reducción
+
+
+Gramática
+
+    0 $accept: prog $end
+
+    1 prog: decl ';' sentence_list ';'
+
+    2 decl: type ID '=' expr ';' decl
+    3     | type ID '=' expr
+
+    4 sentence_list: sentence ';' sentence_list
+    5              | sentence
+
+    6 sentence: ID '=' expr
+    7         | RETURN expr
+
+    8 expr: valor
+    9     | expr '+' expr
+   10     | expr '*' expr
+   11     | '(' expr ')'
+
+   12 type: TINT
+   13     | TBOOL
+
+   14 valor: INT
+   15      | BOOL
+
+
+Terminales con las reglas donde aparecen
+
+    $end (0) 0
+    '(' (40) 11
+    ')' (41) 11
+    '*' (42) 10
+    '+' (43) 9
+    ';' (59) 1 2 4
+    '=' (61) 2 3 6
+    error (256)
+    INT (258) 14
+    ID (259) 2 3 6
+    BOOL (260) 15
+    TMENOS (261)
+    TINT (262) 12
+    TBOOL (263) 13
+    RETURN (264) 7
+
+
+No terminales con las reglas donde aparecen
+
+    $accept (16)
+        on left: 0
+    prog (17)
+        on left: 1
+        on right: 0
+    decl (18)
+        on left: 2 3
+        on right: 1 2
+    sentence_list (19)
+        on left: 4 5
+        on right: 1 4
+    sentence (20)
+        on left: 6 7
+        on right: 4 5
+    expr (21)
+        on left: 8 9 10 11
+        on right: 2 3 6 7 9 10 11
+    type (22)
+        on left: 12 13
+        on right: 2 3
+    valor (23)
+        on left: 14 15
+        on right: 8
+
+
+Estado 0
+
+    0 $accept: • prog $end
+
+    TINT   desplazar e ir al estado 1
+    TBOOL  desplazar e ir al estado 2
+
+    prog  ir al estado 3
+    decl  ir al estado 4
+    type  ir al estado 5
+
+
+Estado 1
+
+   12 type: TINT •
+
+    $default  reduce usando la regla 12 (type)
+
+
+Estado 2
+
+   13 type: TBOOL •
+
+    $default  reduce usando la regla 13 (type)
+
+
+Estado 3
+
+    0 $accept: prog • $end
+
+    $end  desplazar e ir al estado 6
+
+
+Estado 4
+
+    1 prog: decl • ';' sentence_list ';'
+
+    ';'  desplazar e ir al estado 7
+
+
+Estado 5
+
+    2 decl: type • ID '=' expr ';' decl
+    3     | type • ID '=' expr
+
+    ID  desplazar e ir al estado 8
+
+
+Estado 6
+
+    0 $accept: prog $end •
+
+    $default  aceptar
+
+
+Estado 7
+
+    1 prog: decl ';' • sentence_list ';'
+
+    ID      desplazar e ir al estado 9
+    RETURN  desplazar e ir al estado 10
+
+    sentence_list  ir al estado 11
+    sentence       ir al estado 12
+
+
+Estado 8
+
+    2 decl: type ID • '=' expr ';' decl
+    3     | type ID • '=' expr
+
+    '='  desplazar e ir al estado 13
+
+
+Estado 9
+
+    6 sentence: ID • '=' expr
+
+    '='  desplazar e ir al estado 14
+
+
+Estado 10
+
+    7 sentence: RETURN • expr
+
+    INT   desplazar e ir al estado 15
+    BOOL  desplazar e ir al estado 16
+    '('   desplazar e ir al estado 17
+
+    expr   ir al estado 18
+    valor  ir al estado 19
+
+
+Estado 11
+
+    1 prog: decl ';' sentence_list • ';'
+
+    ';'  desplazar e ir al estado 20
+
+
+Estado 12
+
+    4 sentence_list: sentence • ';' sentence_list
+    5              | sentence •
+
+    ';'  desplazar e ir al estado 21
+
+    ';'  [reduce usando la regla 5 (sentence_list)]
+
+
+Estado 13
+
+    2 decl: type ID '=' • expr ';' decl
+    3     | type ID '=' • expr
+
+    INT   desplazar e ir al estado 15
+    BOOL  desplazar e ir al estado 16
+    '('   desplazar e ir al estado 17
+
+    expr   ir al estado 22
+    valor  ir al estado 19
+
+
+Estado 14
+
+    6 sentence: ID '=' • expr
+
+    INT   desplazar e ir al estado 15
+    BOOL  desplazar e ir al estado 16
+    '('   desplazar e ir al estado 17
+
+    expr   ir al estado 23
+    valor  ir al estado 19
+
+
+Estado 15
+
+   14 valor: INT •
+
+    $default  reduce usando la regla 14 (valor)
+
+
+Estado 16
+
+   15 valor: BOOL •
+
+    $default  reduce usando la regla 15 (valor)
+
+
+Estado 17
+
+   11 expr: '(' • expr ')'
+
+    INT   desplazar e ir al estado 15
+    BOOL  desplazar e ir al estado 16
+    '('   desplazar e ir al estado 17
+
+    expr   ir al estado 24
+    valor  ir al estado 19
+
+
+Estado 18
+
+    7 sentence: RETURN expr •
+    9 expr: expr • '+' expr
+   10     | expr • '*' expr
+
+    '+'  desplazar e ir al estado 25
+    '*'  desplazar e ir al estado 26
+
+    $default  reduce usando la regla 7 (sentence)
+
+
+Estado 19
+
+    8 expr: valor •
+
+    $default  reduce usando la regla 8 (expr)
+
+
+Estado 20
+
+    1 prog: decl ';' sentence_list ';' •
+
+    $default  reduce usando la regla 1 (prog)
+
+
+Estado 21
+
+    4 sentence_list: sentence ';' • sentence_list
+
+    ID      desplazar e ir al estado 9
+    RETURN  desplazar e ir al estado 10
+
+    sentence_list  ir al estado 27
+    sentence       ir al estado 12
+
+
+Estado 22
+
+    2 decl: type ID '=' expr • ';' decl
+    3     | type ID '=' expr •
+    9 expr: expr • '+' expr
+   10     | expr • '*' expr
+
+    '+'  desplazar e ir al estado 25
+    '*'  desplazar e ir al estado 26
+    ';'  desplazar e ir al estado 28
+
+    ';'  [reduce usando la regla 3 (decl)]
+
+
+Estado 23
+
+    6 sentence: ID '=' expr •
+    9 expr: expr • '+' expr
+   10     | expr • '*' expr
+
+    '+'  desplazar e ir al estado 25
+    '*'  desplazar e ir al estado 26
+
+    $default  reduce usando la regla 6 (sentence)
+
+
+Estado 24
+
+    9 expr: expr • '+' expr
+   10     | expr • '*' expr
+   11     | '(' expr • ')'
+
+    '+'  desplazar e ir al estado 25
+    '*'  desplazar e ir al estado 26
+    ')'  desplazar e ir al estado 29
+
+
+Estado 25
+
+    9 expr: expr '+' • expr
+
+    INT   desplazar e ir al estado 15
+    BOOL  desplazar e ir al estado 16
+    '('   desplazar e ir al estado 17
+
+    expr   ir al estado 30
+    valor  ir al estado 19
+
+
+Estado 26
+
+   10 expr: expr '*' • expr
+
+    INT   desplazar e ir al estado 15
+    BOOL  desplazar e ir al estado 16
+    '('   desplazar e ir al estado 17
+
+    expr   ir al estado 31
+    valor  ir al estado 19
+
+
+Estado 27
+
+    4 sentence_list: sentence ';' sentence_list •
+
+    $default  reduce usando la regla 4 (sentence_list)
+
+
+Estado 28
+
+    2 decl: type ID '=' expr ';' • decl
+
+    TINT   desplazar e ir al estado 1
+    TBOOL  desplazar e ir al estado 2
+
+    decl  ir al estado 32
+    type  ir al estado 5
+
+
+Estado 29
+
+   11 expr: '(' expr ')' •
+
+    $default  reduce usando la regla 11 (expr)
+
+
+Estado 30
+
+    9 expr: expr • '+' expr
+    9     | expr '+' expr •
+   10     | expr • '*' expr
+
+    '*'  desplazar e ir al estado 26
+
+    $default  reduce usando la regla 9 (expr)
+
+
+Estado 31
+
+    9 expr: expr • '+' expr
+   10     | expr • '*' expr
+   10     | expr '*' expr •
+
+    $default  reduce usando la regla 10 (expr)
+
+
+Estado 32
+
+    2 decl: type ID '=' expr ';' decl •
+
+    $default  reduce usando la regla 2 (decl)
