@@ -19,23 +19,23 @@
  
 %%
  
-prog: decl sentence_list  { printf("No hay errores \n"); } 
+prog: decl sentence_list  { return 0; }
     ;
     
-decl: type ID '=' expr ';' decl 
-     | type ID '=' expr ';' { printf("Declaracion correcta \n"); }
+decl: type ID '=' expr ';' decl  
+     | type ID '=' expr ';' 
     ;
 
 sentence_list: sentence  sentence_list | sentence { printf("Sentencia correcta \n"); }
     ;
 
-sentence: ID '=' expr ';' | RETURN expr ';' { printf("Sentencia correcta \n"); }
+sentence: ID '=' expr ';' | RETURN expr ';' 
     ;
 
 expr: valor               
 
     | ID 
-    
+
     | expr '+' expr    
     
     | expr '*' expr

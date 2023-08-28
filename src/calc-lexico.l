@@ -16,6 +16,7 @@ digito [0-9]
 v_bool true|false
 
 %%
+"#"[^\n]*           { /* Ignora todo desde '#' hasta el final de la línea */ }
 
 {digito}+                     { 
                                 printf("INT : %d\n",atoi(yytext)); 
@@ -59,6 +60,7 @@ int main(int argc,char *argv[]){
     ++argv, --argc;
 
     if (argc > 0) {
+        // Concatenate the folder path "examples/" with the filename
         char filepath[256];
         snprintf(filepath, sizeof(filepath), "../examples/%s", argv[0]);
 
@@ -71,5 +73,13 @@ int main(int argc,char *argv[]){
         yyin = stdin;
     }
 
-    yyparse();
+    if (yyparse() == 0) {
+        printf("-> OK\n");
+        return 0;
+    } else {
+        printf("-> ERROR\n");
+        return 1;
+    }
+
 }
+

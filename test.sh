@@ -13,9 +13,9 @@ for example in ../examples/*.txt; do
 
     # Extract the expected output from the example file
     expected_output=$(grep '^# expected =' $example | cut -d'=' -f2 | tr -d ' ')
-    
+
     # Run the compiler on the example file and capture the output (ignoring stderr)
-    output=$(./a.out $(basename $example) 2>/dev/null)
+    output=$(./a.out $example 2>/dev/null)
 
     # Compare the compiler's output with the expected output
     if [[ "$output" != *"$expected_output"* ]]; then

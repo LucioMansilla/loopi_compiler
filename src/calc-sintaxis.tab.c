@@ -1090,30 +1090,18 @@ yyreduce:
     {
   case 2: /* prog: decl sentence_list  */
 #line 22 "calc-sintaxis.y"
-                          { printf("No hay errores \n"); }
+                          { return 0; }
 #line 1095 "calc-sintaxis.tab.c"
-    break;
-
-  case 4: /* decl: type ID '=' expr ';'  */
-#line 26 "calc-sintaxis.y"
-                            { printf("Declaracion correcta \n"); }
-#line 1101 "calc-sintaxis.tab.c"
     break;
 
   case 6: /* sentence_list: sentence  */
 #line 29 "calc-sintaxis.y"
                                                   { printf("Sentencia correcta \n"); }
-#line 1107 "calc-sintaxis.tab.c"
-    break;
-
-  case 8: /* sentence: RETURN expr ';'  */
-#line 32 "calc-sintaxis.y"
-                                            { printf("Sentencia correcta \n"); }
-#line 1113 "calc-sintaxis.tab.c"
+#line 1101 "calc-sintaxis.tab.c"
     break;
 
 
-#line 1117 "calc-sintaxis.tab.c"
+#line 1105 "calc-sintaxis.tab.c"
 
       default: break;
     }
