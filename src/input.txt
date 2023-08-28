@@ -1,1 +1,7 @@
-int x = 5; b = 3;
+int x = 1;
+int y = 2; 
+bool a = 2 + false;
+x = x + 3 * 2 * y; 
+return x; y = 4; x = 2; 
+return y * 2;
+x = 2;

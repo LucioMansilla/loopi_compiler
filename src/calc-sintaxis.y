@@ -34,6 +34,8 @@ sentence: ID '=' expr ';' | RETURN expr ';' { printf("Sentencia correcta \n"); }
 
 expr: valor               
 
+    | ID 
+    
     | expr '+' expr    
     
     | expr '*' expr

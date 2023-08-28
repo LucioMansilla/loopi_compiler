@@ -1866,13 +1866,22 @@ void yyerror(){
 }
 
 int main(int argc,char *argv[]){
-	++argv,--argc;
-	if (argc > 0)
-		yyin = fopen(argv[0],"r");
-	else
-		yyin = stdin;
+    ++argv, --argc;
 
-	yyparse();
+    if (argc > 0) {
+        // Concatenate the folder path "examples/" with the filename
+        char filepath[256];
+        snprintf(filepath, sizeof(filepath), "../examples/%s", argv[0]);
 
+        yyin = fopen(filepath, "r");
+        if (yyin == NULL) {
+            fprintf(stderr, "Could not open file: %s\\n", filepath);
+            exit(1);
+        }
+    } else {
+        yyin = stdin;
+    }
+
+    yyparse();
 }
 
