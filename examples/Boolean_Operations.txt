@@ -1,0 +1,5 @@
+
+bool x = true;
+bool y = false;
+x = x + y;
+return x;
