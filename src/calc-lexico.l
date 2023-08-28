@@ -59,19 +59,16 @@ void yyerror(){
 int main(int argc,char *argv[]){
     ++argv, --argc;
 
-    if (argc > 0) {
-        // Concatenate the folder path "examples/" with the filename
-        char filepath[256];
-        snprintf(filepath, sizeof(filepath), "../examples/%s", argv[0]);
-
-        yyin = fopen(filepath, "r");
-        if (yyin == NULL) {
-            fprintf(stderr, "Could not open file: %s\\n", filepath);
-            exit(1);
+        if (argc > 0) {
+            yyin = fopen(argv[0], "r");
+            if (yyin == NULL) {
+                fprintf(stderr, "Could not open file: %s\n", argv[0]);
+                exit(1);
+            }
+        } else {
+            yyin = stdin;
         }
-    } else {
-        yyin = stdin;
-    }
+
 
     if (yyparse() == 0) {
         printf("-> OK\n");

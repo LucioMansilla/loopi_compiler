@@ -1,10 +1,16 @@
 cmake_minimum_required(VERSION 3.10)
-add_executable(Compiler main.c)
-project(Compiler VERSION 1.0)
+project(Compiler)
 
-set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_STANDARD_REQUIRED True)
+set(CMAKE_C_STANDARD 11)
 
-#target_include_directories(Compiler PUBLIC
-#                            "${PROJECT_BINARY_DIR}"
-#                            )
+find_package(BISON)
+find_package(FLEX)
+
+FLEX_TARGET(MyScanner src/calc-lexico.l  ${CMAKE_CURRENT_BINARY_DIR}/lex.yy.c)
+BISON_TARGET(MyParser src/calc-sintaxis.y ${CMAKE_CURRENT_BINARY_DIR}/calc-sintaxis.tab.c)
+ADD_FLEX_BISON_DEPENDENCY(MyScanner MyParser)
+
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
+
+add_executable(Compiler ${BISON_MyParser_OUTPUTS} ${FLEX_MyScanner_OUTPUTS})
+target_link_libraries(Compiler ${FLEX_LIBRARIES} ${BISON_LIBRARIES})

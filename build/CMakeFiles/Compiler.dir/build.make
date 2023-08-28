@@ -69,31 +69,60 @@ include CMakeFiles/Compiler.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/Compiler.dir/flags.make
 
-CMakeFiles/Compiler.dir/main.c.o: CMakeFiles/Compiler.dir/flags.make
-CMakeFiles/Compiler.dir/main.c.o: /home/luciom/own_compiler/main.c
-CMakeFiles/Compiler.dir/main.c.o: CMakeFiles/Compiler.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/luciom/own_compiler/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/Compiler.dir/main.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/Compiler.dir/main.c.o -MF CMakeFiles/Compiler.dir/main.c.o.d -o CMakeFiles/Compiler.dir/main.c.o -c /home/luciom/own_compiler/main.c
+calc-sintaxis.tab.c: /home/luciom/own_compiler/src/calc-sintaxis.y
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=/home/luciom/own_compiler/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "[BISON][MyParser] Building parser with bison 3.8.2"
+	cd /home/luciom/own_compiler && /usr/bin/bison -d -o /home/luciom/own_compiler/build/calc-sintaxis.tab.c src/calc-sintaxis.y
 
-CMakeFiles/Compiler.dir/main.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/Compiler.dir/main.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/luciom/own_compiler/main.c > CMakeFiles/Compiler.dir/main.c.i
+calc-sintaxis.tab.h: calc-sintaxis.tab.c
+	@$(CMAKE_COMMAND) -E touch_nocreate calc-sintaxis.tab.h
 
-CMakeFiles/Compiler.dir/main.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/Compiler.dir/main.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/luciom/own_compiler/main.c -o CMakeFiles/Compiler.dir/main.c.s
+lex.yy.c: /home/luciom/own_compiler/src/calc-lexico.l
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=/home/luciom/own_compiler/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "[FLEX][MyScanner] Building scanner with flex 2.6.4"
+	cd /home/luciom/own_compiler && /usr/bin/flex -o/home/luciom/own_compiler/build/lex.yy.c src/calc-lexico.l
+
+CMakeFiles/Compiler.dir/calc-sintaxis.tab.c.o: CMakeFiles/Compiler.dir/flags.make
+CMakeFiles/Compiler.dir/calc-sintaxis.tab.c.o: calc-sintaxis.tab.c
+CMakeFiles/Compiler.dir/calc-sintaxis.tab.c.o: CMakeFiles/Compiler.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/luciom/own_compiler/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object CMakeFiles/Compiler.dir/calc-sintaxis.tab.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/Compiler.dir/calc-sintaxis.tab.c.o -MF CMakeFiles/Compiler.dir/calc-sintaxis.tab.c.o.d -o CMakeFiles/Compiler.dir/calc-sintaxis.tab.c.o -c /home/luciom/own_compiler/build/calc-sintaxis.tab.c
+
+CMakeFiles/Compiler.dir/calc-sintaxis.tab.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/Compiler.dir/calc-sintaxis.tab.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/luciom/own_compiler/build/calc-sintaxis.tab.c > CMakeFiles/Compiler.dir/calc-sintaxis.tab.c.i
+
+CMakeFiles/Compiler.dir/calc-sintaxis.tab.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/Compiler.dir/calc-sintaxis.tab.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/luciom/own_compiler/build/calc-sintaxis.tab.c -o CMakeFiles/Compiler.dir/calc-sintaxis.tab.c.s
+
+CMakeFiles/Compiler.dir/lex.yy.c.o: CMakeFiles/Compiler.dir/flags.make
+CMakeFiles/Compiler.dir/lex.yy.c.o: lex.yy.c
+CMakeFiles/Compiler.dir/lex.yy.c.o: calc-sintaxis.tab.h
+CMakeFiles/Compiler.dir/lex.yy.c.o: CMakeFiles/Compiler.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/luciom/own_compiler/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building C object CMakeFiles/Compiler.dir/lex.yy.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/Compiler.dir/lex.yy.c.o -MF CMakeFiles/Compiler.dir/lex.yy.c.o.d -o CMakeFiles/Compiler.dir/lex.yy.c.o -c /home/luciom/own_compiler/build/lex.yy.c
+
+CMakeFiles/Compiler.dir/lex.yy.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/Compiler.dir/lex.yy.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/luciom/own_compiler/build/lex.yy.c > CMakeFiles/Compiler.dir/lex.yy.c.i
+
+CMakeFiles/Compiler.dir/lex.yy.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/Compiler.dir/lex.yy.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/luciom/own_compiler/build/lex.yy.c -o CMakeFiles/Compiler.dir/lex.yy.c.s
 
 # Object files for target Compiler
 Compiler_OBJECTS = \
-"CMakeFiles/Compiler.dir/main.c.o"
+"CMakeFiles/Compiler.dir/calc-sintaxis.tab.c.o" \
+"CMakeFiles/Compiler.dir/lex.yy.c.o"
 
 # External object files for target Compiler
 Compiler_EXTERNAL_OBJECTS =
 
-Compiler: CMakeFiles/Compiler.dir/main.c.o
+Compiler: CMakeFiles/Compiler.dir/calc-sintaxis.tab.c.o
+Compiler: CMakeFiles/Compiler.dir/lex.yy.c.o
 Compiler: CMakeFiles/Compiler.dir/build.make
+Compiler: /usr/lib64/libfl.a
 Compiler: CMakeFiles/Compiler.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/luciom/own_compiler/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking C executable Compiler"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/luciom/own_compiler/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking C executable Compiler"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/Compiler.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -104,7 +133,9 @@ CMakeFiles/Compiler.dir/clean:
 	$(CMAKE_COMMAND) -P CMakeFiles/Compiler.dir/cmake_clean.cmake
 .PHONY : CMakeFiles/Compiler.dir/clean
 
-CMakeFiles/Compiler.dir/depend:
+CMakeFiles/Compiler.dir/depend: calc-sintaxis.tab.c
+CMakeFiles/Compiler.dir/depend: calc-sintaxis.tab.h
+CMakeFiles/Compiler.dir/depend: lex.yy.c
 	cd /home/luciom/own_compiler/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/luciom/own_compiler /home/luciom/own_compiler /home/luciom/own_compiler/build /home/luciom/own_compiler/build /home/luciom/own_compiler/build/CMakeFiles/Compiler.dir/DependInfo.cmake "--color=$(COLOR)"
 .PHONY : CMakeFiles/Compiler.dir/depend
 

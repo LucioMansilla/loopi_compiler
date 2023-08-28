@@ -1,37 +1,23 @@
 #!/bin/bash
 
-# Navigate to src directory and build the project
-cd src
-./build.sh
-
-# Variable to count failed tests
-failed=0
-
-# Loop through all test files in the 'examples' directory
-for example in ../examples/*.txt; do
-    echo "Testing $example..."
-
-    # Extract the expected output from the example file
-    expected_output=$(grep '^# expected =' $example | cut -d'=' -f2 | tr -d ' ')
-    
-    # Run the compiler on the example file and capture the output (ignoring stderr)
-    output=$(./a.out $(basename $example) 2>/dev/null)
-
-    # Compare the compiler's output with the expected output
-    if [[ "$output" != *"$expected_output"* ]]; then
-        echo "Test failed!"
-        echo "Expected: $expected_output"
-        echo "Got: $output"
-        ((failed++))
-    else
-        echo "Test passed!"
-    fi
-done
-
-# Print summary
-if [ $failed -eq 0 ]; then
-    echo "All tests passed!"
-else
-    echo "$failed tests failed."
-    exit 1
+# Remove old build directory if it exists
+if [ -d "build/" ]; then
+    rm -r build/
 fi
+
+# Create a new build directory and navigate into it
+mkdir build
+cd build
+
+BUILD_TYPE="Debug"
+
+# Check if an argument was provided
+if [ "$1" != "" ]; then
+    if [ "$1" == "False" ]; then
+        BUILD_TYPE="Release"
+    fi
+fi
+
+# Run CMake and build the project
+cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE ..
+cmake --build .

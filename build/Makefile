@@ -129,29 +129,53 @@ Compiler/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Compiler.dir/build.make CMakeFiles/Compiler.dir/build
 .PHONY : Compiler/fast
 
-main.o: main.c.o
-.PHONY : main.o
+calc-sintaxis.tab.o: calc-sintaxis.tab.c.o
+.PHONY : calc-sintaxis.tab.o
 
 # target to build an object file
-main.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Compiler.dir/build.make CMakeFiles/Compiler.dir/main.c.o
-.PHONY : main.c.o
+calc-sintaxis.tab.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Compiler.dir/build.make CMakeFiles/Compiler.dir/calc-sintaxis.tab.c.o
+.PHONY : calc-sintaxis.tab.c.o
 
-main.i: main.c.i
-.PHONY : main.i
+calc-sintaxis.tab.i: calc-sintaxis.tab.c.i
+.PHONY : calc-sintaxis.tab.i
 
 # target to preprocess a source file
-main.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Compiler.dir/build.make CMakeFiles/Compiler.dir/main.c.i
-.PHONY : main.c.i
+calc-sintaxis.tab.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Compiler.dir/build.make CMakeFiles/Compiler.dir/calc-sintaxis.tab.c.i
+.PHONY : calc-sintaxis.tab.c.i
 
-main.s: main.c.s
-.PHONY : main.s
+calc-sintaxis.tab.s: calc-sintaxis.tab.c.s
+.PHONY : calc-sintaxis.tab.s
 
 # target to generate assembly for a file
-main.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Compiler.dir/build.make CMakeFiles/Compiler.dir/main.c.s
-.PHONY : main.c.s
+calc-sintaxis.tab.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Compiler.dir/build.make CMakeFiles/Compiler.dir/calc-sintaxis.tab.c.s
+.PHONY : calc-sintaxis.tab.c.s
+
+lex.yy.o: lex.yy.c.o
+.PHONY : lex.yy.o
+
+# target to build an object file
+lex.yy.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Compiler.dir/build.make CMakeFiles/Compiler.dir/lex.yy.c.o
+.PHONY : lex.yy.c.o
+
+lex.yy.i: lex.yy.c.i
+.PHONY : lex.yy.i
+
+# target to preprocess a source file
+lex.yy.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Compiler.dir/build.make CMakeFiles/Compiler.dir/lex.yy.c.i
+.PHONY : lex.yy.c.i
+
+lex.yy.s: lex.yy.c.s
+.PHONY : lex.yy.s
+
+# target to generate assembly for a file
+lex.yy.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Compiler.dir/build.make CMakeFiles/Compiler.dir/lex.yy.c.s
+.PHONY : lex.yy.c.s
 
 # Help Target
 help:
@@ -162,9 +186,12 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... Compiler"
-	@echo "... main.o"
-	@echo "... main.i"
-	@echo "... main.s"
+	@echo "... calc-sintaxis.tab.o"
+	@echo "... calc-sintaxis.tab.i"
+	@echo "... calc-sintaxis.tab.s"
+	@echo "... lex.yy.o"
+	@echo "... lex.yy.i"
+	@echo "... lex.yy.s"
 .PHONY : help
 
 
