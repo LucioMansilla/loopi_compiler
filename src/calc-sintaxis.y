@@ -19,11 +19,11 @@
  
 %%
  
-prog: decl sentence_list  { return 0; }
+prog: decl sentence_list | decl | sentence_list  { return 0; }
     ;
     
 decl: type ID '=' expr ';' decl  
-     | type ID '=' expr ';' 
+     | type ID '=' expr ';'
     ;
 
 sentence_list: sentence  sentence_list | sentence { printf("Sentencia correcta \n"); }

@@ -20,6 +20,7 @@ v_bool true|false
 
 {digito}+                     { 
                                 printf("INT : %d\n",atoi(yytext)); 
+                                yyval.ival = atoi(yytext);
                                 return INT;}
 
 "int"                          {  printf("%s\n",yytext);
@@ -45,9 +46,6 @@ v_bool true|false
                                   return *yytext;}
 
 .|\n                          ; /* ignore all the rest */
-
-
-
 
 
 %%
