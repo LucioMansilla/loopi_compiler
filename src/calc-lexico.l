@@ -19,16 +19,16 @@ v_bool true|false
 
 {digito}+ { yylval.int_val = atoi(yytext); return INT; }
 
-"int"                          {  printf("%s\n",yytext);
+"int"                          {  //printf("%s\n",yytext);
                                   return TINT;}
 
 {v_bool} { yylval.int_val = strcmp(yytext, "true") == 0 ? 1 : 0; return BOOL; }
 
 								  
-"bool"                         {  printf("%s\n",yytext);
+"bool"                         {  //printf("%s\n",yytext);
                                   return TBOOL;}
 
-"return"                  		 {  printf("%s\n",yytext);
+"return"                  		 {  //printf("%s\n",yytext);
                                   return RETURN;}
 
 {letra}({letra}|{digito})* { 
@@ -37,10 +37,10 @@ v_bool true|false
     return ID; 
 }
 
-"-"                       {  printf("%s\n",yytext);
+"-"                       {  //printf("%s\n",yytext);
                                   return TMENOS;}    
 
-[+*;()=]                   {  printf("%s\n",yytext);
+[+*;()=]                   {  //printf("%s\n",yytext);
                                   return *yytext;}
 
 .|\n                          ; /* ignore all the rest */
@@ -67,10 +67,10 @@ int main(int argc,char *argv[]){
 
 
     if (yyparse() == 0) {
-        printf("-> OK\n");
+        printf("\n-> OK\n");
         return 0;
     } else {
-        printf("-> ERROR\n");
+        printf("\n-> ERROR\n");
         return 1;
     }
 

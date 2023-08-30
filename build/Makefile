@@ -201,6 +201,30 @@ src/ast.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Compiler.dir/build.make CMakeFiles/Compiler.dir/src/ast.c.s
 .PHONY : src/ast.c.s
 
+src/attributes.o: src/attributes.c.o
+.PHONY : src/attributes.o
+
+# target to build an object file
+src/attributes.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Compiler.dir/build.make CMakeFiles/Compiler.dir/src/attributes.c.o
+.PHONY : src/attributes.c.o
+
+src/attributes.i: src/attributes.c.i
+.PHONY : src/attributes.i
+
+# target to preprocess a source file
+src/attributes.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Compiler.dir/build.make CMakeFiles/Compiler.dir/src/attributes.c.i
+.PHONY : src/attributes.c.i
+
+src/attributes.s: src/attributes.c.s
+.PHONY : src/attributes.s
+
+# target to generate assembly for a file
+src/attributes.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Compiler.dir/build.make CMakeFiles/Compiler.dir/src/attributes.c.s
+.PHONY : src/attributes.c.s
+
 src/symbol_table.o: src/symbol_table.c.o
 .PHONY : src/symbol_table.o
 
@@ -243,6 +267,9 @@ help:
 	@echo "... src/ast.o"
 	@echo "... src/ast.i"
 	@echo "... src/ast.s"
+	@echo "... src/attributes.o"
+	@echo "... src/attributes.i"
+	@echo "... src/attributes.s"
 	@echo "... src/symbol_table.o"
 	@echo "... src/symbol_table.i"
 	@echo "... src/symbol_table.s"

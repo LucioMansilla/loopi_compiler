@@ -6,7 +6,9 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/build/Compiler",
-            "args": ["64"],
+            "args": [
+                "${workspaceFolder}/examples/prog.txt"
+            ],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],
@@ -20,7 +22,7 @@
                 }
             ],
             "preLaunchTask": "",
-            "miDebuggerPath": "/usr/bin/gdb", 
+            "miDebuggerPath": "/usr/bin/gdb",
             "miDebuggerArgs": "",
             "logging": {
                 "trace": true,
@@ -31,7 +33,7 @@
             },
             "linux": {
                 "MIMode": "gdb",
-                "miDebuggerPath": "/usr/bin/gdb", 
+                "miDebuggerPath": "/usr/bin/gdb",
                 "setupCommands": [
                     {
                         "description": "Enable pretty-printing for gdb",

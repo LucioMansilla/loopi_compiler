@@ -45,6 +45,9 @@
         "stdexcept": "cpp",
         "streambuf": "cpp",
         "typeinfo": "cpp",
+        "stdlib.h": "c",
+        "symbol_table.h": "c",
+        "attributes.h": "c"
     },
     "[cpp]": {
         "editor.defaultFormatter": "xaver.clang-format"

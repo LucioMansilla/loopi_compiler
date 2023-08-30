@@ -1,0 +1,86 @@
+%{
+#include <stdlib.h>
+#include <stdio.h>
+#include "ast.h"
+ASTNode* root = NULL;  
+%}
+
+%union {
+    int int_val;
+    char *id_val;
+    ASTNode *node;
+
+}
+%token <int_val> INT
+%token <id_val> ID
+%token <int_val> BOOL
+%token TINT
+%token TBOOL
+%token RETURN
+%type <node> expr
+%type <node> valor
+    
+%left '+' TMENOS 
+%left '*'
+
+ 
+%%
+ 
+prog: decl sentence_list | decl | sentence_list  { return 0; }
+    ;
+    
+decl: type ID '=' expr ';' decl  
+     | type ID '=' expr ';'
+    ;
+
+sentence_list: sentence  sentence_list | sentence 
+    ;
+
+sentence: ID '=' expr ';' | RETURN expr ';' 
+    ;
+
+expr: valor 
+     { 
+         $$ = $1;
+         printf("Estamos en expr:");
+         print_ast($$);
+     }              
+
+    | ID  
+     {
+         // Aquí, podemos crear un nodo para un identificador. 
+         // Asumiendo que tienes una función create_id_node similar a create_int_node.
+         $$ = create_id_node($1, yylineno);  
+     }
+
+    | expr '+' expr  
+     {
+         // Crea un nodo para la operación de suma.
+         // Puedes utilizar una función similar a create_op_node para esto.
+         Attributes* attr = create_op_attributes('+', yylineno);
+         $$ = create_ast_node(attr, $1, $3);
+     }
+
+    | expr '*' expr  
+     {
+         // Similar al caso anterior pero para la multiplicación.
+         Attributes* attr = create_op_attributes('*', yylineno);
+         $$ = create_ast_node(attr, $1, $3);
+     }
+
+    | '(' expr ')'  
+     {
+         $$ = $2;  // El AST para la expresión entre paréntesis es simplemente el AST de la expresión misma.
+     }
+;
+    
+type: TINT | TBOOL 
+    ;  
+
+valor : INT { $$ = create_int_node($1,1);
+             }
+     | BOOL     
+    ;
+ 
+%%
+

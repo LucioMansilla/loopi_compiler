@@ -5,6 +5,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/Compiler.dir/lex.yy.c.o.d"
   "CMakeFiles/Compiler.dir/src/ast.c.o"
   "CMakeFiles/Compiler.dir/src/ast.c.o.d"
+  "CMakeFiles/Compiler.dir/src/attributes.c.o"
+  "CMakeFiles/Compiler.dir/src/attributes.c.o.d"
   "CMakeFiles/Compiler.dir/src/symbol_table.c.o"
   "CMakeFiles/Compiler.dir/src/symbol_table.c.o.d"
   "Compiler"

@@ -11,6 +11,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/luciom/own_compiler/build/calc-sintaxis.tab.c" "CMakeFiles/Compiler.dir/calc-sintaxis.tab.c.o" "gcc" "CMakeFiles/Compiler.dir/calc-sintaxis.tab.c.o.d"
   "/home/luciom/own_compiler/build/lex.yy.c" "CMakeFiles/Compiler.dir/lex.yy.c.o" "gcc" "CMakeFiles/Compiler.dir/lex.yy.c.o.d"
   "/home/luciom/own_compiler/src/ast.c" "CMakeFiles/Compiler.dir/src/ast.c.o" "gcc" "CMakeFiles/Compiler.dir/src/ast.c.o.d"
+  "/home/luciom/own_compiler/src/attributes.c" "CMakeFiles/Compiler.dir/src/attributes.c.o" "gcc" "CMakeFiles/Compiler.dir/src/attributes.c.o.d"
   "/home/luciom/own_compiler/src/symbol_table.c" "CMakeFiles/Compiler.dir/src/symbol_table.c.o" "gcc" "CMakeFiles/Compiler.dir/src/symbol_table.c.o.d"
   )
 
