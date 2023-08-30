@@ -1,3 +1,5 @@
+#ifndef ATTRIBUTES_H
+#define ATTRIBUTES_H
 typedef enum {
     TYPE_INT,
     TYPE_BOOL,
@@ -18,3 +20,5 @@ typedef struct Attributes {
     int line;
     ClassType classType;
 } Attributes;
+
+#endif  // ATTRIBUTES_H

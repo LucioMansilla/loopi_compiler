@@ -1,3 +1,5 @@
+#ifndef AST_H
+#define AST_H
 #include "attributes.h"
 
 typedef struct ASTNode {
@@ -7,3 +9,5 @@ typedef struct ASTNode {
 } ASTNode;
 
 ASTNode* create_ast_node(Attributes* info, ASTNode* left, ASTNode* right);
+
+#endif  // AST_H

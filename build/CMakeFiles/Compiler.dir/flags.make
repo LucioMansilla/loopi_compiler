@@ -4,7 +4,7 @@
 # compile C with /usr/bin/cc
 C_DEFINES = 
 
-C_INCLUDES = -I/home/luciom/own_compiler/build
+C_INCLUDES = -I/home/luciom/own_compiler/build -I/home/luciom/own_compiler/src
 
 C_FLAGS = -g -std=gnu11
 

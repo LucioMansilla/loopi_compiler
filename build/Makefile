@@ -177,6 +177,54 @@ lex.yy.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Compiler.dir/build.make CMakeFiles/Compiler.dir/lex.yy.c.s
 .PHONY : lex.yy.c.s
 
+src/ast.o: src/ast.c.o
+.PHONY : src/ast.o
+
+# target to build an object file
+src/ast.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Compiler.dir/build.make CMakeFiles/Compiler.dir/src/ast.c.o
+.PHONY : src/ast.c.o
+
+src/ast.i: src/ast.c.i
+.PHONY : src/ast.i
+
+# target to preprocess a source file
+src/ast.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Compiler.dir/build.make CMakeFiles/Compiler.dir/src/ast.c.i
+.PHONY : src/ast.c.i
+
+src/ast.s: src/ast.c.s
+.PHONY : src/ast.s
+
+# target to generate assembly for a file
+src/ast.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Compiler.dir/build.make CMakeFiles/Compiler.dir/src/ast.c.s
+.PHONY : src/ast.c.s
+
+src/symbol_table.o: src/symbol_table.c.o
+.PHONY : src/symbol_table.o
+
+# target to build an object file
+src/symbol_table.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Compiler.dir/build.make CMakeFiles/Compiler.dir/src/symbol_table.c.o
+.PHONY : src/symbol_table.c.o
+
+src/symbol_table.i: src/symbol_table.c.i
+.PHONY : src/symbol_table.i
+
+# target to preprocess a source file
+src/symbol_table.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Compiler.dir/build.make CMakeFiles/Compiler.dir/src/symbol_table.c.i
+.PHONY : src/symbol_table.c.i
+
+src/symbol_table.s: src/symbol_table.c.s
+.PHONY : src/symbol_table.s
+
+# target to generate assembly for a file
+src/symbol_table.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Compiler.dir/build.make CMakeFiles/Compiler.dir/src/symbol_table.c.s
+.PHONY : src/symbol_table.c.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -192,6 +240,12 @@ help:
 	@echo "... lex.yy.o"
 	@echo "... lex.yy.i"
 	@echo "... lex.yy.s"
+	@echo "... src/ast.o"
+	@echo "... src/ast.i"
+	@echo "... src/ast.s"
+	@echo "... src/symbol_table.o"
+	@echo "... src/symbol_table.i"
+	@echo "... src/symbol_table.s"
 .PHONY : help
 
 

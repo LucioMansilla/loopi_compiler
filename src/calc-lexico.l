@@ -3,9 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-
 #include "calc-sintaxis.tab.h"
-
 %}
 
 %option noyywrap
@@ -20,7 +18,6 @@ v_bool true|false
 
 {digito}+                     { 
                                 printf("INT : %d\n",atoi(yytext)); 
-                                yyval.ival = atoi(yytext);
                                 return INT;}
 
 "int"                          {  printf("%s\n",yytext);
