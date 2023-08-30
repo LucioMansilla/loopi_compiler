@@ -38,14 +38,15 @@ prog: decl sentence_list
          root = $$;  
 
          printf("Programa:\n");
-         int res = evaluate_ast(root);
+         //int res = evaluate_ast(root);
+         print_ast(root);
      }
     | decl 
     { 
         $$ = $1;
         root = $$;  
         printf("Programa2:\n");
-         int res = evaluate_ast(root);
+         //int res = evaluate_ast(root);
 
     }
     | sentence_list 
@@ -53,7 +54,7 @@ prog: decl sentence_list
         $$ = $1;
         root = $$; 
         printf("Programa:\n");
-         int res = evaluate_ast(root);
+         //int res = evaluate_ast(root);
 
     }
     ;

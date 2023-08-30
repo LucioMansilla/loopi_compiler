@@ -8,16 +8,16 @@ typedef enum {
 } ValueType;
 
 typedef enum {
-    CLASS_VAR = 0,
-    CLASS_FUNCTION = 1,
-    CLASS_CONSTANT = 2,
-    CLASS_OPERATION = 3,
-    CLASS_ASSIGN = 4,
-    CLASS_DECL = 5,
-    CLASS_RETURN = 6,
-    CLASS_SENTENCE_LIST = 7,
-    CLASS_DECL_LIST = 8,
-    CLASS_PROGRAM = 9,
+    CLASS_VAR,
+    CLASS_FUNCTION,
+    CLASS_CONSTANT,
+    CLASS_OPERATION,
+    CLASS_ASSIGN,
+    CLASS_DECL,
+    CLASS_RETURN,
+    CLASS_SENTENCE_LIST,
+    CLASS_DECL_LIST,
+    CLASS_PROGRAM,
 
 } ClassType;
 
