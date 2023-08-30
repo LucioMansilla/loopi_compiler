@@ -3,8 +3,11 @@
 #include <stdio.h>
 #include "ast.h"
 %}
- 
-%token INT
+
+%union {
+    int int_val;
+}
+%token <int_val> INT
 %token ID
 %token BOOL
 %token TINT
@@ -45,7 +48,8 @@ expr: valor
 type: TINT | TBOOL 
     ;  
 
-valor : INT | BOOL            
+valor : INT {printf("\nEl valor es: %i\n", $1);}
+     | BOOL           
     ;
  
 %%

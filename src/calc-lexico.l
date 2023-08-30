@@ -16,9 +16,7 @@ v_bool true|false
 %%
 "#"[^\n]*           { /* Ignora todo desde '#' hasta el final de la línea */ }
 
-{digito}+                     { 
-                                printf("INT : %d\n",atoi(yytext)); 
-                                return INT;}
+{digito}+ { yylval.int_val = atoi(yytext); return INT; }
 
 "int"                          {  printf("%s\n",yytext);
                                   return TINT;}
