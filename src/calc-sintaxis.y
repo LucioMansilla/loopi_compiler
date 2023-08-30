@@ -2,22 +2,27 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "ast.h"
+ASTNode* root = NULL;  
 %}
 
 %union {
     int int_val;
+    char *id_val;
+    ASTNode *node;
+
 }
 %token <int_val> INT
-%token ID
-%token BOOL
+%token <id_val> ID
+%token <int_val> BOOL
 %token TINT
 %token TBOOL
 %token RETURN
 %type expr
-%type valor
+%type <int_val> valor
     
 %left '+' TMENOS 
 %left '*'
+
  
 %%
  
@@ -48,8 +53,8 @@ expr: valor
 type: TINT | TBOOL 
     ;  
 
-valor : INT {printf("\nEl valor es: %i\n", $1);}
-     | BOOL           
+valor : INT 
+     | BOOL     
     ;
  
 %%

@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include "ast.h"
 #include "calc-sintaxis.tab.h"
 %}
 
@@ -21,8 +22,8 @@ v_bool true|false
 "int"                          {  printf("%s\n",yytext);
                                   return TINT;}
 
-{v_bool}                       {  printf("%s\n",yytext);
-                                  return BOOL;}
+{v_bool} { yylval.int_val = strcmp(yytext, "true") == 0 ? 1 : 0; return BOOL; }
+
 								  
 "bool"                         {  printf("%s\n",yytext);
                                   return TBOOL;}
@@ -30,9 +31,11 @@ v_bool true|false
 "return"                  		 {  printf("%s\n",yytext);
                                   return RETURN;}
 
-{letra}({letra}|{digito})*    { 
-                                printf("ID : %s\n",yytext);
-                                return ID;}
+{letra}({letra}|{digito})* { 
+    yylval.id_val = (char *) malloc(yyleng + 1);
+    strcpy(yylval.id_val, yytext); 
+    return ID; 
+}
 
 "-"                       {  printf("%s\n",yytext);
                                   return TMENOS;}    
