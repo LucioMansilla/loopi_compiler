@@ -5,6 +5,7 @@ typedef enum {
     TYPE_BOOL,
     TYPE_STRING,
     TYPE_VOID,
+    NOT_TYPE,
 } ValueType;
 
 typedef enum {
@@ -18,7 +19,6 @@ typedef enum {
     CLASS_SENTENCE_LIST,
     CLASS_DECL_LIST,
     CLASS_PROGRAM,
-
 } ClassType;
 
 typedef struct Attributes {

@@ -1,0 +1,21 @@
+digraph AST {
+  0 [label="PROGRAM"];
+  1 [label="DECL LIST"];
+  2 [label="DECLARACIÓN\nTipo: int"];
+  3 [label="VARIABLE\nNombre: x"];
+  2 -> 3;
+  4 [label="CONSTANT\nValor: 5"];
+  2 -> 4;
+  1 -> 2;
+  5 [label="DECLARACIÓN\nTipo: int"];
+  6 [label="VARIABLE\nNombre: y"];
+  5 -> 6;
+  7 [label="CONSTANT\nValor: 2"];
+  5 -> 7;
+  1 -> 5;
+  0 -> 1;
+  8 [label="RETURN"];
+  9 [label="VARIABLE\nNombre: x"];
+  8 -> 9;
+  0 -> 8;
+}

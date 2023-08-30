@@ -2,7 +2,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "ast.h"
-ASTNode* root = NULL;  
+ASTNode* root = NULL;
+extern int yylineno;  
 %}
 
 %union {
@@ -38,36 +39,33 @@ prog: decl sentence_list
          root = $$;  
 
          printf("Programa:\n");
-         //int res = evaluate_ast(root);
-         print_ast(root);
+         generate_dot_file(root, "ast.dot");
      }
     | decl 
     { 
         $$ = $1;
         root = $$;  
         printf("Programa2:\n");
-         //int res = evaluate_ast(root);
-
+        int res = evaluate_ast(root);
     }
     | sentence_list 
     { 
         $$ = $1;
         root = $$; 
         printf("Programa:\n");
-         //int res = evaluate_ast(root);
-
+        int res = evaluate_ast(root);
     }
     ;
 
     
 decl: type ID '=' expr ';' decl  
      { 
-         ASTNode* a = create_single_decl_node($1, create_id_node($2,0), $4,0);
+         ASTNode* a = create_single_decl_node($1, create_id_node($2,yylineno), $4,yylineno);
          $$ = create_list_decl_node(a, $6); 
      }
      | type ID '=' expr ';'  
      { 
-         $$ = create_single_decl_node($1, create_id_node($2,0), $4,0); 
+         $$ = create_single_decl_node($1, create_id_node($2,yylineno), $4, yylineno); 
      }
     ;
 
@@ -84,12 +82,12 @@ sentence_list: sentence sentence_list
 
 sentence: ID '=' expr ';' 
          { 
-             ASTNode* node_id  = create_id_node($1, 0);
-             $$ = create_assign_node(node_id, $3,0);
+             ASTNode* node_id  = create_id_node($1, yylineno);
+             $$ = create_assign_node(node_id, $3, yylineno);
          }
          | RETURN expr ';' 
          { 
-             $$ = create_return_node($2,0); 
+             $$ = create_return_node($2,yylineno); 
          }
     ;
 
@@ -100,18 +98,18 @@ expr: valor
 
     | ID  
      { 
-         $$ = create_id_node($1, 0);  
+         $$ = create_id_node($1, yylineno);  
      }
 
     | expr '+' expr  
      { 
-         Attributes* attr = create_op_attributes(TYPE_INT, '+', 0, CLASS_OPERATION);
+         Attributes* attr = create_op_attributes(NOT_TYPE, '+', 0, CLASS_OPERATION);
          $$ = create_ast_node(attr, $1, $3);
      }
 
     | expr '*' expr  
      { 
-         Attributes* attr = create_op_attributes(TYPE_INT, '*',0, CLASS_OPERATION);
+         Attributes* attr = create_op_attributes(NOT_TYPE, '*',0, CLASS_OPERATION);
          $$ = create_ast_node(attr, $1, $3);
      }
 
@@ -127,8 +125,8 @@ type: TINT { $$ = TYPE_INT; }
     ;
 
 
-valor : INT { $$ = create_int_node($1, 1); }
-       | BOOL { $$ = create_bool_node($1, 1);}
+valor : INT { $$ = create_int_node($1, yylineno); }
+       | BOOL { $$ = create_bool_node($1, yylineno);}
     ;
  
 %%
