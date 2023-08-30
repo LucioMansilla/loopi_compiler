@@ -9,6 +9,8 @@
 // Simulamos una tabla de símbolos simple con un arreglo y su tamaño
 #define MAX_VARIABLES 100
 
+SymbolTable* table;
+
 ASTNode* create_ast_node(Attributes* info, ASTNode* left, ASTNode* right) {
     ASTNode* node = (ASTNode*)malloc(sizeof(ASTNode));
     node->info = info;
@@ -28,12 +30,12 @@ ASTNode* create_bool_node(int value, int line) {
 }
 
 ASTNode* create_id_node(char* id, int line) {
-    Attributes* attr = create_attributes(TYPE_STRING, 0, id, line, CLASS_VAR);
+    Attributes* attr = create_attributes(NOT_TYPE, 0, id, line, CLASS_VAR);
     return create_ast_node(attr, NULL, NULL);
 }
 
 ASTNode* create_return_node(ASTNode* node, int line) {  // el hijo izq es el hijo return?
-    Attributes* attr = create_attributes(TYPE_VOID, 0, NULL, line, CLASS_RETURN);
+    Attributes* attr = create_attributes(NOT_TYPE, 0, NULL, line, CLASS_RETURN);
     return create_ast_node(attr, node, NULL);
 }
 
@@ -201,6 +203,73 @@ int evaluate_ast(ASTNode* node) {
             break;
 
         // notar que si pongo algo abajo del return es inalcanzable
+        default:
+            printf("Nodo no soportado, Tipo: %d\n", node->info->classType);
+            break;
+    }
+
+    return 0;
+}
+
+// Función para recorrer el AST usabndo la tabla de simbolos:
+/*
+#include <stdlib.h>
+
+#include "symbol_table.h"
+
+void insert_symbol(SymbolTable* table, Attributes* info) {
+    Symbol* symbol = (Symbol*)malloc(sizeof(Symbol));
+    symbol->info = info;
+    symbol->next = table->head;
+    table->head = symbol;
+}
+
+Symbol* lookup_symbol(SymbolTable* table, char* id){
+    Symbol* symbol = table->head;
+    while (symbol != NULL) {
+        if (strcmp(symbol->info->tag, id) == 0) {
+            return symbol;
+        }
+        symbol = symbol->next;
+    }
+    return NULL;
+}
+
+
+*/
+Attributes* check_types(ASTNode* node) {
+    if (node == NULL) return 0;
+
+    switch (node->info->classType) {
+        case CLASS_CONSTANT:
+            return node->info;
+            break;
+
+        case CLASS_VAR:
+            if (lookup_symbol(table, node->info->tag) == NULL) {
+                printf("Variable no declarada: %s\n", node->info->tag);
+                exit(1);
+            } else {
+                return lookup_symbol(table, node->info->tag)->info;
+            }
+            break;
+
+        case CLASS_DECL:
+            Attributes* left = lookup_symbol(table, node->left->info->tag)->info;
+            if (left != NULL) {
+                printf("Variable ya declarada: %s\n", node->left->info->tag);
+                exit(1);
+            } else {
+                left->valueType = node->info->valueType;
+                insert_symbol(table, left);
+                Attributes* right = check_types(node->right);
+                if (left->valueType != right->valueType) {
+                    printf("Error de tipos en la declaración de la variable: %s\n", node->left->info->tag);
+                    exit(1);
+                }
+                return NULL;
+            }
+
         default:
             printf("Nodo no soportado, Tipo: %d\n", node->info->classType);
             break;

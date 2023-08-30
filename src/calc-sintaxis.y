@@ -36,24 +36,19 @@ extern int yylineno;
 prog: decl sentence_list 
      { 
          $$ = create_program_node($1, $2); 
-         root = $$;  
-
-         printf("Programa:\n");
+         root = $$; 
+          
          generate_dot_file(root, "ast.dot");
      }
     | decl 
     { 
         $$ = $1;
         root = $$;  
-        printf("Programa2:\n");
-        int res = evaluate_ast(root);
     }
     | sentence_list 
     { 
         $$ = $1;
         root = $$; 
-        printf("Programa:\n");
-        int res = evaluate_ast(root);
     }
     ;
 
