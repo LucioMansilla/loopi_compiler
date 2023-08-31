@@ -1,6 +1,7 @@
 %{
 #include <stdlib.h>
 #include <stdio.h>
+#include "symbol_table.h"
 #include "ast.h"
 ASTNode* root = NULL;
 extern int yylineno;  
@@ -37,6 +38,9 @@ prog: decl sentence_list
      { 
          $$ = create_program_node($1, $2); 
          root = $$; 
+         SymbolTable* table = malloc(sizeof(SymbolTable));
+         table->head = NULL;
+         check_types(root,table);
           
          generate_dot_file(root, "ast.dot");
      }

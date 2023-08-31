@@ -1,3 +1,4 @@
+# expected = OK
 int x = 5;
-int y = 2;
-return x+y;
+bool y = true;
+return false + y;

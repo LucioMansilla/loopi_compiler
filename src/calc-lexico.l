@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include "ast.h"
 #include "calc-sintaxis.tab.h"
+extern ASTNode* root;
 %}
 
 %option noyywrap
@@ -67,6 +68,9 @@ int main(int argc,char *argv[]){
 
 
     if (yyparse() == 0) {
+    //    check_types(root);
+      //  generate_dot_file(root, "ast.dot");
+
         printf("\n-> OK\n");
         return 0;
     } else {

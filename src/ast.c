@@ -9,8 +9,6 @@
 // Simulamos una tabla de símbolos simple con un arreglo y su tamaño
 #define MAX_VARIABLES 100
 
-SymbolTable* table;
-
 ASTNode* create_ast_node(Attributes* info, ASTNode* left, ASTNode* right) {
     ASTNode* node = (ASTNode*)malloc(sizeof(ASTNode));
     node->info = info;
@@ -34,7 +32,7 @@ ASTNode* create_id_node(char* id, int line) {
     return create_ast_node(attr, NULL, NULL);
 }
 
-ASTNode* create_return_node(ASTNode* node, int line) {  // el hijo izq es el hijo return?
+ASTNode* create_return_node(ASTNode* node, int line) {  // el hijo izq es el hijo return
     Attributes* attr = create_attributes(NOT_TYPE, 0, NULL, line, CLASS_RETURN);
     return create_ast_node(attr, node, NULL);
 }
@@ -237,38 +235,97 @@ Symbol* lookup_symbol(SymbolTable* table, char* id){
 
 
 */
-Attributes* check_types(ASTNode* node) {
+Attributes* check_types(ASTNode* node, SymbolTable* table) {
+    Attributes* left = NULL;
+    Attributes* right = NULL;
+
     if (node == NULL) return 0;
 
     switch (node->info->classType) {
+        case CLASS_PROGRAM:
+            check_types(node->left, table);
+            check_types(node->right, table);
+            return NULL;
+            break;
+
         case CLASS_CONSTANT:
             return node->info;
             break;
 
         case CLASS_VAR:
-            if (lookup_symbol(table, node->info->tag) == NULL) {
+            left = lookup_symbol(table, node->info->tag);
+            if (left == NULL) {
                 printf("Variable no declarada: %s\n", node->info->tag);
                 exit(1);
             } else {
-                return lookup_symbol(table, node->info->tag)->info;
+                printf("Variable encontrada: %s\n", node->info->tag);
+                printf("valor : %d\n", left->value);
+                node->info->valueType = left->valueType;
+                return left;
             }
             break;
 
         case CLASS_DECL:
-            Attributes* left = lookup_symbol(table, node->left->info->tag)->info;
+            left = lookup_symbol(table, node->left->info->tag);
             if (left != NULL) {
                 printf("Variable ya declarada: %s\n", node->left->info->tag);
                 exit(1);
             } else {
-                left->valueType = node->info->valueType;
-                insert_symbol(table, left);
-                Attributes* right = check_types(node->right);
-                if (left->valueType != right->valueType) {
+                insert_symbol(table, node->left->info);
+                node->left->info->valueType = node->info->valueType;
+                right = check_types(node->right, table);
+                if (node->left->info->valueType != right->valueType) {
                     printf("Error de tipos en la declaración de la variable: %s\n", node->left->info->tag);
                     exit(1);
                 }
                 return NULL;
             }
+            break;
+
+        case CLASS_ASSIGN:
+            left = lookup_symbol(table, node->left->info->tag);
+            if (left == NULL) {
+                printf("Variable no declarada: %s\n", node->left->info->tag);
+                exit(1);
+            } else {
+                right = check_types(node->right, table);
+                if (left->valueType != right->valueType) {
+                    printf("Error de tipos en la asignación de la variable: %s\n", node->left->info->tag);
+                    exit(1);
+                }
+                node->left->info->valueType = left->valueType;
+                node->info->valueType = left->valueType;
+
+                return NULL;
+            }
+            break;
+
+        case CLASS_OPERATION:
+            left = check_types(node->left, table);
+            right = check_types(node->right, table);
+            if (left->valueType != right->valueType) {
+                printf("Error de tipos en la operación: %c\n", node->info->tag[0]);
+                exit(1);
+            }
+            node->info->valueType = left->valueType;
+            return node->info;
+            break;
+
+        case CLASS_RETURN:
+            left = check_types(node->left, table);
+            node->info->valueType = left->valueType;
+            return left;
+            break;
+
+        case CLASS_DECL_LIST:
+            check_types(node->left, table);
+            check_types(node->right, table);
+            break;
+
+        case CLASS_SENTENCE_LIST:
+            check_types(node->left, table);
+            check_types(node->right, table);
+            break;
 
         default:
             printf("Nodo no soportado, Tipo: %d\n", node->info->classType);
@@ -290,49 +347,73 @@ void generate_dot(ASTNode* node, FILE* fp) {
 
     switch (node->info->classType) {
         case CLASS_CONSTANT:
-            fprintf(fp, "CONSTANT\\nValor: %d", node->info->value);
-            break;
-        case CLASS_VAR:
-            fprintf(fp, "VARIABLE\\nNombre: %s", node->info->tag);
-            break;
-        case CLASS_OPERATION:
-            fprintf(fp, "OPERACIÓN\\nOperador: %c", node->info->tag[0]);
-            break;
-        case CLASS_RETURN:
-            fprintf(fp, "RETURN");
-            break;
-        case CLASS_ASSIGN:
-            fprintf(fp, "ASIGNACIÓN");
-            break;
-        case CLASS_DECL:
-            fprintf(fp, "DECLARACIÓN\\nTipo: ");
+            fprintf(fp, "CONSTANT\\nValor: %d\\nTipo: ", node->info->value);
             if (node->info->valueType == TYPE_INT) {
                 fprintf(fp, "int");
             } else if (node->info->valueType == TYPE_BOOL) {
                 fprintf(fp, "bool");
-            } else if (node->info->valueType == TYPE_STRING) {
-                fprintf(fp, "string");
-            } else if (node->info->valueType == TYPE_VOID) {
-                fprintf(fp, "void");
             }
             break;
-        case CLASS_SENTENCE_LIST:
-            fprintf(fp, "SENTENCE LIST");
+        case CLASS_VAR:
+            fprintf(fp, "VARIABLE\\nNombre: %s\\nTipo: ", node->info->tag);
+            if (node->info->valueType == TYPE_INT) {
+                fprintf(fp, "int");
+            } else if (node->info->valueType == TYPE_BOOL) {
+                fprintf(fp, "bool");
+            }
             break;
-        case CLASS_PROGRAM:
-            fprintf(fp, "PROGRAM");
+        case CLASS_OPERATION:
+            fprintf(fp, "OPERACIÓN\\nOperador: %c\\nTipo: ", node->info->tag[0]);
+            if (node->info->valueType == TYPE_INT) {
+                fprintf(fp, "int");
+            } else if (node->info->valueType == TYPE_BOOL) {
+                fprintf(fp, "bool");
+            }
             break;
-        case CLASS_DECL_LIST:
-            fprintf(fp, "DECL LIST");
+        case CLASS_RETURN:
+            fprintf(fp, "RETURN\\nTipo: ");
+            if (node->info->valueType == TYPE_INT) {
+                fprintf(fp, "int");
+            } else if (node->info->valueType == TYPE_BOOL) {
+                fprintf(fp, "bool");
+            }
             break;
-        default:
-            fprintf(fp, "Tipo de nodo desconocido");
-            break;
+        case CLASS_ASSIGN:
+            fprintf(fp, "ASIGN\\nTipo: ");
+            if (node->info->valueType == TYPE_INT) {
+                fprintf(fp, "int");
+            } else if (node->info->valueType == TYPE_BOOL) {
+                fprintf(fp, "bool");
+                break;
+                case CLASS_DECL:
+                    fprintf(fp, "DECL\\nTipo: ");
+                    if (node->info->valueType == TYPE_INT) {
+                        fprintf(fp, "int");
+                    } else if (node->info->valueType == TYPE_BOOL) {
+                        fprintf(fp, "bool");
+                    } else if (node->info->valueType == TYPE_STRING) {
+                        fprintf(fp, "string");
+                    } else if (node->info->valueType == TYPE_VOID) {
+                        fprintf(fp, "void");
+                    }
+                    break;
+                case CLASS_SENTENCE_LIST:
+                    fprintf(fp, "SENTENCE LIST");
+                    break;
+                case CLASS_PROGRAM:
+                    fprintf(fp, "PROGRAM");
+                    break;
+                case CLASS_DECL_LIST:
+                    fprintf(fp, "DECL LIST");
+                    break;
+                default:
+                    fprintf(fp, "Tipo de nodo desconocido");
+                    break;
+            }
     }
 
     fprintf(fp, "\"];\n");
 
-    // Ahora procesamos los hijos
     if (node->left != NULL) {
         int leftId = nodeId;
         generate_dot(node->left, fp);
