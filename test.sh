@@ -26,6 +26,7 @@ done
 # Print summary
 if [ $failed -eq 0 ]; then
     echo "All tests passed!"
+    cat test_passed.txt
 else
     echo "$failed tests failed."
     exit 1
