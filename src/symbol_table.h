@@ -11,6 +11,6 @@ typedef struct SymbolTable {
 } SymbolTable;
 
 void insert_symbol(SymbolTable *table, Attributes *info);
-Symbol *lookup_symbol(SymbolTable *table, char *id);
+Attributes* lookup_symbol(SymbolTable *table, char *id);
 
 #endif  // SYMBOL_TABLE_H

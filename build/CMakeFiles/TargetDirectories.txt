@@ -1,3 +1,3 @@
-/home/luciom/own_compiler/build/CMakeFiles/Compiler.dir
-/home/luciom/own_compiler/build/CMakeFiles/edit_cache.dir
-/home/luciom/own_compiler/build/CMakeFiles/rebuild_cache.dir
+/home/brend/compilador/own_compiler/build/CMakeFiles/Compiler.dir
+/home/brend/compilador/own_compiler/build/CMakeFiles/edit_cache.dir
+/home/brend/compilador/own_compiler/build/CMakeFiles/rebuild_cache.dir

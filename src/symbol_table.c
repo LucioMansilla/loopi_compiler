@@ -1,6 +1,6 @@
 #include "symbol_table.h"
 #include <stdlib.h>
-
+#include <string.h>
 void insert_symbol(SymbolTable* table, Attributes* info) {
     Symbol* symbol = (Symbol*)malloc(sizeof(Symbol));
     symbol->info = info;
@@ -8,11 +8,11 @@ void insert_symbol(SymbolTable* table, Attributes* info) {
     table->head = symbol;
 }
 
-Symbol* lookup_symbol(SymbolTable* table, char* id){
+Attributes* lookup_symbol(SymbolTable* table, char* id){
     Symbol* symbol = table->head;
     while (symbol != NULL) {
         if (strcmp(symbol->info->tag, id) == 0) {
-            return symbol;
+            return symbol->info;
         }
         symbol = symbol->next;
     }
