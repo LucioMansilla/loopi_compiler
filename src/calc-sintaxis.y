@@ -41,6 +41,7 @@ prog: decl sentence_list
          SymbolTable* table = malloc(sizeof(SymbolTable));
          table->head = NULL;
          check_types(root,table);
+         //eval(root,table);
           
          generate_dot_file(root, "ast.dot");
      }

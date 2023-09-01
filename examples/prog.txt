@@ -1,4 +1,4 @@
-# expected = OK
-int x = 5;
-bool y = true;
-return false + y;
+int a = 2;
+int b = a;
+int c = a + b * 3;
+return c;
