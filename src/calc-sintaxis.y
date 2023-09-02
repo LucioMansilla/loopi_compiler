@@ -4,6 +4,7 @@
 #include "symbol_table.h"
 #include "ast.h"
 ASTNode* root = NULL;
+SymbolTable* table = NULL;   
 extern int yylineno;  
 %}
 
@@ -27,45 +28,55 @@ extern int yylineno;
 %type <node> sentence_list
 %type <node> sentence
 %type <node> prog
+%type <node> declarations
 %type <type_val> type
     
 %left '+' TMENOS 
 %left '*'
 
 %%
- 
-prog: decl sentence_list 
-     { 
+
+init: {
+    table = malloc(sizeof(SymbolTable));
+    table->head = NULL;
+    }prog
+    ;
+prog:
+ declarations sentence_list 
+     {
          $$ = create_program_node($1, $2); 
          root = $$; 
-         SymbolTable* table = malloc(sizeof(SymbolTable));
-         table->head = NULL;
          check_types(root,table);
-         //eval(root,table);
+         eval(root,table);
           
          generate_dot_file(root, "ast.dot");
      }
-    | decl 
-    { 
-        $$ = $1;
-        root = $$;  
-    }
-    | sentence_list 
-    { 
-        $$ = $1;
-        root = $$; 
-    }
+
     ;
 
-    
-decl: type ID '=' expr ';' decl  
+declarations : decl declarations 
+             { 
+                 $$ = create_list_decl_node($1, $2); 
+             }
+             | decl 
+             { 
+                 $$ = $1; 
+             }
+    ;
+
+decl: type ID '=' expr ';'
      { 
-         ASTNode* a = create_single_decl_node($1, create_id_node($2,yylineno), $4,yylineno);
-         $$ = create_list_decl_node(a, $6); 
-     }
-     | type ID '=' expr ';'  
-     { 
-         $$ = create_single_decl_node($1, create_id_node($2,yylineno), $4, yylineno); 
+         Attributes* info = lookup_symbol(table, $2);
+         if(info != NULL){
+             printf("Error: variable %s already declared\n", $2);
+             exit(1);
+         }
+         ASTNode* id = create_id_node($2,yylineno);
+         insert_symbol(table, id->info);
+         printf("Inserting symbol %s\n", id->info->tag);
+         print_symbol_table(table);
+         $$ = create_single_decl_node($1, id, $4,yylineno);
+         
      }
     ;
 
@@ -81,8 +92,14 @@ sentence_list: sentence sentence_list
     ;
 
 sentence: ID '=' expr ';' 
-         { 
-             ASTNode* node_id  = create_id_node($1, yylineno);
+         {  
+            Attributes* info = lookup_symbol(table,$1);
+            if(info == NULL){
+                printf("Error variableasdasdsa %s undeclared",$1);
+                exit(1);
+            }
+
+            ASTNode* node_id =  create_ast_node(info, NULL, NULL);
              $$ = create_assign_node(node_id, $3, yylineno);
          }
          | RETURN expr ';' 
@@ -98,7 +115,16 @@ expr: valor
 
     | ID  
      { 
-         $$ = create_id_node($1, yylineno);  
+        printf("Estoy en expr: valor ID: ");
+        print_symbol_table(table);
+
+        Attributes* info = lookup_symbol(table, $1);
+        if (info == NULL){
+            printf("Error: variaasdasdklfasjflkasjflkble %s undeclared\n", $1);
+            exit(1);
+        }
+
+        $$ = create_ast_node(info,NULL,NULL);  
      }
 
     | expr '+' expr  
