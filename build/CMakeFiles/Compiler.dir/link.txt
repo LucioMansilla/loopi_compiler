@@ -1,1 +1,0 @@
-/usr/bin/cc -g CMakeFiles/Compiler.dir/calc-sintaxis.tab.c.o CMakeFiles/Compiler.dir/lex.yy.c.o CMakeFiles/Compiler.dir/src/ast.c.o CMakeFiles/Compiler.dir/src/attributes.c.o CMakeFiles/Compiler.dir/src/symbol_table.c.o -o Compiler  /usr/lib/x86_64-linux-gnu/libfl.so 
