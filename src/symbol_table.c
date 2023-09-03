@@ -28,3 +28,9 @@ void print_symbol_table(SymbolTable* table) {
         symbol = symbol->next;
     }
 }
+
+SymbolTable* create_symbol_table() {
+    SymbolTable* table = (SymbolTable*)malloc(sizeof(SymbolTable));
+    table->head = NULL;
+    return table;
+}

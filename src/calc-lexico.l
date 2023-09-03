@@ -49,8 +49,14 @@ v_bool true|false
 
 %%
 
-void yyerror(){
-	printf("%s%d\n","-> ERROR Sintactico en la linea: ",yylineno);
+// lexer.l
+
+void yyerror(char* msg) {
+  if(numErrors < MAX_ERRORS) {
+    errors[numErrors].message = msg; 
+    errors[numErrors].lineno = yylineno;
+    numErrors++;
+  }
 }
 
 int main(int argc,char *argv[]){

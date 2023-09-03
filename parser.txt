@@ -3,7 +3,6 @@
 #include <stdio.h>
 #include "symbol_table.h"
 #include "ast.h"
-#include "semantic.h"
 ASTNode* root = NULL;
 SymbolTable* table = NULL;   
 extern int yylineno;  
@@ -16,6 +15,7 @@ extern int yylineno;
     ValueType type_val;
     
 }
+
 %token <int_val> INT
 %token <id_val> ID
 %token <int_val> BOOL
@@ -37,7 +37,8 @@ extern int yylineno;
 %%
 
 init: {
-    table = create_symbol_table();
+    table = malloc(sizeof(SymbolTable));
+    table->head = NULL;
     }prog
     ;
 prog:
@@ -114,6 +115,8 @@ expr: valor
 
     | ID  
      { 
+        printf("Estoy en expr: valor ID: ");
+        print_symbol_table(table);
 
         Attributes* info = lookup_symbol(table, $1);
         if (info == NULL){
