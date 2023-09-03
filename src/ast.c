@@ -57,7 +57,7 @@ ASTNode* create_program_node(ASTNode* left, ASTNode* right) {
     return create_ast_node(attr, left, right);
 }
 
-// El nodo en este punto ya esta etiquetado y los programas terminan en return <expr entera>
+// El nodo en este punto ya esta etiquetado y los programas terminan en return 
 int eval(ASTNode* node, SymbolTable* table) {
     Attributes* left = NULL;
     if (node == NULL) return 0;

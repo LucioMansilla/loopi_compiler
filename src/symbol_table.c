@@ -1,8 +1,8 @@
 #include "symbol_table.h"
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
 void insert_symbol(SymbolTable* table, Attributes* info) {
     Symbol* symbol = (Symbol*)malloc(sizeof(Symbol));
     symbol->info = info;

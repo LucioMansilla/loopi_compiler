@@ -5,6 +5,8 @@
 #include "ast.h"
 #include "semantic.h"
 #include "errors.h"
+int yylex(void);
+void yyerror(const char *s);
 ASTNode* root = NULL;
 SymbolTable* table = NULL;   
 extern int yylineno;  
@@ -47,8 +49,7 @@ prog:
          $$ = create_program_node($1, $2); 
          root = $$; 
          check_types(root,table);
-         eval(root,table);
-          
+         eval(root,table);        
          generate_dot_file(root, "ast.dot");
      }
 
@@ -73,8 +74,6 @@ decl: type ID '=' expr ';'
          }
          ASTNode* id = create_id_node($2,yylineno);
          insert_symbol(table, id->info);
-         printf("Inserting symbol %s\n", id->info->tag);
-         print_symbol_table(table);
          $$ = create_single_decl_node($1, id, $4,yylineno);
          
      }
@@ -95,7 +94,7 @@ sentence: ID '=' expr ';'
          {  
             Attributes* info = lookup_symbol(table,$1);
             if(info == NULL){
-                printf("Error variableasdasdsa %s undeclared",$1);
+                printf("Error variable %s undeclared",$1);
                 exit(1);
             }
 
@@ -118,7 +117,7 @@ expr: valor
 
         Attributes* info = lookup_symbol(table, $1);
         if (info == NULL){
-            printf("Error: variaasdasdklfasjflkasjflkble %s undeclared\n", $1);
+            printf("Error: variable %s undeclared\n", $1);
             exit(1);
         }
 
