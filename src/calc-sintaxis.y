@@ -4,6 +4,7 @@
 #include "symbol_table.h"
 #include "ast.h"
 #include "semantic.h"
+#include "errors.h"
 ASTNode* root = NULL;
 SymbolTable* table = NULL;   
 extern int yylineno;  

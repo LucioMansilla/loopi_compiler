@@ -52,11 +52,7 @@ v_bool true|false
 // lexer.l
 
 void yyerror(char* msg) {
-  if(numErrors < MAX_ERRORS) {
-    errors[numErrors].message = msg; 
-    errors[numErrors].lineno = yylineno;
-    numErrors++;
-  }
+    printf("Error: %s\n", msg);
 }
 
 int main(int argc,char *argv[]){

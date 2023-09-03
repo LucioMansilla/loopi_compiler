@@ -1,6 +1,7 @@
 #include "semantic.h"
 
 #include <stdio.h>
+#include <stdlib.h>
 
 // Función auxiliar para manejar operaciones binarias y asignaciones
 void check_binary_operation(ASTNode* node, SymbolTable* table) {
