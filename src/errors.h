@@ -1,5 +1,3 @@
-// errors.h
-
 #define MAX_ERRORS 100
 
 typedef struct {

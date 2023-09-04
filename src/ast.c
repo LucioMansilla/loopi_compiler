@@ -4,8 +4,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "symbol_table.h"
-
 ASTNode* create_ast_node(Attributes* info, ASTNode* left, ASTNode* right) {
     ASTNode* node = (ASTNode*)malloc(sizeof(ASTNode));
     node->info = info;
@@ -29,7 +27,7 @@ ASTNode* create_id_node(char* id, int line) {
     return create_ast_node(attr, NULL, NULL);
 }
 
-ASTNode* create_return_node(ASTNode* node, int line) {  // el hijo izq es el hijo return
+ASTNode* create_return_node(ASTNode* node, int line) {
     Attributes* attr = create_attributes(NOT_TYPE, 0, NULL, line, CLASS_RETURN);
     return create_ast_node(attr, node, NULL);
 }
@@ -44,7 +42,10 @@ ASTNode* create_sentence_list_node(ASTNode* left, ASTNode* right) {
 }
 
 ASTNode* create_single_decl_node(ValueType valueType, ASTNode* left, ASTNode* right, int line) {
-    Attributes* attr = create_attributes(valueType, '=', 0, line, CLASS_DECL);
+    char* tag = (char*)malloc(2 * sizeof(char));
+    tag[0] = '=';
+    tag[1] = '\0';
+    Attributes* attr = create_attributes(valueType, 0, tag, line, CLASS_DECL);
     return create_ast_node(attr, left, right);
 }
 
@@ -55,74 +56,6 @@ ASTNode* create_list_decl_node(ASTNode* left, ASTNode* right) {
 ASTNode* create_program_node(ASTNode* left, ASTNode* right) {
     Attributes* attr = create_attributes(TYPE_VOID, 0, NULL, 0, CLASS_PROGRAM);
     return create_ast_node(attr, left, right);
-}
-
-// El nodo en este punto ya esta etiquetado y los programas terminan en return
-int eval(ASTNode* node, SymbolTable* table) {
-    Attributes* left = NULL;
-    if (node == NULL) return 0;
-
-    switch (node->info->classType) {
-        case CLASS_PROGRAM:
-            eval(node->left, table);
-            eval(node->right, table);
-            break;
-        case CLASS_CONSTANT:
-            return node->info->value;
-            break;
-
-        case CLASS_VAR:
-            return node->info->value;
-            break;
-
-        case CLASS_DECL:
-            left = lookup_symbol(table, node->left->info->tag);
-            left->value = eval(node->right, table);
-            break;
-        case CLASS_ASSIGN:
-            left = lookup_symbol(table, node->left->info->tag);
-            left->value = eval(node->right, table);
-            break;
-        case CLASS_DECL_LIST:
-            eval(node->left, table);
-            eval(node->right, table);
-            break;
-        case CLASS_SENTENCE_LIST:
-            eval(node->left, table);
-            eval(node->right, table);
-            break;
-        case CLASS_RETURN:
-            eval(node->left, table);
-            if (node->left->info->valueType == TYPE_INT)
-                printf("ResultadoEntero: %d\n", node->left->info->value);
-            else if (node->left->info->value) {
-                printf("ResultadoBooleano: True\n");
-            } else
-                printf("ResultadoBooleano: False\n");
-            break;
-
-        case CLASS_ADD:
-            eval(node->left, table);
-            eval(node->right, table);
-            if (node->info->valueType == TYPE_INT) {
-                node->info->value = node->left->info->value + node->right->info->value;
-            } else {
-                node->info->value = node->left->info->value || node->right->info->value;
-            }
-            return node->info->value;
-            break;
-
-        case CLASS_MUL:
-            eval(node->left, table);
-            eval(node->right, table);
-            if (node->info->valueType == TYPE_INT) {
-                node->info->value = node->left->info->value * node->right->info->value;
-            } else {
-                node->info->value = node->left->info->value && node->right->info->value;
-            }
-            return node->info->value;
-            break;
-    }
 }
 
 // Utilizaremos esta variable para asignar IDs únicos a los nodos

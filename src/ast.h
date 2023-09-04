@@ -20,8 +20,6 @@ ASTNode* create_single_decl_node(ValueType valueType, ASTNode* left, ASTNode* ri
 ASTNode* create_list_decl_node(ASTNode* left, ASTNode* right);
 ASTNode* create_program_node(ASTNode* left, ASTNode* right);
 void print_ast(ASTNode* node);
-
 void generate_dot_file(ASTNode* root, const char* filename);
-int eval(ASTNode* node, SymbolTable* table);
 
 #endif  // AST_H

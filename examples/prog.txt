@@ -1,4 +1,4 @@
-int a = 5;
-int c = false;
-c = true;
-return a +true;
+# expected = 5
+int a = k;
+bool b = true;
+return a + true;

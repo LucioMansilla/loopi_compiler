@@ -123,13 +123,13 @@ expr: valor
 
     | expr '+' expr  
      { 
-         Attributes* attr = create_op_attributes(NOT_TYPE, '+', 0, CLASS_ADD);
+         Attributes* attr = create_op_attributes(NOT_TYPE, '+', yylineno, CLASS_ADD);
          $$ = create_ast_node(attr, $1, $3);
      }
 
     | expr '*' expr  
      { 
-         Attributes* attr = create_op_attributes(NOT_TYPE, '*',0, CLASS_MUL);
+         Attributes* attr = create_op_attributes(NOT_TYPE, '*',yylineno, CLASS_MUL);
          $$ = create_ast_node(attr, $1, $3);
      }
 

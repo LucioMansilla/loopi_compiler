@@ -12,5 +12,5 @@ ADD_FLEX_BISON_DEPENDENCY(MyScanner MyParser)
 
 include_directories(${CMAKE_CURRENT_BINARY_DIR} src/)
 
-add_executable(Compiler ${BISON_MyParser_OUTPUTS} ${FLEX_MyScanner_OUTPUTS} src/ast.c src/attributes.c src/symbol_table.c src/semantic.c src/errors.c) 
+add_executable(Compiler ${BISON_MyParser_OUTPUTS} ${FLEX_MyScanner_OUTPUTS} src/ast.c src/attributes.c src/symbol_table.c src/semantic.c src/errors.c src/eval.c )
 target_link_libraries(Compiler ${FLEX_LIBRARIES} ${BISON_LIBRARIES})

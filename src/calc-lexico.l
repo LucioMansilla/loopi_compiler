@@ -7,6 +7,8 @@
 #include "calc-sintaxis.tab.h"
 #include "symbol_table.h"
 #include "errors.h"
+#include "semantic.h"
+#include "eval.h"
 #include <stdarg.h>
 extern ASTNode* root;
 extern SymbolTable* table;
@@ -84,15 +86,17 @@ int main(int argc,char *argv[]){
         }
 
     yyparse();
-    if (numErrors > 0) {
+    if (numErrors) {
         printErrors();
         exit(1);
     }
     check_types(root, table);
-    if (numErrors > 0) {
+    if (numErrors) {
         printErrors();
         exit(1);
     }
+
+    eval(root, table);
     generate_dot_file(root,"ast.dot");
 
 

@@ -1,5 +1,4 @@
-# expected = OK
-
+# expected = true
 bool x = true;
 bool y = false;
 x = x + y;

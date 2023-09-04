@@ -11,13 +11,12 @@ for example in examples/*.txt; do
 
     # Run the compiler on the example file and capture the output (ignoring stderr)
     output=$(./build/Compiler $example 2>/dev/null)
-
     # Compare the compiler's output with the expected output
-    if [[ "$output" != *"$expected_output"* ]]; then
+    if [ "$output" != "$expected_output" ]; then
         echo "Test failed!"
         echo "Expected: $expected_output"
         echo "Got: $output"
-        ((failed++))
+        failed=$((failed + 1))
     else
         echo "Test passed!"
     fi

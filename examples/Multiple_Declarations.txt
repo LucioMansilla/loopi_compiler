@@ -1,4 +1,4 @@
-# expected = OK
+# expected = 30
 int x = 5;
 int y = 10;
 int z = 15;

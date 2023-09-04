@@ -1,4 +1,4 @@
-# expected = OK
+# expected = 10
 bool x = true;
 int y = 10;
 return y;
