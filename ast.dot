@@ -1,6 +1,7 @@
 digraph AST {
   0 [label="PROGRAM"];
   1 [label="DECL\nTipo: int"];
+<<<<<<< HEAD
   2 [label="VARIABLE\nNombre: x\nTipo: int"];
   1 -> 2;
   3 [label="CONSTANT\nValor: 5\nTipo: int"];
@@ -17,5 +18,19 @@ digraph AST {
   9 [label="VARIABLE\nNombre: x\nTipo: int"];
   8 -> 9;
   4 -> 8;
+=======
+  2 [label="VARIABLE\nNombre: a\nTipo: int"];
+  1 -> 2;
+  3 [label="CONSTANT\nValor: 4\nTipo: int"];
+  1 -> 3;
+  0 -> 1;
+  4 [label="RETURN\nTipo: int"];
+  5 [label="OPERACIÓN\nOperador: +\nTipo: int"];
+  6 [label="VARIABLE\nNombre: a\nTipo: int"];
+  5 -> 6;
+  7 [label="CONSTANT\nValor: 1\nTipo: int"];
+  5 -> 7;
+  4 -> 5;
+>>>>>>> refs/remotes/origin/master
   0 -> 4;
 }
