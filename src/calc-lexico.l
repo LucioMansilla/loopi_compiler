@@ -1,5 +1,4 @@
 %{
-
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
@@ -57,7 +56,7 @@ v_bool true|false
 
 // lexer.l
 void yyerror(const char* format, ...) {
-    static char msg[256]; // Buffer estático para el mensaje
+    static char msg[256]; 
     va_list args;
 
     va_start(args, format);
@@ -65,7 +64,7 @@ void yyerror(const char* format, ...) {
     va_end(args);
 
     if(numErrors < MAX_ERRORS) {
-        errors[numErrors].message = strdup(msg); // Duplicar la cadena para evitar problemas con el buffer estático
+        errors[numErrors].message = strdup(msg);
         errors[numErrors].lineno = yylineno;
         numErrors++;
     }
@@ -95,7 +94,6 @@ int main(int argc,char *argv[]){
         printErrors();
         exit(1);
     }
-
     eval(root, table);
     generate_dot_file(root,"ast.dot");
 

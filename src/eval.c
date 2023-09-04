@@ -70,5 +70,8 @@ void eval(ASTNode* node, SymbolTable* table) {
                 node->info->value = node->left->info->value && node->right->info->value;
             }
             break;
+        default :
+            break;
+
     }
 }

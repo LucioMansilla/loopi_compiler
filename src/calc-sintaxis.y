@@ -17,7 +17,6 @@ extern int yylineno;
     char *id_val;
     ASTNode *node;
     ValueType type_val;
-    
 }
 %token <int_val> INT
 %token <id_val> ID
@@ -48,7 +47,6 @@ prog:
      {
          $$ = create_program_node($1, $2); 
          root = $$; 
-       
      }
 
     ;
@@ -72,7 +70,6 @@ decl: type ID '=' expr ';'
          ASTNode* id = create_id_node($2,yylineno);
          insert_symbol(table, id->info);
          $$ = create_single_decl_node($1, id, $4,yylineno);
-         
      }
     ;
 
@@ -102,7 +99,8 @@ sentence: ID '=' expr ';'
          { 
              $$ = create_return_node($2,yylineno); 
          }
-    ;
+    ;       
+
 
 expr: valor 
      { 

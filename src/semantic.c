@@ -1,12 +1,13 @@
 #include "semantic.h"
-#include "errors.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "errors.h"
 
 void check_binary_operation(ASTNode* node, SymbolTable* table, char* name) {
     if (node->left->info->valueType != node->right->info->valueType) {
-        yyerror_with_lineno(node->info->line, "%s: %s", name, node->info->tag);
+        save_error(node->info->line, "%s: %s", name, node->info->tag);
     }
 }
 

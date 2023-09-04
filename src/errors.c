@@ -13,7 +13,7 @@ void printErrors() {
     }
 }
 
-void yyerror_with_lineno(int lineno, const char *format, ...) {
+void save_error(int lineno, const char *format, ...) {
     static char msg[256];  // Buffer estático para el mensaje
     va_list args;
 
