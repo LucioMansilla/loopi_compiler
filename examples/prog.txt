@@ -1,4 +1,3 @@
 # expected = 5
-int a = k;
-bool b = true;
-return a + true;
+int a = 4;
+return a + 1;
