@@ -1,4 +1,4 @@
-int a = 2;
-int b = a;
-int c = a + b * 3;
-return c;
+int a = 5;
+int c = false;
+c = true;
+return a +true;

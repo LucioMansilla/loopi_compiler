@@ -9,13 +9,14 @@ typedef enum {
 } ValueType;
 
 typedef enum {
-    CLASS_VAR,  
+    CLASS_VAR,
     CLASS_FUNCTION,
-    CLASS_CONSTANT, 
-    CLASS_OPERATION, //CLAS_ADD
-    CLASS_ASSIGN, 
-    CLASS_DECL, 
-    CLASS_RETURN, 
+    CLASS_CONSTANT,
+    CLASS_ADD,
+    CLASS_MUL,
+    CLASS_ASSIGN,
+    CLASS_DECL,
+    CLASS_RETURN,
     CLASS_SENTENCE_LIST,
     CLASS_DECL_LIST,
     CLASS_PROGRAM,

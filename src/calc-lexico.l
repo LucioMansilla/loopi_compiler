@@ -5,7 +5,11 @@
 #include <stdio.h>
 #include "ast.h"
 #include "calc-sintaxis.tab.h"
+#include "symbol_table.h"
+#include "errors.h"
+#include <stdarg.h>
 extern ASTNode* root;
+extern SymbolTable* table;
 %}
 
 %option noyywrap
@@ -50,10 +54,21 @@ v_bool true|false
 %%
 
 // lexer.l
+void yyerror(const char* format, ...) {
+    static char msg[256]; // Buffer estático para el mensaje
+    va_list args;
 
-void yyerror(char* msg) {
-    printf("Error: %s\n", msg);
+    va_start(args, format);
+    vsnprintf(msg, sizeof(msg), format, args);
+    va_end(args);
+
+    if(numErrors < MAX_ERRORS) {
+        errors[numErrors].message = strdup(msg); // Duplicar la cadena para evitar problemas con el buffer estático
+        errors[numErrors].lineno = yylineno;
+        numErrors++;
+    }
 }
+
 
 int main(int argc,char *argv[]){
     ++argv, --argc;
@@ -68,16 +83,19 @@ int main(int argc,char *argv[]){
             yyin = stdin;
         }
 
-
-    if (yyparse() == 0) {
-       // check_types(root);
-      //  generate_dot_file(root, "ast.dot");
-        printf("\n-> OK\n");
-        return 0;
-    } else {
-        printf("\n-> ERROR\n");
-        return 1;
+    yyparse();
+    if (numErrors > 0) {
+        printErrors();
+        exit(1);
     }
+    check_types(root, table);
+    if (numErrors > 0) {
+        printErrors();
+        exit(1);
+    }
+    generate_dot_file(root,"ast.dot");
+
+
 
 }
 

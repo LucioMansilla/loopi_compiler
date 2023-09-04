@@ -6,7 +6,7 @@
 #include "semantic.h"
 #include "errors.h"
 int yylex(void);
-void yyerror(const char *s);
+void yyerror(const char *format,...);
 ASTNode* root = NULL;
 SymbolTable* table = NULL;   
 extern int yylineno;  
@@ -48,9 +48,7 @@ prog:
      {
          $$ = create_program_node($1, $2); 
          root = $$; 
-         check_types(root,table);
-         eval(root,table);        
-         generate_dot_file(root, "ast.dot");
+       
      }
 
     ;
@@ -69,8 +67,7 @@ decl: type ID '=' expr ';'
      { 
          Attributes* info = lookup_symbol(table, $2);
          if(info != NULL){
-             printf("Error: variable %s already declared\n", $2);
-             exit(1);
+                yyerror("variable %s already declared", $2);
          }
          ASTNode* id = create_id_node($2,yylineno);
          insert_symbol(table, id->info);
@@ -93,10 +90,10 @@ sentence_list: sentence sentence_list
 sentence: ID '=' expr ';' 
          {  
             Attributes* info = lookup_symbol(table,$1);
-            if(info == NULL){
-                printf("Error variable %s undeclared",$1);
-                exit(1);
-            }
+                if (info == NULL){
+         yyerror("variable %s undeclared", $1);
+}
+
 
             ASTNode* node_id =  create_ast_node(info, NULL, NULL);
              $$ = create_assign_node(node_id, $3, yylineno);
@@ -116,23 +113,23 @@ expr: valor
      { 
 
         Attributes* info = lookup_symbol(table, $1);
-        if (info == NULL){
-            printf("Error: variable %s undeclared\n", $1);
-            exit(1);
-        }
+     if (info == NULL){
+         yyerror("variable %s undeclared", $1);
+}
+
 
         $$ = create_ast_node(info,NULL,NULL);  
      }
 
     | expr '+' expr  
      { 
-         Attributes* attr = create_op_attributes(NOT_TYPE, '+', 0, CLASS_OPERATION);
+         Attributes* attr = create_op_attributes(NOT_TYPE, '+', 0, CLASS_ADD);
          $$ = create_ast_node(attr, $1, $3);
      }
 
     | expr '*' expr  
      { 
-         Attributes* attr = create_op_attributes(NOT_TYPE, '*',0, CLASS_OPERATION);
+         Attributes* attr = create_op_attributes(NOT_TYPE, '*',0, CLASS_MUL);
          $$ = create_ast_node(attr, $1, $3);
      }
 

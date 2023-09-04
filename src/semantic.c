@@ -3,19 +3,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// Función auxiliar para manejar operaciones binarias y asignaciones
-void check_binary_operation(ASTNode* node, SymbolTable* table) {
-    check_types(node->right, table);
+#include "errors.h"
 
+void check_binary_operation(ASTNode* node, SymbolTable* table, char* name) {
     if (node->left->info->valueType != node->right->info->valueType) {
-        printf("Error de tipos en la operación: %s\n", node->left->info->tag);
-        exit(1);
+        yyerror_with_lineno(node->info->line, "%s: %s", name, node->info->tag);
     }
-
-    node->info->valueType = node->left->info->valueType;
 }
 
-// Función principal para el chequeo semántico
 void check_types(ASTNode* node, SymbolTable* table) {
     if (node == NULL) return;
 
@@ -23,26 +18,20 @@ void check_types(ASTNode* node, SymbolTable* table) {
         case CLASS_DECL:
             node->left->info->valueType = node->info->valueType;
             check_types(node->right, table);
-
-            if (node->left->info->valueType != node->right->info->valueType) {
-                printf("Error de tipos en la declaración de la variable: %s\n", node->left->info->tag);
-                exit(1);
-            }
+            check_binary_operation(node, table, "declaración");
             break;
 
         case CLASS_ASSIGN:
-            check_binary_operation(node, table);
+            check_types(node->right, table);
+            check_binary_operation(node, table, "asignación");
+            node->info->valueType = node->left->info->valueType;
             break;
 
-        case CLASS_OPERATION:
+        case CLASS_ADD:
+        case CLASS_MUL:
             check_types(node->left, table);
             check_types(node->right, table);
-
-            if (node->left->info->valueType != node->right->info->valueType) {
-                printf("Error de tipos en la operación: %c\n", node->info->tag[0]);
-                exit(1);
-            }
-
+            check_binary_operation(node, table, "operación");
             node->info->valueType = node->left->info->valueType;
             break;
 

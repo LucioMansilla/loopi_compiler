@@ -57,7 +57,7 @@ ASTNode* create_program_node(ASTNode* left, ASTNode* right) {
     return create_ast_node(attr, left, right);
 }
 
-// El nodo en este punto ya esta etiquetado y los programas terminan en return 
+// El nodo en este punto ya esta etiquetado y los programas terminan en return
 int eval(ASTNode* node, SymbolTable* table) {
     Attributes* left = NULL;
     if (node == NULL) return 0;
@@ -96,23 +96,29 @@ int eval(ASTNode* node, SymbolTable* table) {
             if (node->left->info->valueType == TYPE_INT)
                 printf("ResultadoEntero: %d\n", node->left->info->value);
             else if (node->left->info->value) {
-                printf("ResultadoTRue: True\n");
+                printf("ResultadoBooleano: True\n");
             } else
-                printf("ResultadoFalse: False\n");
+                printf("ResultadoBooleano: False\n");
             break;
-        case CLASS_OPERATION:
+
+        case CLASS_ADD:
             eval(node->left, table);
             eval(node->right, table);
             if (node->info->valueType == TYPE_INT) {
-                if (node->info->tag[0] == '+')
-                    node->info->value = node->left->info->value + node->right->info->value;
-                else if (node->info->tag[0] == '*')
-                    node->info->value = node->left->info->value * node->right->info->value;
+                node->info->value = node->left->info->value + node->right->info->value;
             } else {
-                if (node->info->tag[0] == '+')
-                    node->info->value = node->left->info->value || node->right->info->value;
-                else if (node->info->tag[0] == '*')
-                    node->info->value = node->left->info->value && node->right->info->value;
+                node->info->value = node->left->info->value || node->right->info->value;
+            }
+            return node->info->value;
+            break;
+
+        case CLASS_MUL:
+            eval(node->left, table);
+            eval(node->right, table);
+            if (node->info->valueType == TYPE_INT) {
+                node->info->value = node->left->info->value * node->right->info->value;
+            } else {
+                node->info->value = node->left->info->value && node->right->info->value;
             }
             return node->info->value;
             break;
@@ -146,7 +152,8 @@ void generate_dot(ASTNode* node, FILE* fp) {
                 fprintf(fp, "bool");
             }
             break;
-        case CLASS_OPERATION:
+        case CLASS_ADD:
+        case CLASS_MUL:
             fprintf(fp, "OPERACIÓN\\nOperador: %c\\nTipo: ", node->info->tag[0]);
             if (node->info->valueType == TYPE_INT) {
                 fprintf(fp, "int");
