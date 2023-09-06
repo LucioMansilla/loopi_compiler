@@ -7,8 +7,8 @@
 #include "errors.h"
 int yylex(void);
 void yyerror(const char *format,...);
-ASTNode* root = NULL;
-SymbolTable* table = NULL;   
+extern  ASTNode* root; 
+SymbolTable* table;    
 extern int yylineno;  
 %}
 

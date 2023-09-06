@@ -4,14 +4,8 @@
 #include <stdio.h>
 #include "ast.h"
 #include "calc-sintaxis.tab.h"
-#include "symbol_table.h"
 #include "errors.h"
-#include "semantic.h"
-#include "eval.h"
 #include <stdarg.h>
-#include "instruction3dir.h"
-extern ASTNode* root;
-extern SymbolTable* table;
 %}
 
 %option noyywrap
@@ -69,36 +63,5 @@ void yyerror(const char* format, ...) {
         errors[numErrors].lineno = yylineno;
         numErrors++;
     }
-}
-
-
-int main(int argc,char *argv[]){
-    ++argv, --argc;
-
-        if (argc > 0) {
-            yyin = fopen(argv[0], "r");
-            if (yyin == NULL) {
-                fprintf(stderr, "Could not open file: %s\n", argv[0]);
-                exit(1);
-            }
-        } else {
-            yyin = stdin;
-        }
-
-    yyparse();
-    if (numErrors) {
-        printErrors();
-        exit(1);
-    }
-    check_types(root);
-    if (numErrors) {
-        printErrors();
-        exit(1);
-    }
-    gen_assembly(root);
-    generate_dot_file(root,"ast.dot");
-
-
-
 }
 

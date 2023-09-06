@@ -49,7 +49,9 @@
         "symbol_table.h": "c",
         "attributes.h": "c",
         "errors.h": "c",
-        "instruction3dir.h": "c"
+        "instruction3dir.h": "c",
+        "semantic.h": "c",
+        "ast.h": "c"
     },
     "[cpp]": {
         "editor.defaultFormatter": "xaver.clang-format"
