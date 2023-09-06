@@ -1,8 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "errors.h"
-#include "semantic.h"
+#include "error-handling/errors.h"
+#include "frontend/semantic.h"
+#include "backend/interpreter/eval.h"
+
 extern int yyparse(void);
 extern FILE* yyin;
 ASTNode* root = NULL;

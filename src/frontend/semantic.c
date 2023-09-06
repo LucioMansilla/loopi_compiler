@@ -1,7 +1,7 @@
+#include "semantic.h"
+
 #include <stdio.h>
 #include <stdlib.h>
-#include "errors.h"
-#include "semantic.h"
 
 void check_binary_operation(ASTNode* node, char* name) {
     if (node->left->info->valueType != node->right->info->valueType) {

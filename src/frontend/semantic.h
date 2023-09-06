@@ -1,6 +1,7 @@
 #ifndef SEMANTIC_H
 #define SEMANTIC_H
-#include "ast.h"
+#include "../structures/ast.h"
+#include "../error-handling/errors.h"
 
 void check_types(ASTNode* node);
 

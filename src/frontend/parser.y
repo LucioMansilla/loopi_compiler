@@ -3,8 +3,7 @@
 #include <stdio.h>
 #include "symbol_table.h"
 #include "ast.h"
-#include "semantic.h"
-#include "errors.h"
+
 int yylex(void);
 void yyerror(const char *format,...);
 extern  ASTNode* root; 

@@ -11,13 +11,6 @@ Instruction* create_instruction(CodOp opcode, Attributes* op1, Attributes* op2, 
     return instr;
 }
 
-void gen_assembly(ASTNode* node) {
-    InstructionList* list = (InstructionList*)malloc(sizeof(InstructionList));
-    list->head = NULL;
-    generate_assembly(node, list);
-    print_list_instruction(list);
-}
-
 void generate_assembly(ASTNode* node, InstructionList* list) {
     if (node == NULL) return;
 
@@ -104,6 +97,22 @@ void print_instruction(Instruction* instruction) {
     printf("\n");
 }
 
+void print_list_instruction(InstructionList* instructionList) {
+    Instruction* instruction = instructionList->head;
+    while (instruction != NULL) {
+        print_instruction(instruction);
+        instruction = instruction->next;
+    }
+}
+
+void gen_assembly(ASTNode* node) {
+    InstructionList* list = (InstructionList*)malloc(sizeof(InstructionList));
+    list->head = NULL;
+    generate_assembly(node, list);
+    print_list_instruction(list);
+}
+
+
 void append_instruction(InstructionList* instructionList, Instruction* instruction) {
     if (instructionList->head == NULL) {
         instructionList->head = instruction;
@@ -117,10 +126,3 @@ void append_instruction(InstructionList* instructionList, Instruction* instructi
     last->next = instruction;
 }
 
-void print_list_instruction(InstructionList* instructionList) {
-    Instruction* instruction = instructionList->head;
-    while (instruction != NULL) {
-        print_instruction(instruction);
-        instruction = instruction->next;
-    }
-}

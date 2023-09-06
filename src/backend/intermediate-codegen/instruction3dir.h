@@ -1,7 +1,7 @@
 #ifndef INSTRUCTION3DIR_H
 #define INSTRUCTION3DIR_H
-#include "ast.h"
-#include "attributes.h"
+#include "structures/ast.h"
+#include "structures/attributes.h"
 #include "stdlib.h"
 
 typedef enum {

@@ -3,7 +3,7 @@
 #include <string.h>
 #include <stdio.h>
 #include "ast.h"
-#include "calc-sintaxis.tab.h"
+#include "parser.tab.h"
 #include "errors.h"
 #include <stdarg.h>
 %}

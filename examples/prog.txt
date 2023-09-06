@@ -1,4 +1,4 @@
 # expected = 3
-int a = k;
+int a = 3;
 int b = 1;|
-return a+false;
+return a;

@@ -1,7 +1,6 @@
 #ifndef AST_H
 #define AST_H
 #include "attributes.h"
-#include "symbol_table.h"
 
 typedef struct ASTNode {
     Attributes* info;
