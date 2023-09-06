@@ -1,17 +1,18 @@
 ./build.sh
-# Variable to count failed tests
+# Variable para contar tests fallidos
 failed=0
 
-# Loop through all test files in the 'examples' directory
-for example in examples/*.txt; do
+# Loop para todos los archivos de prueba en el directorio 'tests/accept'
+for example in tests/accept/*.txt; do
     echo "Testing $example..."
 
-    # Extract the expected output from the example file
+    # Extraer el output esperado del archivo de prueba
     expected_output=$(grep '^# expected =' $example | cut -d'=' -f2 | tr -d ' ')
 
-    # Run the compiler on the example file and capture the output (ignoring stderr)
+    # Ejecutar el compilador en el archivo de prueba y capturar el output (ignorando stderr)
     output=$(./build/Compiler $example 2>/dev/null)
-    # Compare the compiler's output with the expected output
+    
+    # Comparar el output del compilador con el output esperado
     if [ "$output" != "$expected_output" ]; then
         echo "Test failed!"
         echo "Expected: $expected_output"
@@ -22,7 +23,7 @@ for example in examples/*.txt; do
     fi
 done
 
-# Print summary
+# Imprimir resumen
 if [ $failed -eq 0 ]; then
     echo "All tests passed!"
     cat test_passed.txt

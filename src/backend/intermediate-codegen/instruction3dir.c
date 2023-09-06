@@ -118,7 +118,6 @@ void append_instruction(InstructionList* instructionList, Instruction* instructi
         instructionList->head = instruction;
         return;
     }
-
     Instruction* last = instructionList->head;
     while (last->next != NULL) {
         last = last->next;

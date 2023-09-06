@@ -1,0 +1,61 @@
+\documentclass[12pt]{article}
+\usepackage{listings}
+
+\title{Manual de Usuario de Loopify}
+\author{Tu nombre}
+\date{Fecha de publicación}
+
+\begin{document}
+\maketitle
+
+\tableofcontents
+
+\section{Introducción}
+Loopify es un lenguaje de programación diseñado para [...].
+
+\section{Requisitos}
+Para compilar y ejecutar programas escritos en Loopify, necesitarás [...]
+
+\section{Tipos de datos}
+Loopify soporta los siguientes tipos de datos:
+\begin{itemize}
+    \item \texttt{TINT}: Para representar números enteros.
+    \item \texttt{TBOOL}: Para representar valores booleanos.
+\end{itemize}
+
+\section{Declaración de Variables}
+Para declarar una variable en Loopify, se utiliza la siguiente sintaxis:
+\begin{lstlisting}
+TINT variable = expresion;
+TBOOL variable = expresion;
+\end{lstlisting}
+
+\section{Operaciones}
+Loopify soporta las siguientes operaciones:
+\begin{itemize}
+    \item Adición (\texttt{+})
+    \item Multiplicación (\texttt{*})
+\end{itemize}
+
+\section{Sentencias}
+\subsection{Asignación}
+\begin{lstlisting}
+variable = expresion;
+\end{lstlisting}
+
+\subsection{Retorno}
+\begin{lstlisting}
+RETURN expresion;
+\end{lstlisting}
+
+\section{Errores Comunes}
+Aquí podemos describir algunos errores comunes que los usuarios podrían enfrentar y cómo resolverlos.
+
+\section{Ejemplos}
+\subsection{Programa Simple}
+\begin{lstlisting}
+TINT a = 1 + 2;
+RETURN a;
+\end{lstlisting}
+
+\end{document}

@@ -1,13 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "backend/interpreter/eval.h"
 #include "error-handling/errors.h"
 #include "frontend/semantic.h"
-#include "backend/interpreter/eval.h"
 
 extern int yyparse(void);
 extern FILE* yyin;
 ASTNode* root = NULL;
+
+void init_syntax_analysis();
+void init_semantic_analysis();
 
 int main(int argc, char* argv[]) {
     ++argv, --argc;
@@ -22,20 +25,24 @@ int main(int argc, char* argv[]) {
         yyin = stdin;
     }
 
-    yyparse();
-
-    if (numErrors) {
-        printErrors();
-        exit(1);
-    }
-
-    check_types(root);
-
-    if (numErrors) {
-        printErrors();
-        exit(1);
-    }
-
+    init_syntax_analysis();
+    init_semantic_analysis();
     eval(root);
     generate_dot_file(root, "ast.dot");
+}
+
+void init_syntax_analysis() {
+    yyparse();
+    if (numErrors) {
+        printErrors();
+        exit(1);
+    }
+}
+
+void init_semantic_analysis() {
+    check_types(root);
+    if (numErrors) {
+        printErrors();
+        exit(1);
+    }
 }
