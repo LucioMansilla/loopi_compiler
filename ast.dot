@@ -1,36 +1,25 @@
 digraph AST {
   0 [label="PROGRAM"];
-  1 [label="DECL\nTipo: int"];
-<<<<<<< HEAD
-  2 [label="VARIABLE\nNombre: x\nTipo: int"];
+  1 [label="DECL LIST"];
+  2 [label="DECL\nTipo: int"];
+  3 [label="VARIABLE\nNombre: a\nTipo: int"];
+  2 -> 3;
+  4 [label="CONSTANT\nValor: 1\nTipo: int"];
+  2 -> 4;
   1 -> 2;
-  3 [label="CONSTANT\nValor: 5\nTipo: int"];
-  1 -> 3;
-  0 -> 1;
-  4 [label="SENTENCE LIST"];
-  5 [label="ASIGN\nTipo: int"];
-  6 [label="VARIABLE\nNombre: x\nTipo: int"];
+  5 [label="DECL\nTipo: int"];
+  6 [label="VARIABLE\nNombre: b\nTipo: int"];
   5 -> 6;
-  7 [label="CONSTANT\nValor: 10\nTipo: int"];
+  7 [label="CONSTANT\nValor: 2\nTipo: int"];
   5 -> 7;
-  4 -> 5;
+  1 -> 5;
+  0 -> 1;
   8 [label="RETURN\nTipo: int"];
-  9 [label="VARIABLE\nNombre: x\nTipo: int"];
+  9 [label="OPERACIÓN\nOperador: +\nTipo: int"];
+  10 [label="VARIABLE\nNombre: a\nTipo: int"];
+  9 -> 10;
+  11 [label="VARIABLE\nNombre: b\nTipo: int"];
+  9 -> 11;
   8 -> 9;
-  4 -> 8;
-=======
-  2 [label="VARIABLE\nNombre: a\nTipo: int"];
-  1 -> 2;
-  3 [label="CONSTANT\nValor: 4\nTipo: int"];
-  1 -> 3;
-  0 -> 1;
-  4 [label="RETURN\nTipo: int"];
-  5 [label="OPERACIÓN\nOperador: +\nTipo: int"];
-  6 [label="VARIABLE\nNombre: a\nTipo: int"];
-  5 -> 6;
-  7 [label="CONSTANT\nValor: 1\nTipo: int"];
-  5 -> 7;
-  4 -> 5;
->>>>>>> refs/remotes/origin/master
-  0 -> 4;
+  0 -> 8;
 }

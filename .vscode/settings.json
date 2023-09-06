@@ -47,7 +47,9 @@
         "typeinfo": "cpp",
         "stdlib.h": "c",
         "symbol_table.h": "c",
-        "attributes.h": "c"
+        "attributes.h": "c",
+        "errors.h": "c",
+        "instruction3dir.h": "c"
     },
     "[cpp]": {
         "editor.defaultFormatter": "xaver.clang-format"

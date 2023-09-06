@@ -9,6 +9,7 @@
 #include "semantic.h"
 #include "eval.h"
 #include <stdarg.h>
+#include "instruction3dir.h"
 extern ASTNode* root;
 extern SymbolTable* table;
 %}
@@ -89,12 +90,12 @@ int main(int argc,char *argv[]){
         printErrors();
         exit(1);
     }
-    check_types(root, table);
+    check_types(root);
     if (numErrors) {
         printErrors();
         exit(1);
     }
-    eval(root, table);
+    gen_assembly(root);
     generate_dot_file(root,"ast.dot");
 
 
