@@ -54,7 +54,7 @@ ASTNode* create_list_decl_node(ASTNode* left, ASTNode* right) {
     return create_ast_node(attr, left, right);
 }
 ASTNode* create_program_node(ASTNode* left, ASTNode* right) {
-    Attributes* attr = create_attributes(TYPE_VOID, 0, NULL, 0, CLASS_PROGRAM);
+    Attributes* attr = create_attributes(NOT_TYPE, 0, NULL, 0, CLASS_PROGRAM);
     return create_ast_node(attr, left, right);
 }
 
