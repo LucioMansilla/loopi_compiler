@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "backend/assembly-codegen/assembly-codegen.h"
 #include "backend/interpreter/eval.h"
 #include "error-handling/errors.h"
 #include "frontend/semantic.h"
@@ -27,8 +28,11 @@ int main(int argc, char* argv[]) {
 
     init_syntax_analysis();
     init_semantic_analysis();
-    eval(root);
-    generate_dot_file(root, "ast.dot");
+   // eval(root);
+    InstructionList* list = gen_assembly(root);
+    //print_instruction_list(list);
+    generate_gnu_assembly(list);
+    // generate_dot_file(root, "ast.dot");
 }
 
 void init_syntax_analysis() {

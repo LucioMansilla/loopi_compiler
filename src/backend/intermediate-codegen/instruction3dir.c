@@ -97,7 +97,7 @@ void print_instruction(Instruction* instruction) {
     printf("\n");
 }
 
-void print_list_instruction(InstructionList* instructionList) {
+void print_instruction_list(InstructionList* instructionList) {
     Instruction* instruction = instructionList->head;
     while (instruction != NULL) {
         print_instruction(instruction);
@@ -105,13 +105,13 @@ void print_list_instruction(InstructionList* instructionList) {
     }
 }
 
-void gen_assembly(ASTNode* node) {
+InstructionList* gen_assembly(ASTNode* node) {
     InstructionList* list = (InstructionList*)malloc(sizeof(InstructionList));
     list->head = NULL;
     generate_assembly(node, list);
-    print_list_instruction(list);
+    print_instruction_list(list);
+    return list;
 }
-
 
 void append_instruction(InstructionList* instructionList, Instruction* instruction) {
     if (instructionList->head == NULL) {
@@ -124,4 +124,3 @@ void append_instruction(InstructionList* instructionList, Instruction* instructi
     }
     last->next = instruction;
 }
-
