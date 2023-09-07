@@ -36,7 +36,6 @@ void eval(ASTNode* node) {
             eval(node->right);
             node->left->info->value = node->right->info->value;
             break;
-
         case CLASS_RETURN:
             eval(node->left);
             print_result(node->left->info);
