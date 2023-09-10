@@ -38,6 +38,11 @@ void check_types(ASTNode* node) {
             node->info->valueType = node->left->info->valueType;
             break;
 
+        case CLASS_IF:
+            check_types(node->left);   // Check the condition
+            check_types(node->right);  // Check the body
+            // If there are specific semantic checks for if statements, add them here
+            break;
         default:
             check_types(node->left);
             check_types(node->right);

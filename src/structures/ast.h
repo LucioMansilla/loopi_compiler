@@ -18,6 +18,7 @@ ASTNode* create_sentence_list_node(ASTNode* left, ASTNode* right);
 ASTNode* create_single_decl_node(ValueType valueType, ASTNode* left, ASTNode* right, int line);
 ASTNode* create_list_decl_node(ASTNode* left, ASTNode* right);
 ASTNode* create_program_node(ASTNode* left, ASTNode* right);
+ASTNode* create_if_node(ASTNode* condition, ASTNode* true_branch, ASTNode* false_branch, int line);
 void print_ast(ASTNode* node);
 void generate_dot_file(ASTNode* root, const char* filename);
 

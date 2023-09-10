@@ -28,13 +28,15 @@ v_bool true|false
 
 "return"            { return RETURN; }
 
+"if" { return IF; }
+
 {letra}({letra}|{digito})*          { yylval.id_val = (char *) malloc(yyleng + 1);
                                       strcpy(yylval.id_val, yytext); 
                                       return ID; }
 
 "-"                       { return TMENOS; }    
 
-[+*;()=]                  { return *yytext; }
+[+*;()={}]                  { return *yytext; }
 
 .|\n                          ; 
 

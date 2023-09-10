@@ -1,4 +1,5 @@
 #include "eval.h"
+
 #include <stdio.h>
 
 void print_result(Attributes* info) {
@@ -15,7 +16,6 @@ void eval(ASTNode* node) {
     if (node == NULL) return;
 
     switch (node->info->classType) {
-
         case CLASS_PROGRAM:
         case CLASS_DECL_LIST:
         case CLASS_SENTENCE_LIST:
@@ -44,7 +44,7 @@ void eval(ASTNode* node) {
         case CLASS_ADD:
             eval(node->left);
             eval(node->right);
-            node->info->value = node->left->info->value + node->right->info->value;   
+            node->info->value = node->left->info->value + node->right->info->value;
             break;
 
         case CLASS_MUL:
@@ -52,9 +52,13 @@ void eval(ASTNode* node) {
             eval(node->right);
             node->info->value = node->left->info->value * node->right->info->value;
             break;
-
-        default :
+        case CLASS_IF:
+            eval(node->left);               // Evaluate the condition
+            if (node->left->info->value) {  // If the condition is true
+                eval(node->right);          // Evaluate the body
+            }
             break;
-
+        default:
+            break;
     }
 }

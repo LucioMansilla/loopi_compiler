@@ -158,3 +158,8 @@ void generate_dot_file(ASTNode* root, const char* filename) {
     fprintf(fp, "}\n");
     fclose(fp);
 }
+ASTNode* create_if_node(ASTNode* condition, ASTNode* true_branch, ASTNode* false_branch, int line) {
+    Attributes* attr = create_attributes(NOT_TYPE, 0, NULL, line, CLASS_IF);
+    // You might need to adjust the structure of the ASTNode to accommodate an "else" branch
+    return create_ast_node(attr, condition, true_branch);
+}

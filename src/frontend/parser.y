@@ -23,6 +23,7 @@ extern int yylineno;
 %token  TINT
 %token  TBOOL
 %token RETURN
+%token IF
 %type <node> expr
 %type <node> valor
 %type <node> declaration
@@ -30,6 +31,7 @@ extern int yylineno;
 %type <node> sentence
 %type <node> prog
 %type <node> declarations
+
 %type <type_val> type
     
 %left '+' TMENOS 
@@ -77,6 +79,10 @@ sentence: ID '=' expr ';'
             $$ = create_assign_node(create_ast_node(info, NULL, NULL), $3, yylineno);
          }
          | RETURN expr ';' { $$ = create_return_node($2,yylineno); }
+         | IF '(' expr ')' '{' sentence_list '}'   
+         { 
+            $$ = create_if_node($3, $6, NULL, yylineno); 
+         }
         ;       
 
 

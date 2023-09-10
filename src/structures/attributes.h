@@ -20,6 +20,7 @@ typedef enum {
     CLASS_SENTENCE_LIST,
     CLASS_DECL_LIST,
     CLASS_PROGRAM,
+    CLASS_IF,
 } ClassType;
 
 typedef struct Attributes {
