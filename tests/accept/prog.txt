@@ -1,3 +1,4 @@
+# expected = 5
 bool a = true;
 bool b = false;
 int c = 0;

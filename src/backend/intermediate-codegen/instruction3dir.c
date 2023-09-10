@@ -33,7 +33,7 @@ void generate_assembly(ASTNode* node, InstructionList* list) {
         case CLASS_ADD:
             generate_assembly(node->left, list);
             generate_assembly(node->right, list);
-            CodOp addOp = node->left->info->valueType == TYPE_INT ? ADD_I : ADD_B;
+            CodOp addOp = node->left->info->value_type == TYPE_INT ? ADD_I : ADD_B;
             Instruction* addInstr = create_instruction(addOp, node->left->info, node->right->info, node->info);
             append_instruction(list, addInstr);
             break;
@@ -41,7 +41,7 @@ void generate_assembly(ASTNode* node, InstructionList* list) {
         case CLASS_MUL:
             generate_assembly(node->left, list);
             generate_assembly(node->right, list);
-            CodOp mulOp = node->left->info->valueType == TYPE_INT ? MULT_I : MULT_B;
+            CodOp mulOp = node->left->info->value_type == TYPE_INT ? MULT_I : MULT_B;
             Instruction* mulInstr = create_instruction(mulOp, node->left->info, node->right->info, node->info);
             append_instruction(list, mulInstr);
             break;

@@ -41,11 +41,11 @@ ASTNode* create_sentence_list_node(ASTNode* left, ASTNode* right) {
     return create_ast_node(attr, left, right);
 }
 
-ASTNode* create_single_decl_node(ValueType valueType, ASTNode* left, ASTNode* right, int line) {
+ASTNode* create_single_decl_node(value_type value_type, ASTNode* left, ASTNode* right, int line) {
     char* tag = (char*)malloc(2 * sizeof(char));
     tag[0] = '=';
     tag[1] = '\0';
-    Attributes* attr = create_attributes(valueType, 0, tag, line, CLASS_DECL);
+    Attributes* attr = create_attributes(value_type, 0, tag, line, CLASS_DECL);
     return create_ast_node(attr, left, right);
 }
 
@@ -71,53 +71,53 @@ void generate_dot(ASTNode* node, FILE* fp) {
     switch (node->info->classType) {
         case CLASS_CONSTANT:
             fprintf(fp, "CONSTANT\\nValor: %d\\nTipo: ", node->info->value);
-            if (node->info->valueType == TYPE_INT) {
+            if (node->info->value_type == TYPE_INT) {
                 fprintf(fp, "int");
-            } else if (node->info->valueType == TYPE_BOOL) {
+            } else if (node->info->value_type == TYPE_BOOL) {
                 fprintf(fp, "bool");
             }
             break;
         case CLASS_VAR:
             fprintf(fp, "VARIABLE\\nNombre: %s\\nTipo: ", node->info->tag);
-            if (node->info->valueType == TYPE_INT) {
+            if (node->info->value_type == TYPE_INT) {
                 fprintf(fp, "int");
-            } else if (node->info->valueType == TYPE_BOOL) {
+            } else if (node->info->value_type == TYPE_BOOL) {
                 fprintf(fp, "bool");
             }
             break;
         case CLASS_ADD:
         case CLASS_MUL:
             fprintf(fp, "OPERACIÓN\\nOperador: %c\\nTipo: ", node->info->tag[0]);
-            if (node->info->valueType == TYPE_INT) {
+            if (node->info->value_type == TYPE_INT) {
                 fprintf(fp, "int");
-            } else if (node->info->valueType == TYPE_BOOL) {
+            } else if (node->info->value_type == TYPE_BOOL) {
                 fprintf(fp, "bool");
             }
             break;
         case CLASS_RETURN:
             fprintf(fp, "RETURN\\nTipo: ");
-            if (node->info->valueType == TYPE_INT) {
+            if (node->info->value_type == TYPE_INT) {
                 fprintf(fp, "int");
-            } else if (node->info->valueType == TYPE_BOOL) {
+            } else if (node->info->value_type == TYPE_BOOL) {
                 fprintf(fp, "bool");
             }
             break;
         case CLASS_ASSIGN:
             fprintf(fp, "ASIGN\\nTipo: ");
-            if (node->info->valueType == TYPE_INT) {
+            if (node->info->value_type == TYPE_INT) {
                 fprintf(fp, "int");
-            } else if (node->info->valueType == TYPE_BOOL) {
+            } else if (node->info->value_type == TYPE_BOOL) {
                 fprintf(fp, "bool");
                 break;
                 case CLASS_DECL:
                     fprintf(fp, "DECL\\nTipo: ");
-                    if (node->info->valueType == TYPE_INT) {
+                    if (node->info->value_type == TYPE_INT) {
                         fprintf(fp, "int");
-                    } else if (node->info->valueType == TYPE_BOOL) {
+                    } else if (node->info->value_type == TYPE_BOOL) {
                         fprintf(fp, "bool");
-                    } else if (node->info->valueType == TYPE_STRING) {
+                    } else if (node->info->value_type == TYPE_STRING) {
                         fprintf(fp, "string");
-                    } else if (node->info->valueType == TYPE_VOID) {
+                    } else if (node->info->value_type == TYPE_VOID) {
                         fprintf(fp, "void");
                     }
                     break;

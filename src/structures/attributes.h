@@ -6,7 +6,7 @@ typedef enum {
     TYPE_STRING,
     TYPE_VOID,
     NOT_TYPE,
-} ValueType;
+} value_type;
 
 typedef enum {
     CLASS_VAR,
@@ -24,14 +24,14 @@ typedef enum {
 } ClassType;
 
 typedef struct Attributes {
-    ValueType valueType;
+    value_type value_type;
     int value;
     char* tag;
     int line;
     ClassType classType;
 } Attributes;
 
-Attributes* create_attributes(ValueType valueType, int value, char* tag, int line, ClassType classType);
-Attributes* create_op_attributes(ValueType valueType, char op, int line, ClassType classType);
+Attributes* create_attributes(value_type value_type, int value, char* tag, int line, ClassType classType);
+Attributes* create_op_attributes(value_type value_type, char op, int line, ClassType classType);
 
 #endif  // ATTRIBUTES_H

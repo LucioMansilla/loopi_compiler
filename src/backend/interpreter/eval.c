@@ -3,7 +3,7 @@
 #include <stdio.h>
 
 void print_result(Attributes* info) {
-    if (info->valueType == TYPE_INT)
+    if (info->value_type == TYPE_INT)
         printf("%d\n", info->value);
     else if (info->value) {
         printf("true\n");

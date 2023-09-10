@@ -4,11 +4,14 @@ failed=0
 
 # Loop para todos los archivos de prueba en el directorio 'tests/accept'
 for example in tests/accept/*.txt tests/reject/*.txt; do
-    echo "Testing $example..."
 
-    # Extraer el output esperado del archivo de prueba
-    
-    expected_output=$(grep '^# expected =' $example | cut -d'=' -f2 | tr -s ' ' | tr -d '\n')
+    if echo "$example" | grep -q "tests/accept"; then
+        expected_output=$(grep '^# expected =' $example | cut -d'=' -f2 | tr -d ' ' | tr -d '\n')
+    else
+        expected_output=$(grep '^# expected =' $example | cut -d'=' -f2 | tr -s ' ' | tr -d '\n')
+    fi
+
+    echo "Testing $example ..."
 
     # Ejecutar el compilador en el archivo de prueba y capturar el output (ignorando stderr)
     output=$(./build/Compiler $example 2>/dev/null)

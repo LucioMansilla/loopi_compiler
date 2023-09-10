@@ -4,7 +4,7 @@
 #include <stdlib.h>
 
 void check_binary_operation(ASTNode* node, char* name) {
-    if (node->left->info->valueType != node->right->info->valueType) {
+    if (node->left->info->value_type != node->right->info->value_type) {
         save_error(node->info->line, "%s: %s", name, node->info->tag);
     }
 }
@@ -14,7 +14,7 @@ void check_types(ASTNode* node) {
 
     switch (node->info->classType) {
         case CLASS_DECL:
-            node->left->info->valueType = node->info->valueType;
+            node->left->info->value_type = node->info->value_type;
             check_types(node->right);
             check_binary_operation(node, "declaration");
             break;
@@ -22,7 +22,7 @@ void check_types(ASTNode* node) {
         case CLASS_ASSIGN:
             check_types(node->right);
             check_binary_operation(node, "assignment");
-            node->info->valueType = node->left->info->valueType;
+            node->info->value_type = node->left->info->value_type;
             break;
 
         case CLASS_ADD:
@@ -30,12 +30,12 @@ void check_types(ASTNode* node) {
             check_types(node->left);
             check_types(node->right);
             check_binary_operation(node, "operation");
-            node->info->valueType = node->left->info->valueType;
+            node->info->value_type = node->left->info->value_type;
             break;
 
         case CLASS_RETURN:
             check_types(node->left);
-            node->info->valueType = node->left->info->valueType;
+            node->info->value_type = node->left->info->value_type;
             break;
 
         case CLASS_IF:
