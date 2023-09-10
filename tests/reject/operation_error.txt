@@ -1,0 +1,3 @@
+# expected =Error operation: + at line 3
+int x = 1;
+return x + false;
