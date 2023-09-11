@@ -28,10 +28,10 @@ typedef struct Attributes {
     int value;
     char* tag;
     int line;
-    ClassType classType;
+    ClassType class_type;
 } Attributes;
 
-Attributes* create_attributes(value_type value_type, int value, char* tag, int line, ClassType classType);
-Attributes* create_op_attributes(value_type value_type, char op, int line, ClassType classType);
+Attributes* create_attributes(value_type value_type, int value, char* tag, int line, ClassType class_type);
+Attributes* create_op_attributes(value_type value_type, char op, int line, ClassType class_type);
 
 #endif  // ATTRIBUTES_H

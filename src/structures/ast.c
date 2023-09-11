@@ -68,7 +68,7 @@ void generate_dot(ASTNode* node, FILE* fp) {
     int currentId = nodeId++;
     fprintf(fp, "  %d [label=\"", currentId);
 
-    switch (node->info->classType) {
+    switch (node->info->class_type) {
         case CLASS_CONSTANT:
             fprintf(fp, "CONSTANT\\nValor: %d\\nTipo: ", node->info->value);
             if (node->info->value_type == TYPE_INT) {

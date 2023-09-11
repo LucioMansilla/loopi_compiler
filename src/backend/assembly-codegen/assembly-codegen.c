@@ -65,9 +65,9 @@ void generate_gnu_assembly(InstructionList* list) {
                 break;
 
             case ADD_I:
-                if (current->op1->classType == CLASS_CONSTANT) {  
+                if (current->op1->class_type == CLASS_CONSTANT) {
                     fprintf(fp, "    add $%d, %s\n", current->op1->value, op2_reg);
-                } else if (current->op2->classType == CLASS_CONSTANT) {
+                } else if (current->op2->class_type == CLASS_CONSTANT) {
                     fprintf(fp, "    add $%d, %s\n", current->op2->value, op2_reg);
                 } else {
                     fprintf(fp, "    add %s, %s\n", op1_reg, op2_reg);

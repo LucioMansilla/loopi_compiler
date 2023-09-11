@@ -14,7 +14,7 @@ Instruction* create_instruction(CodOp opcode, Attributes* op1, Attributes* op2, 
 void generate_assembly(ASTNode* node, InstructionList* list) {
     if (node == NULL) return;
 
-    switch (node->info->classType) {
+    switch (node->info->class_type) {
         case CLASS_PROGRAM:
         case CLASS_DECL_LIST:
         case CLASS_SENTENCE_LIST:
@@ -25,7 +25,7 @@ void generate_assembly(ASTNode* node, InstructionList* list) {
         case CLASS_DECL:
         case CLASS_ASSIGN:
             generate_assembly(node->right, list);
-            CodOp opcode = node->right->info->classType == CLASS_CONSTANT ? MOV_C : MOV_V;
+            CodOp opcode = node->right->info->class_type == CLASS_CONSTANT ? MOV_C : MOV_V;
             Instruction* movInstr = create_instruction(opcode, node->right->info, NULL, node->left->info);
             append_instruction(list, movInstr);
             break;

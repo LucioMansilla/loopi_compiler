@@ -17,6 +17,7 @@ extern int yylineno;
     ASTNode *node;
     value_type type_val;
 }
+
 %token <int_val> INT
 %token <id_val> ID
 %token <int_val> BOOL
@@ -31,7 +32,6 @@ extern int yylineno;
 %type <node> sentence
 %type <node> prog
 %type <node> declarations
-
 %type <type_val> type
     
 %left '+' TMENOS 
@@ -60,7 +60,6 @@ declaration: type ID '=' expr ';'
          $$ = create_single_decl_node($1, id, $4,yylineno);
      }
     ;
-
 
 sentence_list: sentence sentence_list 
               { 

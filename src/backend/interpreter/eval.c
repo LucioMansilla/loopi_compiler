@@ -15,7 +15,7 @@ void eval(ASTNode* node) {
     Attributes* left = NULL;
     if (node == NULL) return;
 
-    switch (node->info->classType) {
+    switch (node->info->class_type) {
         case CLASS_PROGRAM:
         case CLASS_DECL_LIST:
         case CLASS_SENTENCE_LIST:

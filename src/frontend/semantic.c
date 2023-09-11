@@ -12,7 +12,7 @@ void check_binary_operation(ASTNode* node, char* name) {
 void check_types(ASTNode* node) {
     if (node == NULL) return;
 
-    switch (node->info->classType) {
+    switch (node->info->class_type) {
         case CLASS_DECL:
             node->left->info->value_type = node->info->value_type;
             check_types(node->right);
@@ -39,10 +39,10 @@ void check_types(ASTNode* node) {
             break;
 
         case CLASS_IF:
-            check_types(node->left);   // Check the condition
-            check_types(node->right);  // Check the body
-            // If there are specific semantic checks for if statements, add them here
+            check_types(node->left);  
+            check_types(node->right);  
             break;
+            
         default:
             check_types(node->left);
             check_types(node->right);

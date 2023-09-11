@@ -16,31 +16,29 @@ digito [0-9]
 v_bool true|false
 
 %%
-"#"[^\n]*           { /* Ignora todo desde '#' hasta el final de la línea */ }
+"#"[^\n]*                           { /* Ignora todo desde '#' hasta el final de la línea */ }
 
-{digito}+           { yylval.int_val = atoi(yytext); return INT; }
+{digito}+                           { yylval.int_val = atoi(yytext); return INT; }
 
-"int"               { return TINT; }
+"int"                               { return TINT; }
 
-{v_bool}            { yylval.int_val = strcmp(yytext, "true") == 0 ? 1 : 0; return BOOL; }
+{v_bool}                            { yylval.int_val = strcmp(yytext, "true") == 0 ? 1 : 0; return BOOL; }
 			  
-"bool"              { return TBOOL; }
+"bool"                              { return TBOOL; }
 
-"return"            { return RETURN; }
+"return"                            { return RETURN; }
 
-"if" { return IF; }
+"if"                                { return IF; }
 
 {letra}({letra}|{digito})*          { yylval.id_val = (char *) malloc(yyleng + 1);
                                       strcpy(yylval.id_val, yytext); 
                                       return ID; }
 
-"-"                       { return TMENOS; }    
+"-"                                 { return TMENOS; }    
 
-[+*;()={}]                  { return *yytext; }
+[+*;()={}]                          { return *yytext; }
 
-.|\n                          ; 
-
-
+.|\n                                ; 
 %%
 
 void yyerror(const char* format, ...) {
