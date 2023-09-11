@@ -1,5 +1,4 @@
 #include "ast.h"
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -31,8 +30,9 @@ ASTNode* create_return_node(ASTNode* node, int line) {
     Attributes* attr = create_attributes(NOT_TYPE, 0, NULL, line, CLASS_RETURN);
     return create_ast_node(attr, node, NULL);
 }
+
 ASTNode* create_assign_node(ASTNode* left, ASTNode* right, int line) {
-    Attributes* attr = create_attributes(NOT_TYPE, '=', NULL, line, CLASS_ASSIGN);
+    Attributes* attr = create_attributes(NOT_TYPE,'=', NULL, line, CLASS_ASSIGN);
     return create_ast_node(attr, left, right);
 }
 
@@ -64,7 +64,6 @@ int nodeId = 0;
 void generate_dot(ASTNode* node, FILE* fp) {
     if (node == NULL) return;
 
-    // Imprimimos la etiqueta del nodo actual
     int currentId = nodeId++;
     fprintf(fp, "  %d [label=\"", currentId);
 
