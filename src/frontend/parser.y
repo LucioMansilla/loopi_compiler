@@ -110,7 +110,7 @@ expr: valor  { $$ = $1; }
 
     | expr OR expr 
             { 
-              Attributes* attr = create_op_attributes(TYPE_BOOL,'+',yylineno, CLASS_ADD);
+              Attributes* attr = create_attributes(TYPE_BOOL,0,"||",yylineno, CLASS_ADD);
               $$ = create_ast_node(attr, $1, $3);
             }
             

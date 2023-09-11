@@ -1,5 +1,4 @@
 bool a = false;
-bool b = true;
-int c = 0;
-if(aandb) { c = 10;}
-return c;
+bool b = false;
+b = a || 5;
+return a;

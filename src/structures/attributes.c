@@ -18,3 +18,13 @@ Attributes* create_op_attributes(ValueType value_type, char op, int line, ClassT
     tag[1] = '\0';
     return create_attributes(value_type, 0, tag, line, class_type);
 }
+
+char* get_type_str(int type) {
+    switch (type) {
+        case TYPE_INT: return "int";
+        case TYPE_BOOL: return "bool";
+        case TYPE_STRING: return "string";
+        case TYPE_VOID: return "void";
+        default: return "unknown";
+    }
+}
