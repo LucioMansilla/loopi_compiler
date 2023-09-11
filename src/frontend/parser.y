@@ -21,10 +21,12 @@ extern int yylineno;
 %token <int_val> INT
 %token <id_val> ID
 %token <int_val> BOOL
-%token  TINT
-%token  TBOOL
+%token TINT
+%token TBOOL
 %token RETURN
 %token IF
+%token OR
+%token AND
 %type <node> expr
 %type <node> valor
 %type <node> declaration
@@ -34,8 +36,8 @@ extern int yylineno;
 %type <node> declarations
 %type <type_val> type
     
-%left '+' TMENOS 
-%left '*'
+%left '+' TMENOS OR
+%left '*' AND
 
 %%
 
@@ -105,6 +107,18 @@ expr: valor  { $$ = $1; }
             }
 
     | '(' expr ')' { $$ = $2; }
+
+    | expr OR expr 
+            { 
+              Attributes* attr = create_op_attributes(TYPE_BOOL,'+',yylineno, CLASS_ADD);
+              $$ = create_ast_node(attr, $1, $3);
+            }
+            
+    | expr AND expr 
+            { 
+              Attributes* attr = create_op_attributes(TYPE_BOOL,'*',yylineno, CLASS_MUL);
+              $$ = create_ast_node(attr, $1, $3);
+            }
         
         ;
 

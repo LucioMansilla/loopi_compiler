@@ -30,6 +30,10 @@ v_bool true|false
 
 "if"                                { return IF; }
 
+"||"|or                             { return OR; }
+
+&&|and                              { return AND; }
+
 {letra}({letra}|{digito})*          { yylval.id_val = (char *) malloc(yyleng + 1);
                                       strcpy(yylval.id_val, yytext); 
                                       return ID; }

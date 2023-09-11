@@ -2,10 +2,10 @@
 #include <stdlib.h>
 
 #include "backend/assembly-codegen/assembly-codegen.h"
+#include "backend/intermediate-codegen/pseudo-codegen.h"
 #include "backend/interpreter/eval.h"
 #include "error-handling/errors.h"
 #include "frontend/semantic.h"
-#include "backend/intermediate-codegen/pseudo-codegen.h"
 
 extern int yyparse(void);
 extern FILE* yyin;
@@ -29,10 +29,10 @@ int main(int argc, char* argv[]) {
 
     init_syntax_analysis();
     init_semantic_analysis();
-    //eval(root);
-    InstructionList* list = generate_tac(root);
-    print_instruction_list(list);
-    
+    eval(root);
+    // InstructionList* list = generate_tac(root);
+    // print_instruction_list(list);
+
     // generate_gnu_assembly(list);
     // generate_dot_file(root, "ast.dot");
 }

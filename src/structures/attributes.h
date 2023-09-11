@@ -20,6 +20,7 @@ typedef enum {
     CLASS_SENTENCE_LIST,
     CLASS_DECL_LIST,
     CLASS_PROGRAM,
+    CLASS_OR,
     CLASS_IF,
 } ClassType;
 
