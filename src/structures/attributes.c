@@ -2,7 +2,7 @@
 
 #include <stdlib.h>
 
-Attributes* create_attributes(value_type value_type, int value, char* tag, int line, ClassType class_type) {
+Attributes* create_attributes(ValueType value_type, int value, char* tag, int line, ClassType class_type) {
     Attributes* attr = (Attributes*)malloc(sizeof(Attributes));
     attr->value_type = value_type;
     attr->value = value;
@@ -12,7 +12,7 @@ Attributes* create_attributes(value_type value_type, int value, char* tag, int l
 
     return attr;
 }
-Attributes* create_op_attributes(value_type value_type, char op, int line, ClassType class_type) {
+Attributes* create_op_attributes(ValueType value_type, char op, int line, ClassType class_type) {
     char* tag = (char*)malloc(2 * sizeof(char));
     tag[0] = op;
     tag[1] = '\0';

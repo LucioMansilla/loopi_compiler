@@ -15,7 +15,7 @@ ASTNode* create_id_node(char* id, int line);
 ASTNode* create_return_node(ASTNode* node, int line);
 ASTNode* create_assign_node(ASTNode* left, ASTNode* right, int line);
 ASTNode* create_sentence_list_node(ASTNode* left, ASTNode* right);
-ASTNode* create_single_decl_node(value_type value_type, ASTNode* left, ASTNode* right, int line);
+ASTNode* create_single_decl_node(ValueType value_type, ASTNode* left, ASTNode* right, int line);
 ASTNode* create_list_decl_node(ASTNode* left, ASTNode* right);
 ASTNode* create_program_node(ASTNode* left, ASTNode* right);
 ASTNode* create_if_node(ASTNode* condition, ASTNode* true_branch, ASTNode* false_branch, int line);

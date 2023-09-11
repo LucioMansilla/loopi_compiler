@@ -1,4 +1,5 @@
 #include "ast.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -32,7 +33,7 @@ ASTNode* create_return_node(ASTNode* node, int line) {
 }
 
 ASTNode* create_assign_node(ASTNode* left, ASTNode* right, int line) {
-    Attributes* attr = create_attributes(NOT_TYPE,'=', NULL, line, CLASS_ASSIGN);
+    Attributes* attr = create_attributes(NOT_TYPE, '=', NULL, line, CLASS_ASSIGN);
     return create_ast_node(attr, left, right);
 }
 
@@ -41,7 +42,7 @@ ASTNode* create_sentence_list_node(ASTNode* left, ASTNode* right) {
     return create_ast_node(attr, left, right);
 }
 
-ASTNode* create_single_decl_node(value_type value_type, ASTNode* left, ASTNode* right, int line) {
+ASTNode* create_single_decl_node(ValueType value_type, ASTNode* left, ASTNode* right, int line) {
     char* tag = (char*)malloc(2 * sizeof(char));
     tag[0] = '=';
     tag[1] = '\0';

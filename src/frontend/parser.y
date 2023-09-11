@@ -15,7 +15,7 @@ extern int yylineno;
     int int_val;
     char *id_val;
     ASTNode *node;
-    value_type type_val;
+    ValueType type_val;
 }
 
 %token <int_val> INT
