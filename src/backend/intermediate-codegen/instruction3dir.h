@@ -30,5 +30,5 @@ void print_instruction(Instruction* instruction);
 void print_instruction_list(InstructionList* instructionList);
 Instruction* create_instruction(CodOp opcode, Attributes* op1, Attributes* op2, Attributes* res);
 void append_instruction(InstructionList* instructionList, Instruction* instruction);
-InstructionList* gen_assembly(ASTNode* node);
+
 #endif
