@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include "symbol_table.h"
 #include "ast.h"
+#include "errors.h"
 
 int yylex(void);
 void yyerror(const char *format,...);
@@ -55,7 +56,7 @@ declarations : declaration declarations { $$ = create_list_decl_node($1, $2); }
 declaration: type ID '=' expr ';'
      { 
          Attributes* info = lookup_symbol(table, $2);
-         if(info != NULL) yyerror("variable %s already declared", $2);
+         if(info != NULL) yyerror("Variable %s already declared", $2);
          
          ASTNode* id = create_id_node($2,yylineno);
          insert_symbol(table, id->info);
@@ -76,7 +77,7 @@ sentence_list: sentence sentence_list
 sentence: ID '=' expr ';' 
          {  
             Attributes* info = lookup_symbol(table,$1);
-            if (info == NULL) yyerror("variable %s undeclared", $1);
+            if (info == NULL) save_error(yylineno,"Variable %s undeclared", $1,2);
             $$ = create_assign_node(create_ast_node(info, NULL, NULL), $3, yylineno);
          }
          | RETURN expr ';' { $$ = create_return_node($2,yylineno); }
@@ -90,7 +91,7 @@ sentence: ID '=' expr ';'
 expr: valor  { $$ = $1; }              
       | ID   { 
                Attributes* info = lookup_symbol(table, $1);
-               if (info == NULL) yyerror("variable %s undeclared", $1);
+               if (info == NULL) save_error(yylineno,"Variable %s undeclared", $1,2);
                $$ = create_ast_node(info,NULL,NULL);  
              }
 
@@ -116,7 +117,7 @@ expr: valor  { $$ = $1; }
             
     | expr AND expr 
             { 
-              Attributes* attr = create_op_attributes(TYPE_BOOL,'*',yylineno, CLASS_MUL);
+              Attributes* attr = create_attributes(TYPE_BOOL,0,"&&",yylineno, CLASS_MUL);
               $$ = create_ast_node(attr, $1, $3);
             }
         

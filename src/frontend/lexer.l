@@ -6,6 +6,12 @@
 #include "parser.tab.h"
 #include "errors.h"
 #include <stdarg.h>
+char *lastToken = "Unknown";  // variable global para el último token
+
+// ... dentro de yylex ...
+// (justo antes de retornar un token)
+
+
 %}
 
 %option noyywrap
@@ -42,7 +48,8 @@ v_bool true|false
 
 [+*;()={}]                          { return *yytext; }
 
-.|\n                                ; 
+.|\n                                ;
+
 %%
 
 void yyerror(const char* format, ...) {
@@ -52,7 +59,10 @@ void yyerror(const char* format, ...) {
     va_start(args, format);
     vsnprintf(msg, sizeof(msg), format, args);
     va_end(args);
+    
 
+    if(strcmp(msg, "syntax error") == 0) 
+        snprintf(msg, sizeof(msg), "Syntax error near '%s'", yytext);
     if(numErrors < MAX_ERRORS) {
         errors[numErrors].message = strdup(msg);
         errors[numErrors].lineno = yylineno;
