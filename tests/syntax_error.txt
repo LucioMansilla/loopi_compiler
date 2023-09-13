@@ -1,3 +1,3 @@
-int myvariable = 10;
-int c = myvsla + 5;
-return myvariable;
+int a = 10;
+int c = a + 5;
+return c;

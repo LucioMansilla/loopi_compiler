@@ -77,7 +77,7 @@ sentence_list: sentence sentence_list
 sentence: ID '=' expr ';' 
          {  
             Attributes* info = lookup_symbol(table,$1);
-            if (info == NULL) save_error(yylineno, "Variable %s undeclared", $1, table, 2);
+            if (info == NULL) save_error(yylineno, "Variable %s undeclared", $1, table, UNDECLARED_VARIABLE_CODE);
             $$ = create_assign_node(create_ast_node(info, NULL, NULL), $3, yylineno);
          }
          | RETURN expr ';' { $$ = create_return_node($2,yylineno); }
@@ -91,7 +91,7 @@ sentence: ID '=' expr ';'
 expr: valor  { $$ = $1; }              
       | ID   { 
                Attributes* info = lookup_symbol(table, $1);
-               if (info == NULL) save_error(yylineno, "Variable %s undeclared", $1, table, 2);
+               if (info == NULL) save_error(yylineno, "Variable %s undeclared", $1, table, UNDECLARED_VARIABLE_CODE);
                $$ = create_ast_node(info,NULL,NULL);  
              }
 

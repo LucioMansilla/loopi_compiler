@@ -3,8 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "errors.h"  // Asegúrate de incluir este archivo
-#include "semantic.h"
+#include "errors.h"
 
 void check_binary_operation(ASTNode* node) {
     if (node->left->info->value_type != node->right->info->value_type) {

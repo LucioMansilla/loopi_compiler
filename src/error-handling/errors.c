@@ -36,19 +36,19 @@ void save_error(int lineno, const char* format, ...) {
     const char* var_name = va_arg(args, const char*);
     SymbolTable* table = va_arg(args, SymbolTable*);
     int error_code = va_arg(args, int);
-
-    if (error_code == 2) {
-        suggestion = find_closest_match(table, var_name);
-    }
+    if (error_code == UNDECLARED_VARIABLE_CODE) suggestion = find_closest_match(table, var_name);
     va_end(args);
 
     if (suggestion) {
         strncat(msg, ";\nDid you mean: ", sizeof(msg) - strlen(msg) - 1);
         strncat(msg, suggestion, sizeof(msg) - strlen(msg) - 1);
         strncat(msg, "?", sizeof(msg) - strlen(msg) - 1);
-        free(suggestion); 
+        free(suggestion);
     }
+    store_error(lineno, msg);
+}
 
+void store_error(int lineno, const char* msg) {
     if (numErrors < MAX_ERRORS) {
         errors[numErrors].message = strdup(msg);
         errors[numErrors].lineno = lineno;

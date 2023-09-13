@@ -14,8 +14,8 @@ void generate_pseudo_assembly(ASTNode* node, InstructionList* list) {
         case CLASS_DECL:
         case CLASS_ASSIGN:
             generate_pseudo_assembly(node->right, list);
-            CodOp opcode = node->right->info->class_type == CLASS_CONSTANT ? MOV_C : MOV_V;
-            Instruction* movInstr = create_instruction(opcode, node->right->info, NULL, node->left->info);
+            CodOp op_code = node->right->info->class_type == CLASS_CONSTANT ? MOV_C : MOV_V;
+            Instruction* movInstr = create_instruction(op_code, node->right->info, NULL, node->left->info);
             append_instruction(list, movInstr);
             break;
 
@@ -53,9 +53,3 @@ InstructionList* generate_tac(ASTNode* node) {
     generate_pseudo_assembly(node, list);
     return list;
 }
-
-
-
-
-
-

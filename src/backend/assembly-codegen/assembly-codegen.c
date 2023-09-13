@@ -46,13 +46,13 @@ void generate_gnu_assembly(InstructionList* list) {
     Instruction* current = list->head;
     while (current != NULL) {
         const char* dest_reg = current->res ? get_or_add_symbol(current->res) : NULL;
-        const char* op1_reg = current->op1 ? get_or_add_symbol(current->op1) : NULL;
-        const char* op2_reg = current->op2 ? get_or_add_symbol(current->op2) : NULL;
+        const char* dir1_reg = current->dir1 ? get_or_add_symbol(current->dir1) : NULL;
+        const char* dir2_reg = current->dir2 ? get_or_add_symbol(current->dir2) : NULL;
 
-        switch (current->opcode) {
+        switch (current->op_code) {
             case MOV_C:
-                if (op1_reg && dest_reg) {
-                    fprintf(fp, "    mov $%d, %s\n", current->op1->value, dest_reg);
+                if (dir1_reg && dest_reg) {
+                    fprintf(fp, "    mov $%d, %s\n", current->dir1->value, dest_reg);
                 }
                 break;
 
@@ -65,29 +65,29 @@ void generate_gnu_assembly(InstructionList* list) {
                 break;
 
             case ADD_I:
-                if (current->op1->class_type == CLASS_CONSTANT) {
-                    fprintf(fp, "    add $%d, %s\n", current->op1->value, op2_reg);
-                } else if (current->op2->class_type == CLASS_CONSTANT) {
-                    fprintf(fp, "    add $%d, %s\n", current->op2->value, op2_reg);
+                if (current->dir1->class_type == CLASS_CONSTANT) {
+                    fprintf(fp, "    add $%d, %s\n", current->dir1->value, dir2_reg);
+                } else if (current->dir2->class_type == CLASS_CONSTANT) {
+                    fprintf(fp, "    add $%d, %s\n", current->dir2->value, dir2_reg);
                 } else {
-                    fprintf(fp, "    add %s, %s\n", op1_reg, op2_reg);
+                    fprintf(fp, "    add %s, %s\n", dir1_reg, dir2_reg);
                 }
-                fprintf(fp, "    mov %s, %s\n", op2_reg, dest_reg);
+                fprintf(fp, "    mov %s, %s\n", dir2_reg, dest_reg);
                 break;
             case MULT_I:
-                fprintf(fp, "    imul %s, %s\n", op1_reg, op2_reg);
-                fprintf(fp, "    mov %s, %s\n", op2_reg, dest_reg);
+                fprintf(fp, "    imul %s, %s\n", dir1_reg, dir2_reg);
+                fprintf(fp, "    mov %s, %s\n", dir2_reg, dest_reg);
                 break;
             case ADD_B:  // boolean or
-                fprintf(fp, "    or %s, %s\n", op1_reg, op2_reg);
-                fprintf(fp, "    mov %s, %s\n", op2_reg, dest_reg);
+                fprintf(fp, "    or %s, %s\n", dir1_reg, dir2_reg);
+                fprintf(fp, "    mov %s, %s\n", dir2_reg, dest_reg);
                 break;
             case MULT_B:  // boolean and
-                fprintf(fp, "    and %s, %s\n", op1_reg, op2_reg);
-                fprintf(fp, "    mov %s, %s\n", op2_reg, dest_reg);
+                fprintf(fp, "    and %s, %s\n", dir1_reg, dir2_reg);
+                fprintf(fp, "    mov %s, %s\n", dir2_reg, dest_reg);
                 break;
             case MOV_V:  // mov variable
-                fprintf(fp, "    mov %s, %s\n", op1_reg, dest_reg);
+                fprintf(fp, "    mov %s, %s\n", dir1_reg, dest_reg);
                 break;
             default:
                 break;
