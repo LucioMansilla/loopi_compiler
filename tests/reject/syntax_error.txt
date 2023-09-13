@@ -1,3 +1,0 @@
-int myvariable = 10;
-int c = myvariabla + 5;
-return 0;

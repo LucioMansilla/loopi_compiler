@@ -1,0 +1,3 @@
+int myvariable = 10;
+int c = myvsla + 5;
+return myvariable;
