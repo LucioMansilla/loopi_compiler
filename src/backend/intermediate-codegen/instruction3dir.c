@@ -1,7 +1,5 @@
 #include "instruction3dir.h"
-
 #include <stdio.h>
-
 
 Instruction* create_instruction(CodOp op_code, Attributes* dir1, Attributes* dir2, Attributes* res) {
     Instruction* instr = (Instruction*)malloc(sizeof(Instruction));
@@ -15,7 +13,6 @@ Instruction* create_instruction(CodOp op_code, Attributes* dir1, Attributes* dir
 void print_instruction(Instruction* instruction) {
   
   printf("%s ", COD_OP_STRING[instruction->op_code]); 
-  
   if (instruction->dir1 != NULL) {
     printf("%p ", instruction->dir1); 
   }
@@ -26,6 +23,7 @@ void print_instruction(Instruction* instruction) {
     printf("%p ", instruction->res);
   }
   printf("\n");
+
 }
 
 void print_instruction_list(InstructionList* instruction_list) {
