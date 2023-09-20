@@ -8,10 +8,8 @@
     COD(MOV_C)              \
     COD(MOV_V)              \
     COD(RETURN_A)           \
-    COD(ADD_B)              \
-    COD(ADD_I)              \
-    COD(MULT_B)             \
-    COD(MULT_I)             \
+    COD(ADD)              \
+    COD(MUL)             \
   
 
 #define GENERATE_ENUM(ENUM) ENUM,

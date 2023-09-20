@@ -4,17 +4,16 @@
 main:
     pushq %rbp
     movq %rsp, %rbp
-    subq $32, %rsp
+    subq $16, %rsp
     movq $10, -8(%rbp)
-    movq $0, -16(%rbp)
-    movq $10, -24(%rbp)
-    movq -24(%rbp), %rax
-    addq -8(%rbp), %rax
-    movq %rax, -32(%rbp)
-    movq -32(%rbp), %rax
+    movq $2, %rax
+    addq $5, %rax
+    movq %rax, 0(%rbp)
+    movq 0(%rbp), %rax
     movq %rax, %rdi
-    movq $1, %rsi
+    movq $0, %rsi
     call print
-    addq $32, %rsp
+    addq $16, %rsp
     popq  %rbp
     ret
+    .section	.note.GNU-stack,"",@progbits

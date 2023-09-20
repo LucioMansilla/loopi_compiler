@@ -46,16 +46,6 @@ bool exists_in_symbol_table(void* memory_address) {
     return false;
 }
 
-/*
-        .file	"main.c"
-        .text
-        .globl	main
-        .type	main, @function
-main:
-        pushq	%rbp
-        movq	%rsp, %rbp
-        subq    $24, %rsp
-*/
 void prologue(int offset, FILE* fp) {
     fprintf(fp, "    .text\n");
     fprintf(fp, "    .globl main\n");
@@ -70,10 +60,11 @@ void epilogue(int offset, FILE* fp) {
     fprintf(fp, "    addq $%d, %%rsp\n", offset * -1);
     fprintf(fp, "    popq  %%rbp\n");
     fprintf(fp, "    ret\n");
+    fprintf(fp, "    .section	.note.GNU-stack,\"\",@progbits\n");
 }
 void generate_gnu_assembly(InstructionList* list) {
     FILE* fp = fopen("output.s", "w");
-    int max_offset = get_next_offset() + 8;
+    int max_offset = get_next_offset();
 
     prologue(max_offset, fp);
 
@@ -84,7 +75,7 @@ void generate_gnu_assembly(InstructionList* list) {
                 fprintf(fp, "    movq $%d, %d(%%rbp)\n", current->dir1->value, current->res->offset);
                 break;
             case MOV_V:
-                fprintf(fp, "    movq %d(%rbp) , %%rax\n", current->dir1->offset);
+                fprintf(fp, "    movq %d(%%rbp) , %%rax\n", current->dir1->offset);
                 fprintf(fp, "    movq %%eax, %d(%%rbp)\n", current->res->offset);
                 break;
             case RETURN_A:
@@ -92,21 +83,46 @@ void generate_gnu_assembly(InstructionList* list) {
                     fprintf(fp, "    movq $%d, %%rax\n", current->res->value);
                 else
                     fprintf(fp, "    movq %d(%%rbp), %%rax\n", current->res->offset);
-                
+
                 fprintf(fp, "    movq %%rax, %%rdi\n");
-                fprintf(fp, "    movq $%d, %%rsi\n", current->res->value_type); 
+                fprintf(fp, "    movq $%d, %%rsi\n", current->res->value_type);
                 fprintf(fp, "    call print\n");
 
                 epilogue(max_offset, fp);
                 break;
 
-            case ADD_I:
-            case ADD_B:
-                fprintf(fp, "    movq %d(%%rbp), %%rax\n", current->dir1->offset);
-                fprintf(fp, "    addq %d(%%rbp), %%rax\n", current->dir2->offset);
+            case ADD:
+
+                if (current->dir1->class_type == CLASS_CONSTANT)
+                    fprintf(fp, "    movq $%d, %%rax\n", current->dir1->value);
+                else
+                    fprintf(fp, "    movq %d(%%rbp), %%rax\n", current->dir1->offset);
+
+                if (current->dir2->class_type == CLASS_CONSTANT)
+                    fprintf(fp, "    addq $%d, %%rax\n", current->dir2->value);
+                else
+                    fprintf(fp, "    addq %d(%%rbp), %%rax\n", current->dir2->offset);
+
                 fprintf(fp, "    movq %%rax, %d(%%rbp)\n", current->res->offset);
-            break;
-            
+                break;
+
+            case MUL:
+
+                fprintf(fp, "    movq $0, %%rax\n");
+
+                if (current->dir1->class_type == CLASS_CONSTANT)
+                    fprintf(fp, "    movq $%d, %%rax\n", current->dir1->value);
+                else
+                    fprintf(fp, "    movq %d(%%rbp), %%rax\n", current->dir1->offset);
+
+                if (current->dir2->class_type == CLASS_CONSTANT)
+                    fprintf(fp, "    imul $%d, %%rax\n", current->dir2->value);
+                else
+                    fprintf(fp, "    imul %d(%%rbp), %%rax\n", current->dir2->offset);
+
+                fprintf(fp, "    movq %%rax, %d(%%rbp)\n", current->res->offset);
+                break;
+
             default:
                 break;
         }

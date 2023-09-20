@@ -1,17 +1,16 @@
 #include <stdio.h>
 
-
 void print(int x, int type) {
     switch (type) {
         case 0:
-            printf("%d", x);
+            printf("%d\n", x);
             break;
 
         case 1:
             if (x)
-                printf("true");
+                printf("true\n");
             else
-                printf("false");
+                printf("false\n");
             break;
 
         default:
