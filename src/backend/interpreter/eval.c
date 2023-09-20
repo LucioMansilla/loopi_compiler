@@ -53,9 +53,9 @@ void eval(ASTNode* node) {
             node->info->value = node->left->info->value * node->right->info->value;
             break;
         case CLASS_IF:
-            eval(node->left);               // Evaluate the condition
-            if (node->left->info->value) {  // If the condition is true
-                eval(node->right);          // Evaluate the body
+            eval(node->left);
+            if (node->left->info->value) {
+                eval(node->right);
             }
             break;
         default:

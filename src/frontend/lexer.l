@@ -6,7 +6,7 @@
 #include "parser.tab.h"
 #include "errors.h"
 #include <stdarg.h>
-char *lastToken = "Unknown";  
+void yyerror(const char* format, ...);
 %}
 
 %option noyywrap
@@ -43,7 +43,9 @@ v_bool true|false
 
 [+*;()={}]                          { return *yytext; }
 
-.|\n                                ;
+" "|\n                                ;
+
+.                                   { yyerror("Invalid Character %s",yytext); }
 
 %%
 

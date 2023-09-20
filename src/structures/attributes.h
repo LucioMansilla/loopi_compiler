@@ -30,6 +30,7 @@ typedef struct Attributes {
     char* tag;
     int line;
     ClassType class_type;
+    int offset;
 } Attributes;
 
 Attributes* create_attributes(ValueType value_type, int value, char* tag, int line, ClassType class_type);

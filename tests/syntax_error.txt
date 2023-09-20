@@ -1,4 +1,4 @@
-int a = 6;
-int b = 10;
-b = b+a+b;
-return b;
+int a = 10;
+int b = 0;
+int c = 10;
+return c + a;

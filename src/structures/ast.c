@@ -4,6 +4,13 @@
 #include <stdlib.h>
 #include <string.h>
 
+int curr_offset = 0;
+
+int get_next_offset() {
+    curr_offset -= 8;
+    return curr_offset;
+}
+
 ASTNode* create_ast_node(Attributes* info, ASTNode* left, ASTNode* right) {
     ASTNode* node = (ASTNode*)malloc(sizeof(ASTNode));
     node->info = info;
@@ -24,6 +31,7 @@ ASTNode* create_bool_node(int value, int line) {
 
 ASTNode* create_id_node(char* id, int line) {
     Attributes* attr = create_attributes(NOT_TYPE, 0, id, line, CLASS_VAR);
+    attr->offset = get_next_offset();
     return create_ast_node(attr, NULL, NULL);
 }
 

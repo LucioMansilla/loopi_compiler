@@ -1,4 +1,5 @@
 #include "instruction3dir.h"
+
 #include <stdio.h>
 
 Instruction* create_instruction(CodOp op_code, Attributes* dir1, Attributes* dir2, Attributes* res) {
@@ -11,19 +12,26 @@ Instruction* create_instruction(CodOp op_code, Attributes* dir1, Attributes* dir
 }
 
 void print_instruction(Instruction* instruction) {
-  
-  printf("%s ", COD_OP_STRING[instruction->op_code]); 
-  if (instruction->dir1 != NULL) {
-    printf("%p ", instruction->dir1); 
-  }
-  if (instruction->dir2 != NULL) {
-    printf("%p ", instruction->dir2);
-  }
-  if (instruction->res != NULL) {
-    printf("%p ", instruction->res);
-  }
-  printf("\n");
-
+    printf("%s ", COD_OP_STRING[instruction->op_code]);
+    if (instruction->dir1 != NULL) {
+        printf("%p ", instruction->dir1);
+        if (instruction->dir1->offset) {
+            printf("OFFSET: %d", instruction->dir1->offset);
+        }
+    }
+    if (instruction->dir2 != NULL) {
+        printf("%p ", instruction->dir2);
+        if (instruction->dir1->offset) {
+            printf("OFFSET: %d", instruction->dir2->offset);
+        }
+    }
+    if (instruction->res != NULL) {
+        printf("%p ", instruction->res);
+        if (instruction->res->offset) {
+            printf("OFFSET: %d", instruction->res->offset);
+        }
+    }
+    printf("\n");
 }
 
 void print_instruction_list(InstructionList* instruction_list) {
