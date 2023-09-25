@@ -1,9 +1,11 @@
 #include "assembly-codegen.h"
 
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
+#include "ast.h"
 typedef struct {
     void* memory_address;
     const char* assembly_register;
@@ -24,7 +26,6 @@ const char* get_or_add_symbol(void* memory_address) {
     }
 
     if (symbol_table_count >= MAX_ENTRIES) {
-        fprintf(stderr, "Out of registers, need to spill to memory (not implemented).\n");
         exit(1);
     }
 
@@ -36,64 +37,96 @@ const char* get_or_add_symbol(void* memory_address) {
     return new_register;
 }
 
+bool exists_in_symbol_table(void* memory_address) {
+    for (int i = 0; i < symbol_table_count; ++i) {
+        if (symbol_table[i].memory_address == memory_address) {
+            return true;
+        }
+    }
+    return false;
+}
+
+void prologue(int offset, FILE* fp) {
+    fprintf(fp, "    .text\n");
+    fprintf(fp, "    .globl main\n");
+    fprintf(fp, "    .type main, @function\n");
+    fprintf(fp, "main:\n");
+    fprintf(fp, "    pushq %%rbp\n");
+    fprintf(fp, "    movq %%rsp, %%rbp\n");
+    fprintf(fp, "    subq $%d, %%rsp\n", offset * -1);
+}
+
+void epilogue(int offset, FILE* fp) {
+    fprintf(fp, "    addq $%d, %%rsp\n", offset * -1);
+    fprintf(fp, "    popq  %%rbp\n");
+    fprintf(fp, "    ret\n");
+    fprintf(fp, "    .section	.note.GNU-stack,\"\",@progbits\n");
+}
 void generate_gnu_assembly(InstructionList* list) {
     FILE* fp = fopen("output.s", "w");
+    int max_offset = get_next_offset();
 
-    fprintf(fp, ".section .text\n");
-    fprintf(fp, ".globl _start\n");
-    fprintf(fp, "_start:\n");
+    prologue(max_offset, fp);
 
     Instruction* current = list->head;
     while (current != NULL) {
-        const char* dest_reg = current->res ? get_or_add_symbol(current->res) : NULL;
-        const char* op1_reg = current->op1 ? get_or_add_symbol(current->op1) : NULL;
-        const char* op2_reg = current->op2 ? get_or_add_symbol(current->op2) : NULL;
-
-        switch (current->opcode) {
+        switch (current->op_code) {
             case MOV_C:
-                if (op1_reg && dest_reg) {
-                    fprintf(fp, "    mov $%d, %s\n", current->op1->value, dest_reg);
-                }
+                fprintf(fp, "    movq $%d, %d(%%rbp)\n", current->dir1->value, current->res->offset);
                 break;
-
+            case MOV_V:
+                fprintf(fp, "    movq %d(%%rbp) , %%rax\n", current->dir1->offset);
+                fprintf(fp, "    movq %%eax, %d(%%rbp)\n", current->res->offset);
+                break;
             case RETURN_A:
-                if (dest_reg) {
-                    fprintf(fp, "    mov %s, %%ebx\n", dest_reg);
-                    fprintf(fp, "    mov $1, %%eax\n");
-                    fprintf(fp, "    int $0x80\n");
-                }
+                if (current->res->class_type == CLASS_CONSTANT)
+                    fprintf(fp, "    movq $%d, %%rax\n", current->res->value);
+                else
+                    fprintf(fp, "    movq %d(%%rbp), %%rax\n", current->res->offset);
+
+                fprintf(fp, "    movq %%rax, %%rdi\n");
+                fprintf(fp, "    movq $%d, %%rsi\n", current->res->value_type);
+                fprintf(fp, "    call print\n");
+
+                epilogue(max_offset, fp);
                 break;
 
-            case ADD_I:
-                if (current->op1->class_type == CLASS_CONSTANT) {
-                    fprintf(fp, "    add $%d, %s\n", current->op1->value, op2_reg);
-                } else if (current->op2->class_type == CLASS_CONSTANT) {
-                    fprintf(fp, "    add $%d, %s\n", current->op2->value, op2_reg);
-                } else {
-                    fprintf(fp, "    add %s, %s\n", op1_reg, op2_reg);
-                }
-                fprintf(fp, "    mov %s, %s\n", op2_reg, dest_reg);
+            case ADD:
+
+                if (current->dir1->class_type == CLASS_CONSTANT)
+                    fprintf(fp, "    movq $%d, %%rax\n", current->dir1->value);
+                else
+                    fprintf(fp, "    movq %d(%%rbp), %%rax\n", current->dir1->offset);
+
+                if (current->dir2->class_type == CLASS_CONSTANT)
+                    fprintf(fp, "    addq $%d, %%rax\n", current->dir2->value);
+                else
+                    fprintf(fp, "    addq %d(%%rbp), %%rax\n", current->dir2->offset);
+
+                fprintf(fp, "    movq %%rax, %d(%%rbp)\n", current->res->offset);
                 break;
-            case MULT_I:
-                fprintf(fp, "    imul %s, %s\n", op1_reg, op2_reg);
-                fprintf(fp, "    mov %s, %s\n", op2_reg, dest_reg);
+
+            case MUL:
+
+                fprintf(fp, "    movq $0, %%rax\n");
+
+                if (current->dir1->class_type == CLASS_CONSTANT)
+                    fprintf(fp, "    movq $%d, %%rax\n", current->dir1->value);
+                else
+                    fprintf(fp, "    movq %d(%%rbp), %%rax\n", current->dir1->offset);
+
+                if (current->dir2->class_type == CLASS_CONSTANT)
+                    fprintf(fp, "    imul $%d, %%rax\n", current->dir2->value);
+                else
+                    fprintf(fp, "    imul %d(%%rbp), %%rax\n", current->dir2->offset);
+
+                fprintf(fp, "    movq %%rax, %d(%%rbp)\n", current->res->offset);
                 break;
-            case ADD_B:  // boolean or
-                fprintf(fp, "    or %s, %s\n", op1_reg, op2_reg);
-                fprintf(fp, "    mov %s, %s\n", op2_reg, dest_reg);
-                break;
-            case MULT_B:  // boolean and
-                fprintf(fp, "    and %s, %s\n", op1_reg, op2_reg);
-                fprintf(fp, "    mov %s, %s\n", op2_reg, dest_reg);
-                break;
-            case MOV_V:  // mov variable
-                fprintf(fp, "    mov %s, %s\n", op1_reg, dest_reg);
-                break;
+
             default:
                 break;
         }
         current = current->next;
     }
-
     fclose(fp);
 }

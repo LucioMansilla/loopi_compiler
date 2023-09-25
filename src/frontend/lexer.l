@@ -6,6 +6,7 @@
 #include "parser.tab.h"
 #include "errors.h"
 #include <stdarg.h>
+void yyerror(const char* format, ...);
 %}
 
 %option noyywrap
@@ -30,6 +31,10 @@ v_bool true|false
 
 "if"                                { return IF; }
 
+"||"|or                             { return OR; }
+
+&&|and                              { return AND; }
+
 {letra}({letra}|{digito})*          { yylval.id_val = (char *) malloc(yyleng + 1);
                                       strcpy(yylval.id_val, yytext); 
                                       return ID; }
@@ -38,7 +43,10 @@ v_bool true|false
 
 [+*;()={}]                          { return *yytext; }
 
-.|\n                                ; 
+" "|\n                                ;
+
+.                                   { yyerror("Invalid Character %s",yytext); }
+
 %%
 
 void yyerror(const char* format, ...) {
@@ -48,11 +56,10 @@ void yyerror(const char* format, ...) {
     va_start(args, format);
     vsnprintf(msg, sizeof(msg), format, args);
     va_end(args);
+    
 
-    if(numErrors < MAX_ERRORS) {
-        errors[numErrors].message = strdup(msg);
-        errors[numErrors].lineno = yylineno;
-        numErrors++;
-    }
+    if(strcmp(msg, "syntax error") == 0) 
+        snprintf(msg, sizeof(msg), "Syntax error near '%s'", yytext);
+    store_error(yylineno,msg);
 }
 

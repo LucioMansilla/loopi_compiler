@@ -4,6 +4,13 @@
 #include <stdlib.h>
 #include <string.h>
 
+int curr_offset = 0;
+
+int get_next_offset() {
+    curr_offset -= 8;
+    return curr_offset;
+}
+
 ASTNode* create_ast_node(Attributes* info, ASTNode* left, ASTNode* right) {
     ASTNode* node = (ASTNode*)malloc(sizeof(ASTNode));
     node->info = info;
@@ -24,6 +31,7 @@ ASTNode* create_bool_node(int value, int line) {
 
 ASTNode* create_id_node(char* id, int line) {
     Attributes* attr = create_attributes(NOT_TYPE, 0, id, line, CLASS_VAR);
+    attr->offset = get_next_offset();
     return create_ast_node(attr, NULL, NULL);
 }
 
@@ -33,7 +41,7 @@ ASTNode* create_return_node(ASTNode* node, int line) {
 }
 
 ASTNode* create_assign_node(ASTNode* left, ASTNode* right, int line) {
-    Attributes* attr = create_attributes(NOT_TYPE, '=', NULL, line, CLASS_ASSIGN);
+    Attributes* attr = create_attributes(NOT_TYPE, 0, "=", line, CLASS_ASSIGN);
     return create_ast_node(attr, left, right);
 }
 
@@ -43,10 +51,7 @@ ASTNode* create_sentence_list_node(ASTNode* left, ASTNode* right) {
 }
 
 ASTNode* create_single_decl_node(ValueType value_type, ASTNode* left, ASTNode* right, int line) {
-    char* tag = (char*)malloc(2 * sizeof(char));
-    tag[0] = '=';
-    tag[1] = '\0';
-    Attributes* attr = create_attributes(value_type, 0, tag, line, CLASS_DECL);
+    Attributes* attr = create_attributes(value_type, 0, "=", line, CLASS_DECL);
     return create_ast_node(attr, left, right);
 }
 
@@ -160,6 +165,5 @@ void generate_dot_file(ASTNode* root, const char* filename) {
 }
 ASTNode* create_if_node(ASTNode* condition, ASTNode* true_branch, ASTNode* false_branch, int line) {
     Attributes* attr = create_attributes(NOT_TYPE, 0, NULL, line, CLASS_IF);
-    // You might need to adjust the structure of the ASTNode to accommodate an "else" branch
     return create_ast_node(attr, condition, true_branch);
 }

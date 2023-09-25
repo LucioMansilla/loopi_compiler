@@ -1,0 +1,6 @@
+# expected =Type Error in operation + : left-hand side has type int but right-hand side has type bool at line 5
+# expected =Type Error in operation && : left-hand side has type int but right-hand side has type bool at line 6
+int x = 1;
+int y = 2;
+int c = 3 + false;
+return x && false;

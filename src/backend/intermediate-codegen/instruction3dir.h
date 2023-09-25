@@ -4,20 +4,29 @@
 #include "structures/ast.h"
 #include "structures/attributes.h"
 
+#define FOREACH_OPCOD(COD)  \
+    COD(MOV_C)              \
+    COD(MOV_V)              \
+    COD(RETURN_A)           \
+    COD(ADD)              \
+    COD(MUL)             \
+  
+
+#define GENERATE_ENUM(ENUM) ENUM,
+#define GENERATE_STRING(STRING) #STRING,
+
 typedef enum {
-    MOV_C,
-    MOV_V,
-    RETURN_A,
-    ADD_B,
-    ADD_I,
-    MULT_B,
-    MULT_I,
+    FOREACH_OPCOD(GENERATE_ENUM)
 } CodOp;
 
+static const char *COD_OP_STRING[] = {
+    FOREACH_OPCOD(GENERATE_STRING)
+};
+
 typedef struct Instruction {
-    CodOp opcode;
-    Attributes* op1;
-    Attributes* op2;
+    CodOp op_code;
+    Attributes* dir1;
+    Attributes* dir2;
     Attributes* res;
     struct Instruction* next;
 } Instruction;
@@ -26,9 +35,8 @@ typedef struct InstructionList {
     Instruction* head;
 } InstructionList;
 
-void print_instruction(Instruction* instruction);
-void print_instruction_list(InstructionList* instructionList);
-Instruction* create_instruction(CodOp opcode, Attributes* op1, Attributes* op2, Attributes* res);
-void append_instruction(InstructionList* instructionList, Instruction* instruction);
+void print_instruction_list(InstructionList* instruction_list);
+Instruction* create_instruction(CodOp op_code, Attributes* dir1, Attributes* dir2, Attributes* res);
+void append_instruction(InstructionList* instruction_list, Instruction* instruction);
 
 #endif

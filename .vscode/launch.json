@@ -7,7 +7,7 @@
             "request": "launch",
             "program": "${workspaceFolder}/build/Compiler",
             "args": [
-                "${workspaceFolder}/examples/prog.txt"
+                "${workspaceFolder}/tests/syntax_error.txt"
             ],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",

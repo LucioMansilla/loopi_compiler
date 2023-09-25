@@ -20,6 +20,7 @@ typedef enum {
     CLASS_SENTENCE_LIST,
     CLASS_DECL_LIST,
     CLASS_PROGRAM,
+    CLASS_OR,
     CLASS_IF,
 } ClassType;
 
@@ -29,9 +30,11 @@ typedef struct Attributes {
     char* tag;
     int line;
     ClassType class_type;
+    int offset;
 } Attributes;
 
 Attributes* create_attributes(ValueType value_type, int value, char* tag, int line, ClassType class_type);
 Attributes* create_op_attributes(ValueType value_type, char op, int line, ClassType class_type);
+char* get_type_str(int type);
 
 #endif  // ATTRIBUTES_H

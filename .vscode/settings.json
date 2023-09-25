@@ -51,7 +51,10 @@
         "errors.h": "c",
         "instruction3dir.h": "c",
         "semantic.h": "c",
-        "ast.h": "c"
+        "ast.h": "c",
+        "assembly-codegen.h": "c",
+        "stdio.h": "c",
+        "stdbool.h": "c"
     },
     "[cpp]": {
         "editor.defaultFormatter": "xaver.clang-format"
