@@ -37,7 +37,7 @@ typedef struct Attributes {
 
 Attributes* create_attributes(ValueType value_type, int value, char* tag, int line, ClassType class_type);
 Attributes* create_op_attributes(ValueType value_type, char op, int line, ClassType class_type);
-Attributes* create_func_attributes(ValueType value_type, char* parameter_list, char* name, ASTNode* body, int line);
+Attributes* create_func_attributes(ValueType value_type, char* parameter_list, char* name, int line);
 
 char* get_type_str(int type);
 

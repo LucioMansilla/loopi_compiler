@@ -1,0 +1,10 @@
+Program
+{
+int x = 0;
+
+int f(){
+    int x = 5;
+    return 0;
+}
+
+} 

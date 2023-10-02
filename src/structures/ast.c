@@ -20,7 +20,7 @@ ASTNode* create_ast_node(Attributes* info, ASTNode* left, ASTNode* right) {
 }
 
 ASTNode* create_decl_func(ValueType value_type, char* name, char* parameter_list, ASTNode* body, int line) {
-    Attributes* attr = create_func_attributes(value_type, 0, name, line, CLASS_DECL_FUNCTION);
+    Attributes* attr = create_func_attributes(value_type, 0, name, line);
     return create_ast_node(attr, body, NULL);
 }
 

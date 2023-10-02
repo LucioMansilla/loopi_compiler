@@ -114,7 +114,7 @@ Terminales con las reglas donde aparecen
     BOOL <int_val> (260) 61
     TINT (261) 58
     TBOOL (262) 59
-    TVOID (263) 12 14
+    TVOID <int_val> (263) 12 14
     RETURN (264) 31 32
     IF (265) 33 34
     OR (266) 47
@@ -141,7 +141,7 @@ No terminales con las reglas donde aparecen
     $@1 (38)
         on left: 2
         on right: 3
-    body_program (39)
+    body_program <node> (39)
         on left: 4 5 6
         on right: 3
     methods <node> (40)
@@ -186,10 +186,10 @@ No terminales con las reglas donde aparecen
     sentence <node> (53)
         on left: 29 30 31 32 33 34 35 36 37
         on right: 27 28
-    method_call (54)
+    method_call <node> (54)
         on left: 38 39
         on right: 30 49
-    expr_params (55)
+    expr_params <node> (55)
         on left: 40 41
         on right: 38 40
     expr <node> (56)
