@@ -15,6 +15,15 @@ Attributes* create_attributes(ValueType value_type, int value, char* tag, int li
 
     return attr;
 }
+
+Attributes* create_func_attributes(ValueType value_type, char* parameter_list, char* name, ASTNode* body, int line) {
+    Attributes* attr = create_attributes(value_type, 0, name, line, CLASS_DECL_FUNCTION);
+    attr->parameter_list = parameter_list;
+    return attr;
+}
+
+
+
 Attributes* create_op_attributes(ValueType value_type, char op, int line, ClassType class_type) {
     char* tag = (char*)malloc(2 * sizeof(char));
     tag[0] = op;

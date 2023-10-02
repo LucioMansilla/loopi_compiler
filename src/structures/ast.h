@@ -5,6 +5,7 @@
 typedef struct ASTNode {
     Attributes* info;
     struct ASTNode* left;
+    struct ASTNode* middle;
     struct ASTNode* right;
 } ASTNode;
 
@@ -19,6 +20,8 @@ ASTNode* create_single_decl_node(ValueType value_type, ASTNode* left, ASTNode* r
 ASTNode* create_list_decl_node(ASTNode* left, ASTNode* right);
 ASTNode* create_program_node(ASTNode* left, ASTNode* right);
 ASTNode* create_if_node(ASTNode* condition, ASTNode* true_branch, ASTNode* false_branch, int line);
+ASTNode* create_decl_func(ValueType value_type, char* name, char* parameter_list, ASTNode* body, int line);
+
 int get_next_offset();
 void print_ast(ASTNode* node);
 void generate_dot_file(ASTNode* root, const char* filename);
