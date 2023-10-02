@@ -1,13 +1,14 @@
 %{
 #include <stdlib.h>
 #include <stdio.h>
-#include "stack.h"
+#include "symbol_table.h"
 #include "ast.h"
 #include "errors.h"
 
 int yylex(void);
 void yyerror(const char *format,...);
 extern  ASTNode* root; 
+SymbolTable* table;    
 extern int yylineno;  
 %}
 
@@ -34,67 +35,48 @@ extern int yylineno;
 %token ELSE
 %token WHILE
 %token EQUALS
-%type <node> expr
-%type <node> valor
-%type <node> sentence_list
-%type <node> sentence
-%type <node> declarations
-%type <node> program
-%type <node> method_decl
-%type <node> methods
-%type <node> block
-%type <node> param
-%type <node> param_list
-%type <node> var_decl
-%type <type_val> type
-
-
+%type expr
+%type valor
+%type sentence_list
+%type sentence
+%type declarations
+%type program
+%type method_decl
+%type methods
+%type block
+%type param
+%type param_list
+%type var_decl
+%type type
+    
+%right EQUALS
 %left OR
 %left AND
-%nonassoc EQUALS '<' '>' 
+%left '<' '>'
 %left '+' '-'
 %left '*' '/' '%'
-%right '!' TMENOS //como definir precedencia unaria
+%right '!' TMENOS
 %%
 
 init: program 
       ;
 
-program: PROGRAM '{'{ open_level(); } body_program '}'     
+program: PROGRAM '{' declarations methods '}'
+         | PROGRAM '{' declarations '}'
+         | PROGRAM '{' methods '}'
       ;
 
-body_program: declarations methods
-            | declarations
-            | methods
-            ;
-            
 methods: method_decl methods 
         |  method_decl
       ;
 
-method_decl: type ID param {
-            if(look_and_hook($2) != NULL) 
-                yyerror("method %s already declared", $2);
-          
-            } block    
 
-            | TVOID ID param {
-            if(look_and_hook($2) != NULL) 
-                yyerror("method %s already declared", $2);
-            } block 
-
-            | TVOID ID param EXTERN {
-            if(look_and_hook($2) != NULL) 
-                yyerror("method %s already declared", $2);
-            } ';' 
-            
-            | type ID param EXTERN {
-            if(look_and_hook($2) != NULL) 
-                yyerror("method %s already declared", $2);
-            } ';' 
-        ;
-        
-block: '{' {open_level();} declarations sentence_list '}'{close_level();} 
+method_decl: type ID param block
+            | TVOID ID param block
+            | TVOID ID param EXTERN ';'
+            | type ID param EXTERN ';' 
+                      ;
+block: '{' declarations sentence_list '}' 
         | '{' sentence_list'}'
         ;
     
@@ -122,11 +104,11 @@ sentence: ID '=' expr ';'
          | block
         ;       
 
-method_call: ID '(' expr_params ')' 
-           | ID '(' ')' ;
+method_call: ID '(' expr_params ')' ;
 
 expr_params: expr ',' expr_params 
             | expr 
+            | 
           ;
 
 expr: valor              
@@ -149,8 +131,8 @@ expr: valor
 
 
 
-type: TINT {$$ = TYPE_INT;}
-    | TBOOL {$$ = TYPE_BOOL;}
+type: TINT 
+    | TBOOL 
     ;
 
 

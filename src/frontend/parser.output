@@ -1,120 +1,131 @@
-Estado 32 conflictos: 5 desplazamiento/reducción
-Estado 53 conflictos: 6 desplazamiento/reducción
-Estado 55 conflictos: 5 desplazamiento/reducción, 1 reducción/reducción
-
-
 Gramática
 
     0 $accept: init $end
 
     1 init: program
 
-    2 program: PROGRAM '{' declarations methods '}'
-    3        | PROGRAM '{' declarations '}'
-    4        | PROGRAM '{' methods '}'
+    2 $@1: ε
 
-    5 methods: method_decl methods
-    6        | method_decl
+    3 program: PROGRAM '{' $@1 body_program '}'
 
-    7 method_decl: type ID param block
-    8            | TVOID ID param block
-    9            | TVOID ID param EXTERN ';'
-   10            | type ID param EXTERN ';'
+    4 body_program: declarations methods
+    5             | declarations
+    6             | methods
 
-   11 block: '{' declarations sentence_list '}'
-   12      | '{' sentence_list '}'
-   13      | '{' declarations '}'
+    7 methods: method_decl methods
+    8        | method_decl
 
-   14 param: '(' ')'
-   15      | '(' param_list ')'
+    9 $@2: ε
 
-   16 param_list: type ID ',' param_list
-   17           | type ID
+   10 method_decl: type ID param $@2 block
 
-   18 declarations: declarations var_decl
-   19             | var_decl
+   11 $@3: ε
 
-   20 var_decl: type ID '=' expr ';'
+   12 method_decl: TVOID ID param $@3 block
 
-   21 sentence_list: sentence sentence_list
-   22              | sentence
+   13 $@4: ε
 
-   23 sentence: ID '=' expr ';'
-   24         | method_call ';'
-   25         | RETURN expr ';'
-   26         | RETURN ';'
-   27         | IF '(' expr ')' THEN block
-   28         | IF '(' expr ')' THEN block ELSE block
-   29         | WHILE '(' expr ')' block
-   30         | ε
-   31         | block
+   14 method_decl: TVOID ID param EXTERN $@4 ';'
 
-   32 method_call: ID '(' expr_params ')'
+   15 $@5: ε
 
-   33 expr_params: expr ',' expr_params
-   34            | expr
-   35            | ε
+   16 method_decl: type ID param EXTERN $@5 ';'
 
-   36 expr: valor
-   37     | ID
-   38     | expr '+' expr
-   39     | expr '*' expr
-   40     | '(' expr ')'
-   41     | expr OR expr
-   42     | expr AND expr
-   43     | method_call
-   44     | TMENOS expr
-   45     | '!' expr
-   46     | expr '<' expr
-   47     | expr '>' expr
-   48     | expr EQUALS expr
-   49     | expr '-' expr
-   50     | expr '/' expr
-   51     | expr '%' expr
+   17 $@6: ε
 
-   52 type: TINT
-   53     | TBOOL
+   18 block: '{' $@6 declarations sentence_list '}'
+   19      | '{' sentence_list '}'
 
-   54 valor: INT
-   55      | BOOL
+   20 param: '(' ')'
+   21      | '(' param_list ')'
+
+   22 param_list: type ID ',' param_list
+   23           | type ID
+
+   24 declarations: declarations var_decl
+   25             | var_decl
+
+   26 var_decl: type ID '=' expr ';'
+
+   27 sentence_list: sentence sentence_list
+   28              | sentence
+
+   29 sentence: ID '=' expr ';'
+   30         | method_call ';'
+   31         | RETURN expr ';'
+   32         | RETURN ';'
+   33         | IF '(' expr ')' THEN block
+   34         | IF '(' expr ')' THEN block ELSE block
+   35         | WHILE '(' expr ')' block
+   36         | ';'
+   37         | block
+
+   38 method_call: ID '(' expr_params ')'
+   39            | ID '(' ')'
+
+   40 expr_params: expr ',' expr_params
+   41            | expr
+
+   42 expr: valor
+   43     | ID
+   44     | expr '+' expr
+   45     | expr '*' expr
+   46     | '(' expr ')'
+   47     | expr OR expr
+   48     | expr AND expr
+   49     | method_call
+   50     | TMENOS expr
+   51     | '!' expr
+   52     | expr '<' expr
+   53     | expr '>' expr
+   54     | expr EQUALS expr
+   55     | expr '-' expr
+   56     | expr '/' expr
+   57     | expr '%' expr
+
+   58 type: TINT
+   59     | TBOOL
+
+   60 valor: INT
+   61      | BOOL
 
 
 Terminales con las reglas donde aparecen
 
     $end (0) 0
-    '!' (33) 45
-    '%' (37) 51
-    '(' (40) 14 15 27 28 29 32 40
-    ')' (41) 14 15 27 28 29 32 40
-    '*' (42) 39
-    '+' (43) 38
-    ',' (44) 16 33
-    '-' (45) 49
-    '/' (47) 50
-    ';' (59) 9 10 20 23 24 25 26
-    '<' (60) 46
-    '=' (61) 20 23
-    '>' (62) 47
-    '{' (123) 2 3 4 11 12 13
-    '}' (125) 2 3 4 11 12 13
+    '!' (33) 51
+    '%' (37) 57
+    '(' (40) 20 21 33 34 35 38 39 46
+    ')' (41) 20 21 33 34 35 38 39 46
+    '*' (42) 45
+    '+' (43) 44
+    ',' (44) 22 40
+    '-' (45) 55
+    '/' (47) 56
+    ';' (59) 14 16 26 29 30 31 32 36
+    '<' (60) 52
+    '=' (61) 26 29
+    '>' (62) 53
+    '{' (123) 3 18 19
+    '}' (125) 3 18 19
     error (256)
-    INT <int_val> (258) 54
-    ID <id_val> (259) 7 8 9 10 16 17 20 23 32 37
-    BOOL <int_val> (260) 55
-    TINT (261) 52
-    TBOOL (262) 53
-    TVOID (263) 8 9
-    RETURN (264) 25 26
-    IF (265) 27 28
-    OR (266) 41
-    AND (267) 42
-    PROGRAM (268) 2 3 4
-    EXTERN (269) 9 10
-    THEN (270) 27 28
-    ELSE (271) 28
-    WHILE (272) 29
-    EQUALS (273) 48
-    TMENOS (274) 44
+    INT <int_val> (258) 60
+    ID <id_val> (259) 10 12 14 16 22 23 26 29 38 39 43
+    BOOL <int_val> (260) 61
+    TINT (261) 58
+    TBOOL (262) 59
+    TVOID (263) 12 14
+    RETURN (264) 31 32
+    IF (265) 33 34
+    OR (266) 47
+    AND (267) 48
+    PROGRAM (268) 3
+    EXTERN (269) 14 16
+    THEN (270) 33 34
+    ELSE (271) 34
+    WHILE (272) 35
+    EQUALS (273) 54
+    TMENOS (274) 50
 
 
 No terminales con las reglas donde aparecen
@@ -124,51 +135,72 @@ No terminales con las reglas donde aparecen
     init (36)
         on left: 1
         on right: 0
-    program (37)
-        on left: 2 3 4
+    program <node> (37)
+        on left: 3
         on right: 1
-    methods (38)
-        on left: 5 6
-        on right: 2 4 5
-    method_decl (39)
-        on left: 7 8 9 10
-        on right: 5 6
-    block (40)
-        on left: 11 12 13
-        on right: 7 8 27 28 29 31
-    param (41)
-        on left: 14 15
-        on right: 7 8 9 10
-    param_list (42)
-        on left: 16 17
-        on right: 15 16
-    declarations (43)
+    $@1 (38)
+        on left: 2
+        on right: 3
+    body_program (39)
+        on left: 4 5 6
+        on right: 3
+    methods <node> (40)
+        on left: 7 8
+        on right: 4 6 7
+    method_decl <node> (41)
+        on left: 10 12 14 16
+        on right: 7 8
+    $@2 (42)
+        on left: 9
+        on right: 10
+    $@3 (43)
+        on left: 11
+        on right: 12
+    $@4 (44)
+        on left: 13
+        on right: 14
+    $@5 (45)
+        on left: 15
+        on right: 16
+    block <node> (46)
         on left: 18 19
-        on right: 2 3 11 13 18
-    var_decl (44)
-        on left: 20
-        on right: 18 19
-    sentence_list (45)
-        on left: 21 22
-        on right: 11 12 21
-    sentence (46)
-        on left: 23 24 25 26 27 28 29 30 31
+        on right: 10 12 33 34 35 37
+    $@6 (47)
+        on left: 17
+        on right: 18
+    param <node> (48)
+        on left: 20 21
+        on right: 10 12 14 16
+    param_list <node> (49)
+        on left: 22 23
         on right: 21 22
-    method_call (47)
-        on left: 32
-        on right: 24 43
-    expr_params (48)
-        on left: 33 34 35
-        on right: 32 33
-    expr (49)
-        on left: 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51
-        on right: 20 23 25 27 28 29 33 34 38 39 40 41 42 44 45 46 47 48 49 50 51
-    type (50)
-        on left: 52 53
-        on right: 7 10 16 17 20
-    valor (51)
-        on left: 54 55
-        on right: 36
+    declarations <node> (50)
+        on left: 24 25
+        on right: 4 5 18 24
+    var_decl <node> (51)
+        on left: 26
+        on right: 24 25
+    sentence_list <node> (52)
+        on left: 27 28
+        on right: 18 19 27
+    sentence <node> (53)
+        on left: 29 30 31 32 33 34 35 36 37
+        on right: 27 28
+    method_call (54)
+        on left: 38 39
+        on right: 30 49
+    expr_params (55)
+        on left: 40 41
+        on right: 38 40
+    expr <node> (56)
+        on left: 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57
+        on right: 26 29 31 33 34 35 40 41 44 45 46 47 48 50 51 52 53 54 55 56 57
+    type <type_val> (57)
+        on left: 58 59
+        on right: 10 16 22 23 26
+    valor <node> (58)
+        on left: 60 61
+        on right: 42
 
 
 Estado 0
@@ -183,9 +215,7 @@ Estado 0
 
 Estado 1
 
-    2 program: PROGRAM • '{' declarations methods '}'
-    3        | PROGRAM • '{' declarations '}'
-    4        | PROGRAM • '{' methods '}'
+    3 program: PROGRAM • '{' $@1 body_program '}'
 
     '{'  desplazar e ir al estado 4
 
@@ -206,19 +236,11 @@ Estado 3
 
 Estado 4
 
-    2 program: PROGRAM '{' • declarations methods '}'
-    3        | PROGRAM '{' • declarations '}'
-    4        | PROGRAM '{' • methods '}'
+    3 program: PROGRAM '{' • $@1 body_program '}'
 
-    TINT   desplazar e ir al estado 6
-    TBOOL  desplazar e ir al estado 7
-    TVOID  desplazar e ir al estado 8
+    $default  reduce usando la regla 2 ($@1)
 
-    methods       ir al estado 9
-    method_decl   ir al estado 10
-    declarations  ir al estado 11
-    var_decl      ir al estado 12
-    type          ir al estado 13
+    $@1  ir al estado 6
 
 
 Estado 5
@@ -230,1408 +252,1461 @@ Estado 5
 
 Estado 6
 
-   52 type: TINT •
+    3 program: PROGRAM '{' $@1 • body_program '}'
 
-    $default  reduce usando la regla 52 (type)
+    TINT   desplazar e ir al estado 7
+    TBOOL  desplazar e ir al estado 8
+    TVOID  desplazar e ir al estado 9
+
+    body_program  ir al estado 10
+    methods       ir al estado 11
+    method_decl   ir al estado 12
+    declarations  ir al estado 13
+    var_decl      ir al estado 14
+    type          ir al estado 15
 
 
 Estado 7
 
-   53 type: TBOOL •
+   58 type: TINT •
 
-    $default  reduce usando la regla 53 (type)
+    $default  reduce usando la regla 58 (type)
 
 
 Estado 8
 
-    8 method_decl: TVOID • ID param block
-    9            | TVOID • ID param EXTERN ';'
+   59 type: TBOOL •
 
-    ID  desplazar e ir al estado 14
+    $default  reduce usando la regla 59 (type)
 
 
 Estado 9
 
-    4 program: PROGRAM '{' methods • '}'
+   12 method_decl: TVOID • ID param $@3 block
+   14            | TVOID • ID param EXTERN $@4 ';'
 
-    '}'  desplazar e ir al estado 15
+    ID  desplazar e ir al estado 16
 
 
 Estado 10
 
-    5 methods: method_decl • methods
-    6        | method_decl •
+    3 program: PROGRAM '{' $@1 body_program • '}'
 
-    TINT   desplazar e ir al estado 6
-    TBOOL  desplazar e ir al estado 7
-    TVOID  desplazar e ir al estado 8
-
-    $default  reduce usando la regla 6 (methods)
-
-    methods      ir al estado 16
-    method_decl  ir al estado 10
-    type         ir al estado 17
+    '}'  desplazar e ir al estado 17
 
 
 Estado 11
 
-    2 program: PROGRAM '{' declarations • methods '}'
-    3        | PROGRAM '{' declarations • '}'
-   18 declarations: declarations • var_decl
+    6 body_program: methods •
 
-    TINT   desplazar e ir al estado 6
-    TBOOL  desplazar e ir al estado 7
-    TVOID  desplazar e ir al estado 8
-    '}'    desplazar e ir al estado 18
-
-    methods      ir al estado 19
-    method_decl  ir al estado 10
-    var_decl     ir al estado 20
-    type         ir al estado 13
+    $default  reduce usando la regla 6 (body_program)
 
 
 Estado 12
 
-   19 declarations: var_decl •
+    7 methods: method_decl • methods
+    8        | method_decl •
 
-    $default  reduce usando la regla 19 (declarations)
+    TINT   desplazar e ir al estado 7
+    TBOOL  desplazar e ir al estado 8
+    TVOID  desplazar e ir al estado 9
+
+    $default  reduce usando la regla 8 (methods)
+
+    methods      ir al estado 18
+    method_decl  ir al estado 12
+    type         ir al estado 19
 
 
 Estado 13
 
-    7 method_decl: type • ID param block
-   10            | type • ID param EXTERN ';'
-   20 var_decl: type • ID '=' expr ';'
+    4 body_program: declarations • methods
+    5             | declarations •
+   24 declarations: declarations • var_decl
 
-    ID  desplazar e ir al estado 21
+    TINT   desplazar e ir al estado 7
+    TBOOL  desplazar e ir al estado 8
+    TVOID  desplazar e ir al estado 9
+
+    $default  reduce usando la regla 5 (body_program)
+
+    methods      ir al estado 20
+    method_decl  ir al estado 12
+    var_decl     ir al estado 21
+    type         ir al estado 15
 
 
 Estado 14
 
-    8 method_decl: TVOID ID • param block
-    9            | TVOID ID • param EXTERN ';'
+   25 declarations: var_decl •
 
-    '('  desplazar e ir al estado 22
-
-    param  ir al estado 23
+    $default  reduce usando la regla 25 (declarations)
 
 
 Estado 15
 
-    4 program: PROGRAM '{' methods '}' •
+   10 method_decl: type • ID param $@2 block
+   16            | type • ID param EXTERN $@5 ';'
+   26 var_decl: type • ID '=' expr ';'
 
-    $default  reduce usando la regla 4 (program)
+    ID  desplazar e ir al estado 22
 
 
 Estado 16
 
-    5 methods: method_decl methods •
+   12 method_decl: TVOID ID • param $@3 block
+   14            | TVOID ID • param EXTERN $@4 ';'
 
-    $default  reduce usando la regla 5 (methods)
+    '('  desplazar e ir al estado 23
+
+    param  ir al estado 24
 
 
 Estado 17
 
-    7 method_decl: type • ID param block
-   10            | type • ID param EXTERN ';'
-
-    ID  desplazar e ir al estado 24
-
-
-Estado 18
-
-    3 program: PROGRAM '{' declarations '}' •
+    3 program: PROGRAM '{' $@1 body_program '}' •
 
     $default  reduce usando la regla 3 (program)
 
 
+Estado 18
+
+    7 methods: method_decl methods •
+
+    $default  reduce usando la regla 7 (methods)
+
+
 Estado 19
 
-    2 program: PROGRAM '{' declarations methods • '}'
+   10 method_decl: type • ID param $@2 block
+   16            | type • ID param EXTERN $@5 ';'
 
-    '}'  desplazar e ir al estado 25
+    ID  desplazar e ir al estado 25
 
 
 Estado 20
 
-   18 declarations: declarations var_decl •
+    4 body_program: declarations methods •
 
-    $default  reduce usando la regla 18 (declarations)
+    $default  reduce usando la regla 4 (body_program)
 
 
 Estado 21
 
-    7 method_decl: type ID • param block
-   10            | type ID • param EXTERN ';'
-   20 var_decl: type ID • '=' expr ';'
+   24 declarations: declarations var_decl •
 
-    '('  desplazar e ir al estado 22
+    $default  reduce usando la regla 24 (declarations)
+
+
+Estado 22
+
+   10 method_decl: type ID • param $@2 block
+   16            | type ID • param EXTERN $@5 ';'
+   26 var_decl: type ID • '=' expr ';'
+
+    '('  desplazar e ir al estado 23
     '='  desplazar e ir al estado 26
 
     param  ir al estado 27
 
 
-Estado 22
+Estado 23
 
-   14 param: '(' • ')'
-   15      | '(' • param_list ')'
+   20 param: '(' • ')'
+   21      | '(' • param_list ')'
 
-    TINT   desplazar e ir al estado 6
-    TBOOL  desplazar e ir al estado 7
+    TINT   desplazar e ir al estado 7
+    TBOOL  desplazar e ir al estado 8
     ')'    desplazar e ir al estado 28
 
     param_list  ir al estado 29
     type        ir al estado 30
 
 
-Estado 23
-
-    8 method_decl: TVOID ID param • block
-    9            | TVOID ID param • EXTERN ';'
-
-    EXTERN  desplazar e ir al estado 31
-    '{'     desplazar e ir al estado 32
-
-    block  ir al estado 33
-
-
 Estado 24
 
-    7 method_decl: type ID • param block
-   10            | type ID • param EXTERN ';'
+   12 method_decl: TVOID ID param • $@3 block
+   14            | TVOID ID param • EXTERN $@4 ';'
 
-    '('  desplazar e ir al estado 22
+    EXTERN  desplazar e ir al estado 31
 
-    param  ir al estado 27
+    $default  reduce usando la regla 11 ($@3)
+
+    $@3  ir al estado 32
 
 
 Estado 25
 
-    2 program: PROGRAM '{' declarations methods '}' •
+   10 method_decl: type ID • param $@2 block
+   16            | type ID • param EXTERN $@5 ';'
 
-    $default  reduce usando la regla 2 (program)
+    '('  desplazar e ir al estado 23
+
+    param  ir al estado 27
 
 
 Estado 26
 
-   20 var_decl: type ID '=' • expr ';'
+   26 var_decl: type ID '=' • expr ';'
 
-    INT     desplazar e ir al estado 34
-    ID      desplazar e ir al estado 35
-    BOOL    desplazar e ir al estado 36
-    '!'     desplazar e ir al estado 37
-    TMENOS  desplazar e ir al estado 38
-    '('     desplazar e ir al estado 39
+    INT     desplazar e ir al estado 33
+    ID      desplazar e ir al estado 34
+    BOOL    desplazar e ir al estado 35
+    '!'     desplazar e ir al estado 36
+    TMENOS  desplazar e ir al estado 37
+    '('     desplazar e ir al estado 38
 
-    method_call  ir al estado 40
-    expr         ir al estado 41
-    valor        ir al estado 42
+    method_call  ir al estado 39
+    expr         ir al estado 40
+    valor        ir al estado 41
 
 
 Estado 27
 
-    7 method_decl: type ID param • block
-   10            | type ID param • EXTERN ';'
+   10 method_decl: type ID param • $@2 block
+   16            | type ID param • EXTERN $@5 ';'
 
-    EXTERN  desplazar e ir al estado 43
-    '{'     desplazar e ir al estado 32
+    EXTERN  desplazar e ir al estado 42
 
-    block  ir al estado 44
+    $default  reduce usando la regla 9 ($@2)
+
+    $@2  ir al estado 43
 
 
 Estado 28
 
-   14 param: '(' ')' •
+   20 param: '(' ')' •
 
-    $default  reduce usando la regla 14 (param)
+    $default  reduce usando la regla 20 (param)
 
 
 Estado 29
 
-   15 param: '(' param_list • ')'
+   21 param: '(' param_list • ')'
 
-    ')'  desplazar e ir al estado 45
+    ')'  desplazar e ir al estado 44
 
 
 Estado 30
 
-   16 param_list: type • ID ',' param_list
-   17           | type • ID
+   22 param_list: type • ID ',' param_list
+   23           | type • ID
 
-    ID  desplazar e ir al estado 46
+    ID  desplazar e ir al estado 45
 
 
 Estado 31
 
-    9 method_decl: TVOID ID param EXTERN • ';'
+   14 method_decl: TVOID ID param EXTERN • $@4 ';'
 
-    ';'  desplazar e ir al estado 47
+    $default  reduce usando la regla 13 ($@4)
+
+    $@4  ir al estado 46
 
 
 Estado 32
 
-   11 block: '{' • declarations sentence_list '}'
-   12      | '{' • sentence_list '}'
-   13      | '{' • declarations '}'
+   12 method_decl: TVOID ID param $@3 • block
 
-    ID      desplazar e ir al estado 48
-    TINT    desplazar e ir al estado 6
-    TBOOL   desplazar e ir al estado 7
-    RETURN  desplazar e ir al estado 49
-    IF      desplazar e ir al estado 50
-    WHILE   desplazar e ir al estado 51
-    '{'     desplazar e ir al estado 32
+    '{'  desplazar e ir al estado 47
 
-    ID        [reduce usando la regla 30 (sentence)]
-    RETURN    [reduce usando la regla 30 (sentence)]
-    IF        [reduce usando la regla 30 (sentence)]
-    WHILE     [reduce usando la regla 30 (sentence)]
-    '{'       [reduce usando la regla 30 (sentence)]
-    $default  reduce usando la regla 30 (sentence)
-
-    block          ir al estado 52
-    declarations   ir al estado 53
-    var_decl       ir al estado 12
-    sentence_list  ir al estado 54
-    sentence       ir al estado 55
-    method_call    ir al estado 56
-    type           ir al estado 57
+    block  ir al estado 48
 
 
 Estado 33
 
-    8 method_decl: TVOID ID param block •
+   60 valor: INT •
 
-    $default  reduce usando la regla 8 (method_decl)
+    $default  reduce usando la regla 60 (valor)
 
 
 Estado 34
 
-   54 valor: INT •
+   38 method_call: ID • '(' expr_params ')'
+   39            | ID • '(' ')'
+   43 expr: ID •
 
-    $default  reduce usando la regla 54 (valor)
-
-
-Estado 35
-
-   32 method_call: ID • '(' expr_params ')'
-   37 expr: ID •
-
-    '('  desplazar e ir al estado 58
-
-    $default  reduce usando la regla 37 (expr)
-
-
-Estado 36
-
-   55 valor: BOOL •
-
-    $default  reduce usando la regla 55 (valor)
-
-
-Estado 37
-
-   45 expr: '!' • expr
-
-    INT     desplazar e ir al estado 34
-    ID      desplazar e ir al estado 35
-    BOOL    desplazar e ir al estado 36
-    '!'     desplazar e ir al estado 37
-    TMENOS  desplazar e ir al estado 38
-    '('     desplazar e ir al estado 39
-
-    method_call  ir al estado 40
-    expr         ir al estado 59
-    valor        ir al estado 42
-
-
-Estado 38
-
-   44 expr: TMENOS • expr
-
-    INT     desplazar e ir al estado 34
-    ID      desplazar e ir al estado 35
-    BOOL    desplazar e ir al estado 36
-    '!'     desplazar e ir al estado 37
-    TMENOS  desplazar e ir al estado 38
-    '('     desplazar e ir al estado 39
-
-    method_call  ir al estado 40
-    expr         ir al estado 60
-    valor        ir al estado 42
-
-
-Estado 39
-
-   40 expr: '(' • expr ')'
-
-    INT     desplazar e ir al estado 34
-    ID      desplazar e ir al estado 35
-    BOOL    desplazar e ir al estado 36
-    '!'     desplazar e ir al estado 37
-    TMENOS  desplazar e ir al estado 38
-    '('     desplazar e ir al estado 39
-
-    method_call  ir al estado 40
-    expr         ir al estado 61
-    valor        ir al estado 42
-
-
-Estado 40
-
-   43 expr: method_call •
+    '('  desplazar e ir al estado 49
 
     $default  reduce usando la regla 43 (expr)
 
 
-Estado 41
+Estado 35
 
-   20 var_decl: type ID '=' expr • ';'
-   38 expr: expr • '+' expr
-   39     | expr • '*' expr
-   41     | expr • OR expr
-   42     | expr • AND expr
-   46     | expr • '<' expr
-   47     | expr • '>' expr
-   48     | expr • EQUALS expr
-   49     | expr • '-' expr
-   50     | expr • '/' expr
-   51     | expr • '%' expr
+   61 valor: BOOL •
 
-    OR      desplazar e ir al estado 62
-    AND     desplazar e ir al estado 63
-    EQUALS  desplazar e ir al estado 64
-    '<'     desplazar e ir al estado 65
-    '>'     desplazar e ir al estado 66
-    '+'     desplazar e ir al estado 67
-    '-'     desplazar e ir al estado 68
-    '*'     desplazar e ir al estado 69
-    '/'     desplazar e ir al estado 70
-    '%'     desplazar e ir al estado 71
-    ';'     desplazar e ir al estado 72
+    $default  reduce usando la regla 61 (valor)
 
 
-Estado 42
+Estado 36
 
-   36 expr: valor •
+   51 expr: '!' • expr
 
-    $default  reduce usando la regla 36 (expr)
+    INT     desplazar e ir al estado 33
+    ID      desplazar e ir al estado 34
+    BOOL    desplazar e ir al estado 35
+    '!'     desplazar e ir al estado 36
+    TMENOS  desplazar e ir al estado 37
+    '('     desplazar e ir al estado 38
 
+    method_call  ir al estado 39
+    expr         ir al estado 50
+    valor        ir al estado 41
 
-Estado 43
 
-   10 method_decl: type ID param EXTERN • ';'
+Estado 37
 
-    ';'  desplazar e ir al estado 73
+   50 expr: TMENOS • expr
 
+    INT     desplazar e ir al estado 33
+    ID      desplazar e ir al estado 34
+    BOOL    desplazar e ir al estado 35
+    '!'     desplazar e ir al estado 36
+    TMENOS  desplazar e ir al estado 37
+    '('     desplazar e ir al estado 38
 
-Estado 44
+    method_call  ir al estado 39
+    expr         ir al estado 51
+    valor        ir al estado 41
 
-    7 method_decl: type ID param block •
 
-    $default  reduce usando la regla 7 (method_decl)
+Estado 38
 
+   46 expr: '(' • expr ')'
 
-Estado 45
+    INT     desplazar e ir al estado 33
+    ID      desplazar e ir al estado 34
+    BOOL    desplazar e ir al estado 35
+    '!'     desplazar e ir al estado 36
+    TMENOS  desplazar e ir al estado 37
+    '('     desplazar e ir al estado 38
 
-   15 param: '(' param_list ')' •
+    method_call  ir al estado 39
+    expr         ir al estado 52
+    valor        ir al estado 41
 
-    $default  reduce usando la regla 15 (param)
 
+Estado 39
 
-Estado 46
-
-   16 param_list: type ID • ',' param_list
-   17           | type ID •
-
-    ','  desplazar e ir al estado 74
-
-    $default  reduce usando la regla 17 (param_list)
-
-
-Estado 47
-
-    9 method_decl: TVOID ID param EXTERN ';' •
-
-    $default  reduce usando la regla 9 (method_decl)
-
-
-Estado 48
-
-   23 sentence: ID • '=' expr ';'
-   32 method_call: ID • '(' expr_params ')'
-
-    '('  desplazar e ir al estado 58
-    '='  desplazar e ir al estado 75
-
-
-Estado 49
-
-   25 sentence: RETURN • expr ';'
-   26         | RETURN • ';'
-
-    INT     desplazar e ir al estado 34
-    ID      desplazar e ir al estado 35
-    BOOL    desplazar e ir al estado 36
-    '!'     desplazar e ir al estado 37
-    TMENOS  desplazar e ir al estado 38
-    ';'     desplazar e ir al estado 76
-    '('     desplazar e ir al estado 39
-
-    method_call  ir al estado 40
-    expr         ir al estado 77
-    valor        ir al estado 42
-
-
-Estado 50
-
-   27 sentence: IF • '(' expr ')' THEN block
-   28         | IF • '(' expr ')' THEN block ELSE block
-
-    '('  desplazar e ir al estado 78
-
-
-Estado 51
-
-   29 sentence: WHILE • '(' expr ')' block
-
-    '('  desplazar e ir al estado 79
-
-
-Estado 52
-
-   31 sentence: block •
-
-    $default  reduce usando la regla 31 (sentence)
-
-
-Estado 53
-
-   11 block: '{' declarations • sentence_list '}'
-   13      | '{' declarations • '}'
-   18 declarations: declarations • var_decl
-
-    ID      desplazar e ir al estado 48
-    TINT    desplazar e ir al estado 6
-    TBOOL   desplazar e ir al estado 7
-    RETURN  desplazar e ir al estado 49
-    IF      desplazar e ir al estado 50
-    WHILE   desplazar e ir al estado 51
-    '{'     desplazar e ir al estado 32
-    '}'     desplazar e ir al estado 80
-
-    ID      [reduce usando la regla 30 (sentence)]
-    RETURN  [reduce usando la regla 30 (sentence)]
-    IF      [reduce usando la regla 30 (sentence)]
-    WHILE   [reduce usando la regla 30 (sentence)]
-    '{'     [reduce usando la regla 30 (sentence)]
-    '}'     [reduce usando la regla 30 (sentence)]
-
-    block          ir al estado 52
-    var_decl       ir al estado 20
-    sentence_list  ir al estado 81
-    sentence       ir al estado 55
-    method_call    ir al estado 56
-    type           ir al estado 57
-
-
-Estado 54
-
-   12 block: '{' sentence_list • '}'
-
-    '}'  desplazar e ir al estado 82
-
-
-Estado 55
-
-   21 sentence_list: sentence • sentence_list
-   22              | sentence •
-
-    ID      desplazar e ir al estado 48
-    RETURN  desplazar e ir al estado 49
-    IF      desplazar e ir al estado 50
-    WHILE   desplazar e ir al estado 51
-    '{'     desplazar e ir al estado 32
-
-    ID        [reduce usando la regla 30 (sentence)]
-    RETURN    [reduce usando la regla 30 (sentence)]
-    IF        [reduce usando la regla 30 (sentence)]
-    WHILE     [reduce usando la regla 30 (sentence)]
-    '{'       [reduce usando la regla 30 (sentence)]
-    '}'       reduce usando la regla 22 (sentence_list)
-    '}'       [reduce usando la regla 30 (sentence)]
-    $default  reduce usando la regla 22 (sentence_list)
-
-    block          ir al estado 52
-    sentence_list  ir al estado 83
-    sentence       ir al estado 55
-    method_call    ir al estado 56
-
-
-Estado 56
-
-   24 sentence: method_call • ';'
-
-    ';'  desplazar e ir al estado 84
-
-
-Estado 57
-
-   20 var_decl: type • ID '=' expr ';'
-
-    ID  desplazar e ir al estado 85
-
-
-Estado 58
-
-   32 method_call: ID '(' • expr_params ')'
-
-    INT     desplazar e ir al estado 34
-    ID      desplazar e ir al estado 35
-    BOOL    desplazar e ir al estado 36
-    '!'     desplazar e ir al estado 37
-    TMENOS  desplazar e ir al estado 38
-    '('     desplazar e ir al estado 39
-
-    $default  reduce usando la regla 35 (expr_params)
-
-    method_call  ir al estado 40
-    expr_params  ir al estado 86
-    expr         ir al estado 87
-    valor        ir al estado 42
-
-
-Estado 59
-
-   38 expr: expr • '+' expr
-   39     | expr • '*' expr
-   41     | expr • OR expr
-   42     | expr • AND expr
-   45     | '!' expr •
-   46     | expr • '<' expr
-   47     | expr • '>' expr
-   48     | expr • EQUALS expr
-   49     | expr • '-' expr
-   50     | expr • '/' expr
-   51     | expr • '%' expr
-
-    $default  reduce usando la regla 45 (expr)
-
-
-Estado 60
-
-   38 expr: expr • '+' expr
-   39     | expr • '*' expr
-   41     | expr • OR expr
-   42     | expr • AND expr
-   44     | TMENOS expr •
-   46     | expr • '<' expr
-   47     | expr • '>' expr
-   48     | expr • EQUALS expr
-   49     | expr • '-' expr
-   50     | expr • '/' expr
-   51     | expr • '%' expr
-
-    $default  reduce usando la regla 44 (expr)
-
-
-Estado 61
-
-   38 expr: expr • '+' expr
-   39     | expr • '*' expr
-   40     | '(' expr • ')'
-   41     | expr • OR expr
-   42     | expr • AND expr
-   46     | expr • '<' expr
-   47     | expr • '>' expr
-   48     | expr • EQUALS expr
-   49     | expr • '-' expr
-   50     | expr • '/' expr
-   51     | expr • '%' expr
-
-    OR      desplazar e ir al estado 62
-    AND     desplazar e ir al estado 63
-    EQUALS  desplazar e ir al estado 64
-    '<'     desplazar e ir al estado 65
-    '>'     desplazar e ir al estado 66
-    '+'     desplazar e ir al estado 67
-    '-'     desplazar e ir al estado 68
-    '*'     desplazar e ir al estado 69
-    '/'     desplazar e ir al estado 70
-    '%'     desplazar e ir al estado 71
-    ')'     desplazar e ir al estado 88
-
-
-Estado 62
-
-   41 expr: expr OR • expr
-
-    INT     desplazar e ir al estado 34
-    ID      desplazar e ir al estado 35
-    BOOL    desplazar e ir al estado 36
-    '!'     desplazar e ir al estado 37
-    TMENOS  desplazar e ir al estado 38
-    '('     desplazar e ir al estado 39
-
-    method_call  ir al estado 40
-    expr         ir al estado 89
-    valor        ir al estado 42
-
-
-Estado 63
-
-   42 expr: expr AND • expr
-
-    INT     desplazar e ir al estado 34
-    ID      desplazar e ir al estado 35
-    BOOL    desplazar e ir al estado 36
-    '!'     desplazar e ir al estado 37
-    TMENOS  desplazar e ir al estado 38
-    '('     desplazar e ir al estado 39
-
-    method_call  ir al estado 40
-    expr         ir al estado 90
-    valor        ir al estado 42
-
-
-Estado 64
-
-   48 expr: expr EQUALS • expr
-
-    INT     desplazar e ir al estado 34
-    ID      desplazar e ir al estado 35
-    BOOL    desplazar e ir al estado 36
-    '!'     desplazar e ir al estado 37
-    TMENOS  desplazar e ir al estado 38
-    '('     desplazar e ir al estado 39
-
-    method_call  ir al estado 40
-    expr         ir al estado 91
-    valor        ir al estado 42
-
-
-Estado 65
-
-   46 expr: expr '<' • expr
-
-    INT     desplazar e ir al estado 34
-    ID      desplazar e ir al estado 35
-    BOOL    desplazar e ir al estado 36
-    '!'     desplazar e ir al estado 37
-    TMENOS  desplazar e ir al estado 38
-    '('     desplazar e ir al estado 39
-
-    method_call  ir al estado 40
-    expr         ir al estado 92
-    valor        ir al estado 42
-
-
-Estado 66
-
-   47 expr: expr '>' • expr
-
-    INT     desplazar e ir al estado 34
-    ID      desplazar e ir al estado 35
-    BOOL    desplazar e ir al estado 36
-    '!'     desplazar e ir al estado 37
-    TMENOS  desplazar e ir al estado 38
-    '('     desplazar e ir al estado 39
-
-    method_call  ir al estado 40
-    expr         ir al estado 93
-    valor        ir al estado 42
-
-
-Estado 67
-
-   38 expr: expr '+' • expr
-
-    INT     desplazar e ir al estado 34
-    ID      desplazar e ir al estado 35
-    BOOL    desplazar e ir al estado 36
-    '!'     desplazar e ir al estado 37
-    TMENOS  desplazar e ir al estado 38
-    '('     desplazar e ir al estado 39
-
-    method_call  ir al estado 40
-    expr         ir al estado 94
-    valor        ir al estado 42
-
-
-Estado 68
-
-   49 expr: expr '-' • expr
-
-    INT     desplazar e ir al estado 34
-    ID      desplazar e ir al estado 35
-    BOOL    desplazar e ir al estado 36
-    '!'     desplazar e ir al estado 37
-    TMENOS  desplazar e ir al estado 38
-    '('     desplazar e ir al estado 39
-
-    method_call  ir al estado 40
-    expr         ir al estado 95
-    valor        ir al estado 42
-
-
-Estado 69
-
-   39 expr: expr '*' • expr
-
-    INT     desplazar e ir al estado 34
-    ID      desplazar e ir al estado 35
-    BOOL    desplazar e ir al estado 36
-    '!'     desplazar e ir al estado 37
-    TMENOS  desplazar e ir al estado 38
-    '('     desplazar e ir al estado 39
-
-    method_call  ir al estado 40
-    expr         ir al estado 96
-    valor        ir al estado 42
-
-
-Estado 70
-
-   50 expr: expr '/' • expr
-
-    INT     desplazar e ir al estado 34
-    ID      desplazar e ir al estado 35
-    BOOL    desplazar e ir al estado 36
-    '!'     desplazar e ir al estado 37
-    TMENOS  desplazar e ir al estado 38
-    '('     desplazar e ir al estado 39
-
-    method_call  ir al estado 40
-    expr         ir al estado 97
-    valor        ir al estado 42
-
-
-Estado 71
-
-   51 expr: expr '%' • expr
-
-    INT     desplazar e ir al estado 34
-    ID      desplazar e ir al estado 35
-    BOOL    desplazar e ir al estado 36
-    '!'     desplazar e ir al estado 37
-    TMENOS  desplazar e ir al estado 38
-    '('     desplazar e ir al estado 39
-
-    method_call  ir al estado 40
-    expr         ir al estado 98
-    valor        ir al estado 42
-
-
-Estado 72
-
-   20 var_decl: type ID '=' expr ';' •
-
-    $default  reduce usando la regla 20 (var_decl)
-
-
-Estado 73
-
-   10 method_decl: type ID param EXTERN ';' •
-
-    $default  reduce usando la regla 10 (method_decl)
-
-
-Estado 74
-
-   16 param_list: type ID ',' • param_list
-
-    TINT   desplazar e ir al estado 6
-    TBOOL  desplazar e ir al estado 7
-
-    param_list  ir al estado 99
-    type        ir al estado 30
-
-
-Estado 75
-
-   23 sentence: ID '=' • expr ';'
-
-    INT     desplazar e ir al estado 34
-    ID      desplazar e ir al estado 35
-    BOOL    desplazar e ir al estado 36
-    '!'     desplazar e ir al estado 37
-    TMENOS  desplazar e ir al estado 38
-    '('     desplazar e ir al estado 39
-
-    method_call  ir al estado 40
-    expr         ir al estado 100
-    valor        ir al estado 42
-
-
-Estado 76
-
-   26 sentence: RETURN ';' •
-
-    $default  reduce usando la regla 26 (sentence)
-
-
-Estado 77
-
-   25 sentence: RETURN expr • ';'
-   38 expr: expr • '+' expr
-   39     | expr • '*' expr
-   41     | expr • OR expr
-   42     | expr • AND expr
-   46     | expr • '<' expr
-   47     | expr • '>' expr
-   48     | expr • EQUALS expr
-   49     | expr • '-' expr
-   50     | expr • '/' expr
-   51     | expr • '%' expr
-
-    OR      desplazar e ir al estado 62
-    AND     desplazar e ir al estado 63
-    EQUALS  desplazar e ir al estado 64
-    '<'     desplazar e ir al estado 65
-    '>'     desplazar e ir al estado 66
-    '+'     desplazar e ir al estado 67
-    '-'     desplazar e ir al estado 68
-    '*'     desplazar e ir al estado 69
-    '/'     desplazar e ir al estado 70
-    '%'     desplazar e ir al estado 71
-    ';'     desplazar e ir al estado 101
-
-
-Estado 78
-
-   27 sentence: IF '(' • expr ')' THEN block
-   28         | IF '(' • expr ')' THEN block ELSE block
-
-    INT     desplazar e ir al estado 34
-    ID      desplazar e ir al estado 35
-    BOOL    desplazar e ir al estado 36
-    '!'     desplazar e ir al estado 37
-    TMENOS  desplazar e ir al estado 38
-    '('     desplazar e ir al estado 39
-
-    method_call  ir al estado 40
-    expr         ir al estado 102
-    valor        ir al estado 42
-
-
-Estado 79
-
-   29 sentence: WHILE '(' • expr ')' block
-
-    INT     desplazar e ir al estado 34
-    ID      desplazar e ir al estado 35
-    BOOL    desplazar e ir al estado 36
-    '!'     desplazar e ir al estado 37
-    TMENOS  desplazar e ir al estado 38
-    '('     desplazar e ir al estado 39
-
-    method_call  ir al estado 40
-    expr         ir al estado 103
-    valor        ir al estado 42
-
-
-Estado 80
-
-   13 block: '{' declarations '}' •
-
-    $default  reduce usando la regla 13 (block)
-
-
-Estado 81
-
-   11 block: '{' declarations sentence_list • '}'
-
-    '}'  desplazar e ir al estado 104
-
-
-Estado 82
-
-   12 block: '{' sentence_list '}' •
-
-    $default  reduce usando la regla 12 (block)
-
-
-Estado 83
-
-   21 sentence_list: sentence sentence_list •
-
-    $default  reduce usando la regla 21 (sentence_list)
-
-
-Estado 84
-
-   24 sentence: method_call ';' •
-
-    $default  reduce usando la regla 24 (sentence)
-
-
-Estado 85
-
-   20 var_decl: type ID • '=' expr ';'
-
-    '='  desplazar e ir al estado 26
-
-
-Estado 86
-
-   32 method_call: ID '(' expr_params • ')'
-
-    ')'  desplazar e ir al estado 105
-
-
-Estado 87
-
-   33 expr_params: expr • ',' expr_params
-   34            | expr •
-   38 expr: expr • '+' expr
-   39     | expr • '*' expr
-   41     | expr • OR expr
-   42     | expr • AND expr
-   46     | expr • '<' expr
-   47     | expr • '>' expr
-   48     | expr • EQUALS expr
-   49     | expr • '-' expr
-   50     | expr • '/' expr
-   51     | expr • '%' expr
-
-    OR      desplazar e ir al estado 62
-    AND     desplazar e ir al estado 63
-    EQUALS  desplazar e ir al estado 64
-    '<'     desplazar e ir al estado 65
-    '>'     desplazar e ir al estado 66
-    '+'     desplazar e ir al estado 67
-    '-'     desplazar e ir al estado 68
-    '*'     desplazar e ir al estado 69
-    '/'     desplazar e ir al estado 70
-    '%'     desplazar e ir al estado 71
-    ','     desplazar e ir al estado 106
-
-    $default  reduce usando la regla 34 (expr_params)
-
-
-Estado 88
-
-   40 expr: '(' expr ')' •
-
-    $default  reduce usando la regla 40 (expr)
-
-
-Estado 89
-
-   38 expr: expr • '+' expr
-   39     | expr • '*' expr
-   41     | expr • OR expr
-   41     | expr OR expr •
-   42     | expr • AND expr
-   46     | expr • '<' expr
-   47     | expr • '>' expr
-   48     | expr • EQUALS expr
-   49     | expr • '-' expr
-   50     | expr • '/' expr
-   51     | expr • '%' expr
-
-    AND  desplazar e ir al estado 63
-    '<'  desplazar e ir al estado 65
-    '>'  desplazar e ir al estado 66
-    '+'  desplazar e ir al estado 67
-    '-'  desplazar e ir al estado 68
-    '*'  desplazar e ir al estado 69
-    '/'  desplazar e ir al estado 70
-    '%'  desplazar e ir al estado 71
-
-    $default  reduce usando la regla 41 (expr)
-
-
-Estado 90
-
-   38 expr: expr • '+' expr
-   39     | expr • '*' expr
-   41     | expr • OR expr
-   42     | expr • AND expr
-   42     | expr AND expr •
-   46     | expr • '<' expr
-   47     | expr • '>' expr
-   48     | expr • EQUALS expr
-   49     | expr • '-' expr
-   50     | expr • '/' expr
-   51     | expr • '%' expr
-
-    '<'  desplazar e ir al estado 65
-    '>'  desplazar e ir al estado 66
-    '+'  desplazar e ir al estado 67
-    '-'  desplazar e ir al estado 68
-    '*'  desplazar e ir al estado 69
-    '/'  desplazar e ir al estado 70
-    '%'  desplazar e ir al estado 71
-
-    $default  reduce usando la regla 42 (expr)
-
-
-Estado 91
-
-   38 expr: expr • '+' expr
-   39     | expr • '*' expr
-   41     | expr • OR expr
-   42     | expr • AND expr
-   46     | expr • '<' expr
-   47     | expr • '>' expr
-   48     | expr • EQUALS expr
-   48     | expr EQUALS expr •
-   49     | expr • '-' expr
-   50     | expr • '/' expr
-   51     | expr • '%' expr
-
-    OR      desplazar e ir al estado 62
-    AND     desplazar e ir al estado 63
-    EQUALS  desplazar e ir al estado 64
-    '<'     desplazar e ir al estado 65
-    '>'     desplazar e ir al estado 66
-    '+'     desplazar e ir al estado 67
-    '-'     desplazar e ir al estado 68
-    '*'     desplazar e ir al estado 69
-    '/'     desplazar e ir al estado 70
-    '%'     desplazar e ir al estado 71
-
-    $default  reduce usando la regla 48 (expr)
-
-
-Estado 92
-
-   38 expr: expr • '+' expr
-   39     | expr • '*' expr
-   41     | expr • OR expr
-   42     | expr • AND expr
-   46     | expr • '<' expr
-   46     | expr '<' expr •
-   47     | expr • '>' expr
-   48     | expr • EQUALS expr
-   49     | expr • '-' expr
-   50     | expr • '/' expr
-   51     | expr • '%' expr
-
-    '+'  desplazar e ir al estado 67
-    '-'  desplazar e ir al estado 68
-    '*'  desplazar e ir al estado 69
-    '/'  desplazar e ir al estado 70
-    '%'  desplazar e ir al estado 71
-
-    $default  reduce usando la regla 46 (expr)
-
-
-Estado 93
-
-   38 expr: expr • '+' expr
-   39     | expr • '*' expr
-   41     | expr • OR expr
-   42     | expr • AND expr
-   46     | expr • '<' expr
-   47     | expr • '>' expr
-   47     | expr '>' expr •
-   48     | expr • EQUALS expr
-   49     | expr • '-' expr
-   50     | expr • '/' expr
-   51     | expr • '%' expr
-
-    '+'  desplazar e ir al estado 67
-    '-'  desplazar e ir al estado 68
-    '*'  desplazar e ir al estado 69
-    '/'  desplazar e ir al estado 70
-    '%'  desplazar e ir al estado 71
-
-    $default  reduce usando la regla 47 (expr)
-
-
-Estado 94
-
-   38 expr: expr • '+' expr
-   38     | expr '+' expr •
-   39     | expr • '*' expr
-   41     | expr • OR expr
-   42     | expr • AND expr
-   46     | expr • '<' expr
-   47     | expr • '>' expr
-   48     | expr • EQUALS expr
-   49     | expr • '-' expr
-   50     | expr • '/' expr
-   51     | expr • '%' expr
-
-    '*'  desplazar e ir al estado 69
-    '/'  desplazar e ir al estado 70
-    '%'  desplazar e ir al estado 71
-
-    $default  reduce usando la regla 38 (expr)
-
-
-Estado 95
-
-   38 expr: expr • '+' expr
-   39     | expr • '*' expr
-   41     | expr • OR expr
-   42     | expr • AND expr
-   46     | expr • '<' expr
-   47     | expr • '>' expr
-   48     | expr • EQUALS expr
-   49     | expr • '-' expr
-   49     | expr '-' expr •
-   50     | expr • '/' expr
-   51     | expr • '%' expr
-
-    '*'  desplazar e ir al estado 69
-    '/'  desplazar e ir al estado 70
-    '%'  desplazar e ir al estado 71
+   49 expr: method_call •
 
     $default  reduce usando la regla 49 (expr)
 
 
-Estado 96
+Estado 40
 
-   38 expr: expr • '+' expr
-   39     | expr • '*' expr
-   39     | expr '*' expr •
-   41     | expr • OR expr
-   42     | expr • AND expr
-   46     | expr • '<' expr
-   47     | expr • '>' expr
-   48     | expr • EQUALS expr
-   49     | expr • '-' expr
-   50     | expr • '/' expr
-   51     | expr • '%' expr
+   26 var_decl: type ID '=' expr • ';'
+   44 expr: expr • '+' expr
+   45     | expr • '*' expr
+   47     | expr • OR expr
+   48     | expr • AND expr
+   52     | expr • '<' expr
+   53     | expr • '>' expr
+   54     | expr • EQUALS expr
+   55     | expr • '-' expr
+   56     | expr • '/' expr
+   57     | expr • '%' expr
 
-    $default  reduce usando la regla 39 (expr)
-
-
-Estado 97
-
-   38 expr: expr • '+' expr
-   39     | expr • '*' expr
-   41     | expr • OR expr
-   42     | expr • AND expr
-   46     | expr • '<' expr
-   47     | expr • '>' expr
-   48     | expr • EQUALS expr
-   49     | expr • '-' expr
-   50     | expr • '/' expr
-   50     | expr '/' expr •
-   51     | expr • '%' expr
-
-    $default  reduce usando la regla 50 (expr)
+    OR      desplazar e ir al estado 53
+    AND     desplazar e ir al estado 54
+    EQUALS  desplazar e ir al estado 55
+    '<'     desplazar e ir al estado 56
+    '>'     desplazar e ir al estado 57
+    '+'     desplazar e ir al estado 58
+    '-'     desplazar e ir al estado 59
+    '*'     desplazar e ir al estado 60
+    '/'     desplazar e ir al estado 61
+    '%'     desplazar e ir al estado 62
+    ';'     desplazar e ir al estado 63
 
 
-Estado 98
+Estado 41
 
-   38 expr: expr • '+' expr
-   39     | expr • '*' expr
-   41     | expr • OR expr
-   42     | expr • AND expr
-   46     | expr • '<' expr
-   47     | expr • '>' expr
-   48     | expr • EQUALS expr
-   49     | expr • '-' expr
-   50     | expr • '/' expr
-   51     | expr • '%' expr
-   51     | expr '%' expr •
+   42 expr: valor •
+
+    $default  reduce usando la regla 42 (expr)
+
+
+Estado 42
+
+   16 method_decl: type ID param EXTERN • $@5 ';'
+
+    $default  reduce usando la regla 15 ($@5)
+
+    $@5  ir al estado 64
+
+
+Estado 43
+
+   10 method_decl: type ID param $@2 • block
+
+    '{'  desplazar e ir al estado 47
+
+    block  ir al estado 65
+
+
+Estado 44
+
+   21 param: '(' param_list ')' •
+
+    $default  reduce usando la regla 21 (param)
+
+
+Estado 45
+
+   22 param_list: type ID • ',' param_list
+   23           | type ID •
+
+    ','  desplazar e ir al estado 66
+
+    $default  reduce usando la regla 23 (param_list)
+
+
+Estado 46
+
+   14 method_decl: TVOID ID param EXTERN $@4 • ';'
+
+    ';'  desplazar e ir al estado 67
+
+
+Estado 47
+
+   18 block: '{' • $@6 declarations sentence_list '}'
+   19      | '{' • sentence_list '}'
+
+    ID      desplazar e ir al estado 68
+    RETURN  desplazar e ir al estado 69
+    IF      desplazar e ir al estado 70
+    WHILE   desplazar e ir al estado 71
+    '{'     desplazar e ir al estado 47
+    ';'     desplazar e ir al estado 72
+
+    $default  reduce usando la regla 17 ($@6)
+
+    block          ir al estado 73
+    $@6            ir al estado 74
+    sentence_list  ir al estado 75
+    sentence       ir al estado 76
+    method_call    ir al estado 77
+
+
+Estado 48
+
+   12 method_decl: TVOID ID param $@3 block •
+
+    $default  reduce usando la regla 12 (method_decl)
+
+
+Estado 49
+
+   38 method_call: ID '(' • expr_params ')'
+   39            | ID '(' • ')'
+
+    INT     desplazar e ir al estado 33
+    ID      desplazar e ir al estado 34
+    BOOL    desplazar e ir al estado 35
+    '!'     desplazar e ir al estado 36
+    TMENOS  desplazar e ir al estado 37
+    '('     desplazar e ir al estado 38
+    ')'     desplazar e ir al estado 78
+
+    method_call  ir al estado 39
+    expr_params  ir al estado 79
+    expr         ir al estado 80
+    valor        ir al estado 41
+
+
+Estado 50
+
+   44 expr: expr • '+' expr
+   45     | expr • '*' expr
+   47     | expr • OR expr
+   48     | expr • AND expr
+   51     | '!' expr •
+   52     | expr • '<' expr
+   53     | expr • '>' expr
+   54     | expr • EQUALS expr
+   55     | expr • '-' expr
+   56     | expr • '/' expr
+   57     | expr • '%' expr
 
     $default  reduce usando la regla 51 (expr)
 
 
+Estado 51
+
+   44 expr: expr • '+' expr
+   45     | expr • '*' expr
+   47     | expr • OR expr
+   48     | expr • AND expr
+   50     | TMENOS expr •
+   52     | expr • '<' expr
+   53     | expr • '>' expr
+   54     | expr • EQUALS expr
+   55     | expr • '-' expr
+   56     | expr • '/' expr
+   57     | expr • '%' expr
+
+    $default  reduce usando la regla 50 (expr)
+
+
+Estado 52
+
+   44 expr: expr • '+' expr
+   45     | expr • '*' expr
+   46     | '(' expr • ')'
+   47     | expr • OR expr
+   48     | expr • AND expr
+   52     | expr • '<' expr
+   53     | expr • '>' expr
+   54     | expr • EQUALS expr
+   55     | expr • '-' expr
+   56     | expr • '/' expr
+   57     | expr • '%' expr
+
+    OR      desplazar e ir al estado 53
+    AND     desplazar e ir al estado 54
+    EQUALS  desplazar e ir al estado 55
+    '<'     desplazar e ir al estado 56
+    '>'     desplazar e ir al estado 57
+    '+'     desplazar e ir al estado 58
+    '-'     desplazar e ir al estado 59
+    '*'     desplazar e ir al estado 60
+    '/'     desplazar e ir al estado 61
+    '%'     desplazar e ir al estado 62
+    ')'     desplazar e ir al estado 81
+
+
+Estado 53
+
+   47 expr: expr OR • expr
+
+    INT     desplazar e ir al estado 33
+    ID      desplazar e ir al estado 34
+    BOOL    desplazar e ir al estado 35
+    '!'     desplazar e ir al estado 36
+    TMENOS  desplazar e ir al estado 37
+    '('     desplazar e ir al estado 38
+
+    method_call  ir al estado 39
+    expr         ir al estado 82
+    valor        ir al estado 41
+
+
+Estado 54
+
+   48 expr: expr AND • expr
+
+    INT     desplazar e ir al estado 33
+    ID      desplazar e ir al estado 34
+    BOOL    desplazar e ir al estado 35
+    '!'     desplazar e ir al estado 36
+    TMENOS  desplazar e ir al estado 37
+    '('     desplazar e ir al estado 38
+
+    method_call  ir al estado 39
+    expr         ir al estado 83
+    valor        ir al estado 41
+
+
+Estado 55
+
+   54 expr: expr EQUALS • expr
+
+    INT     desplazar e ir al estado 33
+    ID      desplazar e ir al estado 34
+    BOOL    desplazar e ir al estado 35
+    '!'     desplazar e ir al estado 36
+    TMENOS  desplazar e ir al estado 37
+    '('     desplazar e ir al estado 38
+
+    method_call  ir al estado 39
+    expr         ir al estado 84
+    valor        ir al estado 41
+
+
+Estado 56
+
+   52 expr: expr '<' • expr
+
+    INT     desplazar e ir al estado 33
+    ID      desplazar e ir al estado 34
+    BOOL    desplazar e ir al estado 35
+    '!'     desplazar e ir al estado 36
+    TMENOS  desplazar e ir al estado 37
+    '('     desplazar e ir al estado 38
+
+    method_call  ir al estado 39
+    expr         ir al estado 85
+    valor        ir al estado 41
+
+
+Estado 57
+
+   53 expr: expr '>' • expr
+
+    INT     desplazar e ir al estado 33
+    ID      desplazar e ir al estado 34
+    BOOL    desplazar e ir al estado 35
+    '!'     desplazar e ir al estado 36
+    TMENOS  desplazar e ir al estado 37
+    '('     desplazar e ir al estado 38
+
+    method_call  ir al estado 39
+    expr         ir al estado 86
+    valor        ir al estado 41
+
+
+Estado 58
+
+   44 expr: expr '+' • expr
+
+    INT     desplazar e ir al estado 33
+    ID      desplazar e ir al estado 34
+    BOOL    desplazar e ir al estado 35
+    '!'     desplazar e ir al estado 36
+    TMENOS  desplazar e ir al estado 37
+    '('     desplazar e ir al estado 38
+
+    method_call  ir al estado 39
+    expr         ir al estado 87
+    valor        ir al estado 41
+
+
+Estado 59
+
+   55 expr: expr '-' • expr
+
+    INT     desplazar e ir al estado 33
+    ID      desplazar e ir al estado 34
+    BOOL    desplazar e ir al estado 35
+    '!'     desplazar e ir al estado 36
+    TMENOS  desplazar e ir al estado 37
+    '('     desplazar e ir al estado 38
+
+    method_call  ir al estado 39
+    expr         ir al estado 88
+    valor        ir al estado 41
+
+
+Estado 60
+
+   45 expr: expr '*' • expr
+
+    INT     desplazar e ir al estado 33
+    ID      desplazar e ir al estado 34
+    BOOL    desplazar e ir al estado 35
+    '!'     desplazar e ir al estado 36
+    TMENOS  desplazar e ir al estado 37
+    '('     desplazar e ir al estado 38
+
+    method_call  ir al estado 39
+    expr         ir al estado 89
+    valor        ir al estado 41
+
+
+Estado 61
+
+   56 expr: expr '/' • expr
+
+    INT     desplazar e ir al estado 33
+    ID      desplazar e ir al estado 34
+    BOOL    desplazar e ir al estado 35
+    '!'     desplazar e ir al estado 36
+    TMENOS  desplazar e ir al estado 37
+    '('     desplazar e ir al estado 38
+
+    method_call  ir al estado 39
+    expr         ir al estado 90
+    valor        ir al estado 41
+
+
+Estado 62
+
+   57 expr: expr '%' • expr
+
+    INT     desplazar e ir al estado 33
+    ID      desplazar e ir al estado 34
+    BOOL    desplazar e ir al estado 35
+    '!'     desplazar e ir al estado 36
+    TMENOS  desplazar e ir al estado 37
+    '('     desplazar e ir al estado 38
+
+    method_call  ir al estado 39
+    expr         ir al estado 91
+    valor        ir al estado 41
+
+
+Estado 63
+
+   26 var_decl: type ID '=' expr ';' •
+
+    $default  reduce usando la regla 26 (var_decl)
+
+
+Estado 64
+
+   16 method_decl: type ID param EXTERN $@5 • ';'
+
+    ';'  desplazar e ir al estado 92
+
+
+Estado 65
+
+   10 method_decl: type ID param $@2 block •
+
+    $default  reduce usando la regla 10 (method_decl)
+
+
+Estado 66
+
+   22 param_list: type ID ',' • param_list
+
+    TINT   desplazar e ir al estado 7
+    TBOOL  desplazar e ir al estado 8
+
+    param_list  ir al estado 93
+    type        ir al estado 30
+
+
+Estado 67
+
+   14 method_decl: TVOID ID param EXTERN $@4 ';' •
+
+    $default  reduce usando la regla 14 (method_decl)
+
+
+Estado 68
+
+   29 sentence: ID • '=' expr ';'
+   38 method_call: ID • '(' expr_params ')'
+   39            | ID • '(' ')'
+
+    '('  desplazar e ir al estado 49
+    '='  desplazar e ir al estado 94
+
+
+Estado 69
+
+   31 sentence: RETURN • expr ';'
+   32         | RETURN • ';'
+
+    INT     desplazar e ir al estado 33
+    ID      desplazar e ir al estado 34
+    BOOL    desplazar e ir al estado 35
+    '!'     desplazar e ir al estado 36
+    TMENOS  desplazar e ir al estado 37
+    ';'     desplazar e ir al estado 95
+    '('     desplazar e ir al estado 38
+
+    method_call  ir al estado 39
+    expr         ir al estado 96
+    valor        ir al estado 41
+
+
+Estado 70
+
+   33 sentence: IF • '(' expr ')' THEN block
+   34         | IF • '(' expr ')' THEN block ELSE block
+
+    '('  desplazar e ir al estado 97
+
+
+Estado 71
+
+   35 sentence: WHILE • '(' expr ')' block
+
+    '('  desplazar e ir al estado 98
+
+
+Estado 72
+
+   36 sentence: ';' •
+
+    $default  reduce usando la regla 36 (sentence)
+
+
+Estado 73
+
+   37 sentence: block •
+
+    $default  reduce usando la regla 37 (sentence)
+
+
+Estado 74
+
+   18 block: '{' $@6 • declarations sentence_list '}'
+
+    TINT   desplazar e ir al estado 7
+    TBOOL  desplazar e ir al estado 8
+
+    declarations  ir al estado 99
+    var_decl      ir al estado 14
+    type          ir al estado 100
+
+
+Estado 75
+
+   19 block: '{' sentence_list • '}'
+
+    '}'  desplazar e ir al estado 101
+
+
+Estado 76
+
+   27 sentence_list: sentence • sentence_list
+   28              | sentence •
+
+    ID      desplazar e ir al estado 68
+    RETURN  desplazar e ir al estado 69
+    IF      desplazar e ir al estado 70
+    WHILE   desplazar e ir al estado 71
+    '{'     desplazar e ir al estado 47
+    ';'     desplazar e ir al estado 72
+
+    $default  reduce usando la regla 28 (sentence_list)
+
+    block          ir al estado 73
+    sentence_list  ir al estado 102
+    sentence       ir al estado 76
+    method_call    ir al estado 77
+
+
+Estado 77
+
+   30 sentence: method_call • ';'
+
+    ';'  desplazar e ir al estado 103
+
+
+Estado 78
+
+   39 method_call: ID '(' ')' •
+
+    $default  reduce usando la regla 39 (method_call)
+
+
+Estado 79
+
+   38 method_call: ID '(' expr_params • ')'
+
+    ')'  desplazar e ir al estado 104
+
+
+Estado 80
+
+   40 expr_params: expr • ',' expr_params
+   41            | expr •
+   44 expr: expr • '+' expr
+   45     | expr • '*' expr
+   47     | expr • OR expr
+   48     | expr • AND expr
+   52     | expr • '<' expr
+   53     | expr • '>' expr
+   54     | expr • EQUALS expr
+   55     | expr • '-' expr
+   56     | expr • '/' expr
+   57     | expr • '%' expr
+
+    OR      desplazar e ir al estado 53
+    AND     desplazar e ir al estado 54
+    EQUALS  desplazar e ir al estado 55
+    '<'     desplazar e ir al estado 56
+    '>'     desplazar e ir al estado 57
+    '+'     desplazar e ir al estado 58
+    '-'     desplazar e ir al estado 59
+    '*'     desplazar e ir al estado 60
+    '/'     desplazar e ir al estado 61
+    '%'     desplazar e ir al estado 62
+    ','     desplazar e ir al estado 105
+
+    $default  reduce usando la regla 41 (expr_params)
+
+
+Estado 81
+
+   46 expr: '(' expr ')' •
+
+    $default  reduce usando la regla 46 (expr)
+
+
+Estado 82
+
+   44 expr: expr • '+' expr
+   45     | expr • '*' expr
+   47     | expr • OR expr
+   47     | expr OR expr •
+   48     | expr • AND expr
+   52     | expr • '<' expr
+   53     | expr • '>' expr
+   54     | expr • EQUALS expr
+   55     | expr • '-' expr
+   56     | expr • '/' expr
+   57     | expr • '%' expr
+
+    AND     desplazar e ir al estado 54
+    EQUALS  desplazar e ir al estado 55
+    '<'     desplazar e ir al estado 56
+    '>'     desplazar e ir al estado 57
+    '+'     desplazar e ir al estado 58
+    '-'     desplazar e ir al estado 59
+    '*'     desplazar e ir al estado 60
+    '/'     desplazar e ir al estado 61
+    '%'     desplazar e ir al estado 62
+
+    $default  reduce usando la regla 47 (expr)
+
+
+Estado 83
+
+   44 expr: expr • '+' expr
+   45     | expr • '*' expr
+   47     | expr • OR expr
+   48     | expr • AND expr
+   48     | expr AND expr •
+   52     | expr • '<' expr
+   53     | expr • '>' expr
+   54     | expr • EQUALS expr
+   55     | expr • '-' expr
+   56     | expr • '/' expr
+   57     | expr • '%' expr
+
+    EQUALS  desplazar e ir al estado 55
+    '<'     desplazar e ir al estado 56
+    '>'     desplazar e ir al estado 57
+    '+'     desplazar e ir al estado 58
+    '-'     desplazar e ir al estado 59
+    '*'     desplazar e ir al estado 60
+    '/'     desplazar e ir al estado 61
+    '%'     desplazar e ir al estado 62
+
+    $default  reduce usando la regla 48 (expr)
+
+
+Estado 84
+
+   44 expr: expr • '+' expr
+   45     | expr • '*' expr
+   47     | expr • OR expr
+   48     | expr • AND expr
+   52     | expr • '<' expr
+   53     | expr • '>' expr
+   54     | expr • EQUALS expr
+   54     | expr EQUALS expr •
+   55     | expr • '-' expr
+   56     | expr • '/' expr
+   57     | expr • '%' expr
+
+    '+'  desplazar e ir al estado 58
+    '-'  desplazar e ir al estado 59
+    '*'  desplazar e ir al estado 60
+    '/'  desplazar e ir al estado 61
+    '%'  desplazar e ir al estado 62
+
+    EQUALS  error (no asociativo)
+    '<'     error (no asociativo)
+    '>'     error (no asociativo)
+
+    $default  reduce usando la regla 54 (expr)
+
+
+Estado 85
+
+   44 expr: expr • '+' expr
+   45     | expr • '*' expr
+   47     | expr • OR expr
+   48     | expr • AND expr
+   52     | expr • '<' expr
+   52     | expr '<' expr •
+   53     | expr • '>' expr
+   54     | expr • EQUALS expr
+   55     | expr • '-' expr
+   56     | expr • '/' expr
+   57     | expr • '%' expr
+
+    '+'  desplazar e ir al estado 58
+    '-'  desplazar e ir al estado 59
+    '*'  desplazar e ir al estado 60
+    '/'  desplazar e ir al estado 61
+    '%'  desplazar e ir al estado 62
+
+    EQUALS  error (no asociativo)
+    '<'     error (no asociativo)
+    '>'     error (no asociativo)
+
+    $default  reduce usando la regla 52 (expr)
+
+
+Estado 86
+
+   44 expr: expr • '+' expr
+   45     | expr • '*' expr
+   47     | expr • OR expr
+   48     | expr • AND expr
+   52     | expr • '<' expr
+   53     | expr • '>' expr
+   53     | expr '>' expr •
+   54     | expr • EQUALS expr
+   55     | expr • '-' expr
+   56     | expr • '/' expr
+   57     | expr • '%' expr
+
+    '+'  desplazar e ir al estado 58
+    '-'  desplazar e ir al estado 59
+    '*'  desplazar e ir al estado 60
+    '/'  desplazar e ir al estado 61
+    '%'  desplazar e ir al estado 62
+
+    EQUALS  error (no asociativo)
+    '<'     error (no asociativo)
+    '>'     error (no asociativo)
+
+    $default  reduce usando la regla 53 (expr)
+
+
+Estado 87
+
+   44 expr: expr • '+' expr
+   44     | expr '+' expr •
+   45     | expr • '*' expr
+   47     | expr • OR expr
+   48     | expr • AND expr
+   52     | expr • '<' expr
+   53     | expr • '>' expr
+   54     | expr • EQUALS expr
+   55     | expr • '-' expr
+   56     | expr • '/' expr
+   57     | expr • '%' expr
+
+    '*'  desplazar e ir al estado 60
+    '/'  desplazar e ir al estado 61
+    '%'  desplazar e ir al estado 62
+
+    $default  reduce usando la regla 44 (expr)
+
+
+Estado 88
+
+   44 expr: expr • '+' expr
+   45     | expr • '*' expr
+   47     | expr • OR expr
+   48     | expr • AND expr
+   52     | expr • '<' expr
+   53     | expr • '>' expr
+   54     | expr • EQUALS expr
+   55     | expr • '-' expr
+   55     | expr '-' expr •
+   56     | expr • '/' expr
+   57     | expr • '%' expr
+
+    '*'  desplazar e ir al estado 60
+    '/'  desplazar e ir al estado 61
+    '%'  desplazar e ir al estado 62
+
+    $default  reduce usando la regla 55 (expr)
+
+
+Estado 89
+
+   44 expr: expr • '+' expr
+   45     | expr • '*' expr
+   45     | expr '*' expr •
+   47     | expr • OR expr
+   48     | expr • AND expr
+   52     | expr • '<' expr
+   53     | expr • '>' expr
+   54     | expr • EQUALS expr
+   55     | expr • '-' expr
+   56     | expr • '/' expr
+   57     | expr • '%' expr
+
+    $default  reduce usando la regla 45 (expr)
+
+
+Estado 90
+
+   44 expr: expr • '+' expr
+   45     | expr • '*' expr
+   47     | expr • OR expr
+   48     | expr • AND expr
+   52     | expr • '<' expr
+   53     | expr • '>' expr
+   54     | expr • EQUALS expr
+   55     | expr • '-' expr
+   56     | expr • '/' expr
+   56     | expr '/' expr •
+   57     | expr • '%' expr
+
+    $default  reduce usando la regla 56 (expr)
+
+
+Estado 91
+
+   44 expr: expr • '+' expr
+   45     | expr • '*' expr
+   47     | expr • OR expr
+   48     | expr • AND expr
+   52     | expr • '<' expr
+   53     | expr • '>' expr
+   54     | expr • EQUALS expr
+   55     | expr • '-' expr
+   56     | expr • '/' expr
+   57     | expr • '%' expr
+   57     | expr '%' expr •
+
+    $default  reduce usando la regla 57 (expr)
+
+
+Estado 92
+
+   16 method_decl: type ID param EXTERN $@5 ';' •
+
+    $default  reduce usando la regla 16 (method_decl)
+
+
+Estado 93
+
+   22 param_list: type ID ',' param_list •
+
+    $default  reduce usando la regla 22 (param_list)
+
+
+Estado 94
+
+   29 sentence: ID '=' • expr ';'
+
+    INT     desplazar e ir al estado 33
+    ID      desplazar e ir al estado 34
+    BOOL    desplazar e ir al estado 35
+    '!'     desplazar e ir al estado 36
+    TMENOS  desplazar e ir al estado 37
+    '('     desplazar e ir al estado 38
+
+    method_call  ir al estado 39
+    expr         ir al estado 106
+    valor        ir al estado 41
+
+
+Estado 95
+
+   32 sentence: RETURN ';' •
+
+    $default  reduce usando la regla 32 (sentence)
+
+
+Estado 96
+
+   31 sentence: RETURN expr • ';'
+   44 expr: expr • '+' expr
+   45     | expr • '*' expr
+   47     | expr • OR expr
+   48     | expr • AND expr
+   52     | expr • '<' expr
+   53     | expr • '>' expr
+   54     | expr • EQUALS expr
+   55     | expr • '-' expr
+   56     | expr • '/' expr
+   57     | expr • '%' expr
+
+    OR      desplazar e ir al estado 53
+    AND     desplazar e ir al estado 54
+    EQUALS  desplazar e ir al estado 55
+    '<'     desplazar e ir al estado 56
+    '>'     desplazar e ir al estado 57
+    '+'     desplazar e ir al estado 58
+    '-'     desplazar e ir al estado 59
+    '*'     desplazar e ir al estado 60
+    '/'     desplazar e ir al estado 61
+    '%'     desplazar e ir al estado 62
+    ';'     desplazar e ir al estado 107
+
+
+Estado 97
+
+   33 sentence: IF '(' • expr ')' THEN block
+   34         | IF '(' • expr ')' THEN block ELSE block
+
+    INT     desplazar e ir al estado 33
+    ID      desplazar e ir al estado 34
+    BOOL    desplazar e ir al estado 35
+    '!'     desplazar e ir al estado 36
+    TMENOS  desplazar e ir al estado 37
+    '('     desplazar e ir al estado 38
+
+    method_call  ir al estado 39
+    expr         ir al estado 108
+    valor        ir al estado 41
+
+
+Estado 98
+
+   35 sentence: WHILE '(' • expr ')' block
+
+    INT     desplazar e ir al estado 33
+    ID      desplazar e ir al estado 34
+    BOOL    desplazar e ir al estado 35
+    '!'     desplazar e ir al estado 36
+    TMENOS  desplazar e ir al estado 37
+    '('     desplazar e ir al estado 38
+
+    method_call  ir al estado 39
+    expr         ir al estado 109
+    valor        ir al estado 41
+
+
 Estado 99
 
-   16 param_list: type ID ',' param_list •
+   18 block: '{' $@6 declarations • sentence_list '}'
+   24 declarations: declarations • var_decl
 
-    $default  reduce usando la regla 16 (param_list)
+    ID      desplazar e ir al estado 68
+    TINT    desplazar e ir al estado 7
+    TBOOL   desplazar e ir al estado 8
+    RETURN  desplazar e ir al estado 69
+    IF      desplazar e ir al estado 70
+    WHILE   desplazar e ir al estado 71
+    '{'     desplazar e ir al estado 47
+    ';'     desplazar e ir al estado 72
+
+    block          ir al estado 73
+    var_decl       ir al estado 21
+    sentence_list  ir al estado 110
+    sentence       ir al estado 76
+    method_call    ir al estado 77
+    type           ir al estado 100
 
 
 Estado 100
 
-   23 sentence: ID '=' expr • ';'
-   38 expr: expr • '+' expr
-   39     | expr • '*' expr
-   41     | expr • OR expr
-   42     | expr • AND expr
-   46     | expr • '<' expr
-   47     | expr • '>' expr
-   48     | expr • EQUALS expr
-   49     | expr • '-' expr
-   50     | expr • '/' expr
-   51     | expr • '%' expr
+   26 var_decl: type • ID '=' expr ';'
 
-    OR      desplazar e ir al estado 62
-    AND     desplazar e ir al estado 63
-    EQUALS  desplazar e ir al estado 64
-    '<'     desplazar e ir al estado 65
-    '>'     desplazar e ir al estado 66
-    '+'     desplazar e ir al estado 67
-    '-'     desplazar e ir al estado 68
-    '*'     desplazar e ir al estado 69
-    '/'     desplazar e ir al estado 70
-    '%'     desplazar e ir al estado 71
-    ';'     desplazar e ir al estado 107
+    ID  desplazar e ir al estado 111
 
 
 Estado 101
 
-   25 sentence: RETURN expr ';' •
+   19 block: '{' sentence_list '}' •
 
-    $default  reduce usando la regla 25 (sentence)
+    $default  reduce usando la regla 19 (block)
 
 
 Estado 102
 
-   27 sentence: IF '(' expr • ')' THEN block
-   28         | IF '(' expr • ')' THEN block ELSE block
-   38 expr: expr • '+' expr
-   39     | expr • '*' expr
-   41     | expr • OR expr
-   42     | expr • AND expr
-   46     | expr • '<' expr
-   47     | expr • '>' expr
-   48     | expr • EQUALS expr
-   49     | expr • '-' expr
-   50     | expr • '/' expr
-   51     | expr • '%' expr
+   27 sentence_list: sentence sentence_list •
 
-    OR      desplazar e ir al estado 62
-    AND     desplazar e ir al estado 63
-    EQUALS  desplazar e ir al estado 64
-    '<'     desplazar e ir al estado 65
-    '>'     desplazar e ir al estado 66
-    '+'     desplazar e ir al estado 67
-    '-'     desplazar e ir al estado 68
-    '*'     desplazar e ir al estado 69
-    '/'     desplazar e ir al estado 70
-    '%'     desplazar e ir al estado 71
-    ')'     desplazar e ir al estado 108
+    $default  reduce usando la regla 27 (sentence_list)
 
 
 Estado 103
 
-   29 sentence: WHILE '(' expr • ')' block
-   38 expr: expr • '+' expr
-   39     | expr • '*' expr
-   41     | expr • OR expr
-   42     | expr • AND expr
-   46     | expr • '<' expr
-   47     | expr • '>' expr
-   48     | expr • EQUALS expr
-   49     | expr • '-' expr
-   50     | expr • '/' expr
-   51     | expr • '%' expr
+   30 sentence: method_call ';' •
 
-    OR      desplazar e ir al estado 62
-    AND     desplazar e ir al estado 63
-    EQUALS  desplazar e ir al estado 64
-    '<'     desplazar e ir al estado 65
-    '>'     desplazar e ir al estado 66
-    '+'     desplazar e ir al estado 67
-    '-'     desplazar e ir al estado 68
-    '*'     desplazar e ir al estado 69
-    '/'     desplazar e ir al estado 70
-    '%'     desplazar e ir al estado 71
-    ')'     desplazar e ir al estado 109
+    $default  reduce usando la regla 30 (sentence)
 
 
 Estado 104
 
-   11 block: '{' declarations sentence_list '}' •
+   38 method_call: ID '(' expr_params ')' •
 
-    $default  reduce usando la regla 11 (block)
+    $default  reduce usando la regla 38 (method_call)
 
 
 Estado 105
 
-   32 method_call: ID '(' expr_params ')' •
+   40 expr_params: expr ',' • expr_params
 
-    $default  reduce usando la regla 32 (method_call)
+    INT     desplazar e ir al estado 33
+    ID      desplazar e ir al estado 34
+    BOOL    desplazar e ir al estado 35
+    '!'     desplazar e ir al estado 36
+    TMENOS  desplazar e ir al estado 37
+    '('     desplazar e ir al estado 38
+
+    method_call  ir al estado 39
+    expr_params  ir al estado 112
+    expr         ir al estado 80
+    valor        ir al estado 41
 
 
 Estado 106
 
-   33 expr_params: expr ',' • expr_params
+   29 sentence: ID '=' expr • ';'
+   44 expr: expr • '+' expr
+   45     | expr • '*' expr
+   47     | expr • OR expr
+   48     | expr • AND expr
+   52     | expr • '<' expr
+   53     | expr • '>' expr
+   54     | expr • EQUALS expr
+   55     | expr • '-' expr
+   56     | expr • '/' expr
+   57     | expr • '%' expr
 
-    INT     desplazar e ir al estado 34
-    ID      desplazar e ir al estado 35
-    BOOL    desplazar e ir al estado 36
-    '!'     desplazar e ir al estado 37
-    TMENOS  desplazar e ir al estado 38
-    '('     desplazar e ir al estado 39
-
-    $default  reduce usando la regla 35 (expr_params)
-
-    method_call  ir al estado 40
-    expr_params  ir al estado 110
-    expr         ir al estado 87
-    valor        ir al estado 42
+    OR      desplazar e ir al estado 53
+    AND     desplazar e ir al estado 54
+    EQUALS  desplazar e ir al estado 55
+    '<'     desplazar e ir al estado 56
+    '>'     desplazar e ir al estado 57
+    '+'     desplazar e ir al estado 58
+    '-'     desplazar e ir al estado 59
+    '*'     desplazar e ir al estado 60
+    '/'     desplazar e ir al estado 61
+    '%'     desplazar e ir al estado 62
+    ';'     desplazar e ir al estado 113
 
 
 Estado 107
 
-   23 sentence: ID '=' expr ';' •
+   31 sentence: RETURN expr ';' •
 
-    $default  reduce usando la regla 23 (sentence)
+    $default  reduce usando la regla 31 (sentence)
 
 
 Estado 108
 
-   27 sentence: IF '(' expr ')' • THEN block
-   28         | IF '(' expr ')' • THEN block ELSE block
+   33 sentence: IF '(' expr • ')' THEN block
+   34         | IF '(' expr • ')' THEN block ELSE block
+   44 expr: expr • '+' expr
+   45     | expr • '*' expr
+   47     | expr • OR expr
+   48     | expr • AND expr
+   52     | expr • '<' expr
+   53     | expr • '>' expr
+   54     | expr • EQUALS expr
+   55     | expr • '-' expr
+   56     | expr • '/' expr
+   57     | expr • '%' expr
 
-    THEN  desplazar e ir al estado 111
+    OR      desplazar e ir al estado 53
+    AND     desplazar e ir al estado 54
+    EQUALS  desplazar e ir al estado 55
+    '<'     desplazar e ir al estado 56
+    '>'     desplazar e ir al estado 57
+    '+'     desplazar e ir al estado 58
+    '-'     desplazar e ir al estado 59
+    '*'     desplazar e ir al estado 60
+    '/'     desplazar e ir al estado 61
+    '%'     desplazar e ir al estado 62
+    ')'     desplazar e ir al estado 114
 
 
 Estado 109
 
-   29 sentence: WHILE '(' expr ')' • block
+   35 sentence: WHILE '(' expr • ')' block
+   44 expr: expr • '+' expr
+   45     | expr • '*' expr
+   47     | expr • OR expr
+   48     | expr • AND expr
+   52     | expr • '<' expr
+   53     | expr • '>' expr
+   54     | expr • EQUALS expr
+   55     | expr • '-' expr
+   56     | expr • '/' expr
+   57     | expr • '%' expr
 
-    '{'  desplazar e ir al estado 32
-
-    block  ir al estado 112
+    OR      desplazar e ir al estado 53
+    AND     desplazar e ir al estado 54
+    EQUALS  desplazar e ir al estado 55
+    '<'     desplazar e ir al estado 56
+    '>'     desplazar e ir al estado 57
+    '+'     desplazar e ir al estado 58
+    '-'     desplazar e ir al estado 59
+    '*'     desplazar e ir al estado 60
+    '/'     desplazar e ir al estado 61
+    '%'     desplazar e ir al estado 62
+    ')'     desplazar e ir al estado 115
 
 
 Estado 110
 
-   33 expr_params: expr ',' expr_params •
+   18 block: '{' $@6 declarations sentence_list • '}'
 
-    $default  reduce usando la regla 33 (expr_params)
+    '}'  desplazar e ir al estado 116
 
 
 Estado 111
 
-   27 sentence: IF '(' expr ')' THEN • block
-   28         | IF '(' expr ')' THEN • block ELSE block
+   26 var_decl: type ID • '=' expr ';'
 
-    '{'  desplazar e ir al estado 32
-
-    block  ir al estado 113
+    '='  desplazar e ir al estado 26
 
 
 Estado 112
 
-   29 sentence: WHILE '(' expr ')' block •
+   40 expr_params: expr ',' expr_params •
 
-    $default  reduce usando la regla 29 (sentence)
+    $default  reduce usando la regla 40 (expr_params)
 
 
 Estado 113
 
-   27 sentence: IF '(' expr ')' THEN block •
-   28         | IF '(' expr ')' THEN block • ELSE block
+   29 sentence: ID '=' expr ';' •
 
-    ELSE  desplazar e ir al estado 114
-
-    $default  reduce usando la regla 27 (sentence)
+    $default  reduce usando la regla 29 (sentence)
 
 
 Estado 114
 
-   28 sentence: IF '(' expr ')' THEN block ELSE • block
+   33 sentence: IF '(' expr ')' • THEN block
+   34         | IF '(' expr ')' • THEN block ELSE block
 
-    '{'  desplazar e ir al estado 32
-
-    block  ir al estado 115
+    THEN  desplazar e ir al estado 117
 
 
 Estado 115
 
-   28 sentence: IF '(' expr ')' THEN block ELSE block •
+   35 sentence: WHILE '(' expr ')' • block
 
-    $default  reduce usando la regla 28 (sentence)
+    '{'  desplazar e ir al estado 47
+
+    block  ir al estado 118
+
+
+Estado 116
+
+   18 block: '{' $@6 declarations sentence_list '}' •
+
+    $default  reduce usando la regla 18 (block)
+
+
+Estado 117
+
+   33 sentence: IF '(' expr ')' THEN • block
+   34         | IF '(' expr ')' THEN • block ELSE block
+
+    '{'  desplazar e ir al estado 47
+
+    block  ir al estado 119
+
+
+Estado 118
+
+   35 sentence: WHILE '(' expr ')' block •
+
+    $default  reduce usando la regla 35 (sentence)
+
+
+Estado 119
+
+   33 sentence: IF '(' expr ')' THEN block •
+   34         | IF '(' expr ')' THEN block • ELSE block
+
+    ELSE  desplazar e ir al estado 120
+
+    $default  reduce usando la regla 33 (sentence)
+
+
+Estado 120
+
+   34 sentence: IF '(' expr ')' THEN block ELSE • block
+
+    '{'  desplazar e ir al estado 47
+
+    block  ir al estado 121
+
+
+Estado 121
+
+   34 sentence: IF '(' expr ')' THEN block ELSE block •
+
+    $default  reduce usando la regla 34 (sentence)
