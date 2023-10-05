@@ -18,7 +18,7 @@ digito [0-9]
 v_bool true|false
 
 %%
-"#"[^\n]*                           { /* Ignora todo desde '#' hasta el final de la línea */ }
+"//"[^\n]*                           { /* Ignora todo desde '#' hasta el final de la línea */ }
 "/*"                                { BEGIN(COMMENT); }
 <COMMENT>"*/"                       { BEGIN(INITIAL); }
 <COMMENT>.|\n                       { /* Ignora todo dentro de COMMENT */ }
@@ -40,6 +40,8 @@ v_bool true|false
 
 "int"                               { return TINT; }
 
+","                                 { return ','; }
+
 "=="                                { return EQUALS; }
 
 {v_bool}                            { yylval.int_val = strcmp(yytext, "true") == 0 ? 1 : 0; return BOOL; }
@@ -60,7 +62,7 @@ v_bool true|false
 
 "-"                                 { return TMENOS; }    
 
-[<>!+*;()={}/%]                          { return *yytext; }
+[<>!+*;()={}/%]                     { return *yytext; }
 
 " "|\n                                ;
 

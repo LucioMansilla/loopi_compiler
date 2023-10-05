@@ -1,4 +1,5 @@
 #include "symbol_table.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -8,6 +9,7 @@ void insert_symbol(SymbolTable* table, Attributes* info) {
     symbol->info = info;
     symbol->next = table->head;
     table->head = symbol;
+    table->length++;
 }
 
 Attributes* lookup_symbol(SymbolTable* table, char* id) {
@@ -32,5 +34,6 @@ void print_symbol_table(SymbolTable* table) {
 SymbolTable* create_symbol_table() {
     SymbolTable* table = (SymbolTable*)malloc(sizeof(SymbolTable));
     table->head = NULL;
+    table->length = 0;
     return table;
 }

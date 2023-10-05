@@ -1,5 +1,7 @@
 #ifndef ATTRIBUTES_H
 #define ATTRIBUTES_H
+
+typedef struct SymbolTable SymbolTable;
 typedef enum {
     TYPE_INT,
     TYPE_BOOL,
@@ -23,6 +25,7 @@ typedef enum {
     CLASS_PROGRAM,
     CLASS_OR,
     CLASS_IF,
+    CLASS_FORMAL_PARAM,
 } ClassType;
 
 typedef struct Attributes {
@@ -32,13 +35,12 @@ typedef struct Attributes {
     int line;
     ClassType class_type;
     int offset;
-    char* parameter_list;
+    SymbolTable* parameter_list;
 } Attributes;
 
 Attributes* create_attributes(ValueType value_type, int value, char* tag, int line, ClassType class_type);
 Attributes* create_op_attributes(ValueType value_type, char op, int line, ClassType class_type);
-Attributes* create_func_attributes(ValueType value_type, char* parameter_list, char* name, int line);
+Attributes* create_func_attributes(ValueType value_type, SymbolTable* parameter_list, char* name, int line);
 
 char* get_type_str(int type);
-
 #endif  // ATTRIBUTES_H

@@ -9,6 +9,7 @@ typedef struct Symbol {
 
 typedef struct SymbolTable {
     Symbol *head;
+    int length;
 } SymbolTable;
 
 void insert_symbol(SymbolTable *table, Attributes *info);

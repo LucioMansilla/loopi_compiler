@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "symbol_table.h"
+
 int curr_offset = 0;
 
 int get_next_offset() {
@@ -19,9 +21,8 @@ ASTNode* create_ast_node(Attributes* info, ASTNode* left, ASTNode* right) {
     return node;
 }
 
-ASTNode* create_decl_func(ValueType value_type, char* name, char* parameter_list, ASTNode* body, int line) {
-    Attributes* attr = create_func_attributes(value_type, 0, name, line);
-    return create_ast_node(attr, body, NULL);
+ASTNode* create_decl_func(Attributes* info, ASTNode* body, int line) {
+    return create_ast_node(info, body, NULL);
 }
 
 ASTNode* create_int_node(int value, int line) {
