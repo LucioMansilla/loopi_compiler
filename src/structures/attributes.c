@@ -22,11 +22,8 @@ Attributes* create_func_attributes(ValueType value_type, SymbolTable* parameter_
     return attr;
 }
 
-Attributes* create_op_attributes(ValueType value_type, char op, int line, ClassType class_type) {
-    char* tag = (char*)malloc(2 * sizeof(char));
-    tag[0] = op;
-    tag[1] = '\0';
-    Attributes* new_attr = create_attributes(value_type, 0, tag, line, class_type);
+Attributes* create_op_attributes(ValueType value_type, char* op, int line, ClassType class_type) {
+    Attributes* new_attr = create_attributes(value_type, 0, op, line, class_type);
     new_attr->offset = get_next_offset();
     return new_attr;
 }

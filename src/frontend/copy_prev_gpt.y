@@ -76,23 +76,23 @@ methods: method_decl methods { $$ = root;}
       ;
 
 method_decl: type ID param {
-            if(look_and_hook($2) != NULL) 
+            if(lookup_in_current_level($2) != NULL) 
                 yyerror("method %s already declared", $2);
           
             } block {create_decl_func($1,$2,NULL,$4,yylineno);}
 
             | TVOID ID param {
-            if(look_and_hook($2) != NULL) 
+            if(lookup_in_current_level($2) != NULL) 
                 yyerror("method %s already declared", $2);
             } block {create_decl_func(TYPE_VOID,$2,NULL,$4);}
 
             | TVOID ID param EXTERN {
-            if(look_and_hook($2) != NULL) 
+            if(lookup_in_current_level($2) != NULL) 
                 yyerror("method %s already declared", $2);
             } ';' 
             
             | type ID param EXTERN {
-            if(look_and_hook($2) != NULL) 
+            if(lookup_in_current_level($2) != NULL) 
                 yyerror("method %s already declared", $2);
             } ';' 
         ;

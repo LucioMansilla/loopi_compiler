@@ -1335,10 +1335,10 @@ yyreduce:
   case 10: /* $@2: %empty  */
 #line 81 "parser.y"
                   {
-        if(look_and_hook((yyvsp[-1].id_val)) != NULL) 
+        if(lookup_in_current_level((yyvsp[-1].id_val)) != NULL) 
             yyerror("Identifier %s already declared", (yyvsp[-1].id_val));
         Attributes* info = create_func_attributes((yyvsp[-2].type_val),(yyvsp[0].st),(yyvsp[-1].id_val),yylineno);
-        insert_symbol_in_stack(info);
+        add_symbol_to_current_level(info);
         insert_level((yyvsp[0].st)); //push the params and insert into a new level.
     }
 #line 1345 "parser.tab.c"
@@ -1348,7 +1348,7 @@ yyreduce:
 #line 88 "parser.y"
           { 
             close_level();
-            Attributes* info = search_symbol((yyvsp[-3].id_val));
+            Attributes* info = lookup_in_all_levels((yyvsp[-3].id_val));
             ASTNode* temp = create_decl_func(info,(yyvsp[0].node), yylineno);
             (yyval.node) = temp;
      }
@@ -1358,10 +1358,10 @@ yyreduce:
   case 12: /* $@3: %empty  */
 #line 95 "parser.y"
                      {
-        if(look_and_hook((yyvsp[-1].id_val)) != NULL) 
+        if(lookup_in_current_level((yyvsp[-1].id_val)) != NULL) 
             yyerror("Identifier %s already declared", (yyvsp[-1].id_val));
         Attributes* info = create_func_attributes(TYPE_VOID,(yyvsp[0].st),(yyvsp[-1].id_val),yylineno);
-        insert_symbol_in_stack(info);
+        add_symbol_to_current_level(info);
         insert_level((yyvsp[0].st));
     }
 #line 1368 "parser.tab.c"
@@ -1370,7 +1370,7 @@ yyreduce:
   case 13: /* method_decl: TVOID ID param $@3 block  */
 #line 102 "parser.y"
           {  close_level();
-            Attributes* info = search_symbol((yyvsp[-3].id_val));
+            Attributes* info = lookup_in_all_levels((yyvsp[-3].id_val));
             ASTNode* temp = create_decl_func(info,(yyvsp[0].node), yylineno);
             (yyval.node) = temp; }
 #line 1377 "parser.tab.c"
@@ -1379,10 +1379,10 @@ yyreduce:
   case 14: /* $@4: %empty  */
 #line 107 "parser.y"
                             {
-        if(look_and_hook((yyvsp[-2].id_val)) != NULL) 
+        if(lookup_in_current_level((yyvsp[-2].id_val)) != NULL) 
             yyerror("Identifier %s already declared", (yyvsp[-2].id_val));
         Attributes* info = create_func_attributes(TYPE_VOID,(yyvsp[-1].st),(yyvsp[-2].id_val),yylineno);
-        insert_symbol_in_stack(info);
+        add_symbol_to_current_level(info);
     }
 #line 1388 "parser.tab.c"
     break;
@@ -1397,10 +1397,10 @@ yyreduce:
   case 16: /* $@5: %empty  */
 #line 116 "parser.y"
                            {
-        if(look_and_hook((yyvsp[-2].id_val)) != NULL) 
+        if(lookup_in_current_level((yyvsp[-2].id_val)) != NULL) 
             yyerror("Identifier %s already declared", (yyvsp[-2].id_val));
         Attributes* info = create_func_attributes(TYPE_VOID,(yyvsp[-1].st),(yyvsp[-2].id_val),yylineno);
-        insert_symbol_in_stack(info);
+        add_symbol_to_current_level(info);
     }
 #line 1406 "parser.tab.c"
     break;
@@ -1485,12 +1485,12 @@ yyreduce:
   case 27: /* var_decl: type ID '=' expr ';'  */
 #line 160 "parser.y"
                                { 
-            Attributes* info = look_and_hook((yyvsp[-3].id_val));
+            Attributes* info = lookup_in_current_level((yyvsp[-3].id_val));
             if (info != NULL) 
                 yyerror("Identifier %s already declared", (yyvsp[-3].id_val));
             else {
                 ASTNode* id = create_id_node((yyvsp[-3].id_val),yylineno);
-                insert_symbol_in_stack(id->info);
+                add_symbol_to_current_level(id->info);
                 (yyval.node) = create_single_decl_node((yyvsp[-4].type_val),id,(yyvsp[-1].node),yylineno);
             }
      }
@@ -1512,7 +1512,7 @@ yyreduce:
   case 30: /* sentence: ID '=' expr ';'  */
 #line 176 "parser.y"
                           { 
-         Attributes* info = search_symbol((yyvsp[-3].id_val));
+         Attributes* info = lookup_in_all_levels((yyvsp[-3].id_val));
          if (info == NULL) yyerror("Identifier %s not declared", (yyvsp[-3].id_val));
          (yyval.node) = create_assign_node((create_ast_node(info,NULL,NULL)), (yyvsp[-1].node), yylineno);
           }
@@ -1570,7 +1570,7 @@ yyreduce:
   case 39: /* method_call: ID '(' expr_params ')'  */
 #line 191 "parser.y"
                                     {
-                Attributes* info = search_symbol((yyvsp[-3].id_val));
+                Attributes* info = lookup_in_all_levels((yyvsp[-3].id_val));
                 if(info == NULL || info->class_type != CLASS_DECL_FUNCTION)
                     yyerror("Method %s not declared", (yyvsp[-3].id_val));
                 if(info->parameter_list->length  != count_params){
@@ -1588,7 +1588,7 @@ yyreduce:
   case 40: /* method_call: ID '(' ')'  */
 #line 204 "parser.y"
                         { 
-                Attributes* info = search_symbol((yyvsp[-2].id_val));
+                Attributes* info = lookup_in_all_levels((yyvsp[-2].id_val));
                 if(info == NULL || info->class_type != CLASS_DECL_FUNCTION)
                     yyerror("Method %s not declared", (yyvsp[-2].id_val));
 
@@ -1626,7 +1626,7 @@ yyreduce:
   case 45: /* expr: ID  */
 #line 220 "parser.y"
            { 
-               Attributes* info = search_symbol((yyvsp[0].id_val));
+               Attributes* info = lookup_in_all_levels((yyvsp[0].id_val));
                if (info == NULL)
                     yyerror("Identifier %s not declared", (yyvsp[0].id_val));
                else

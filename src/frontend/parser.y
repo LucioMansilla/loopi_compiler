@@ -36,6 +36,8 @@ int count_params = 0;
 %token ELSE
 %token WHILE
 %token EQUALS
+%token NOT
+%token TMENOS
 %type <node> expr
 %type <node> valor
 %type <node> sentence_list
@@ -59,15 +61,13 @@ int count_params = 0;
 %nonassoc EQUALS '<' '>' 
 %left '+' '-'
 %left '*' '/' '%'
-%right '!' TMENOS //como definir precedencia unaria
+%left NOT TMINUS 
 %%
 
 init: program 
       ;
-
 program: PROGRAM '{'{ open_level(); } body_program '}' {$$ = $4;}
       ;
-
 body_program: declarations methods { $$ = create_ast_node(NULL,$1,$2);}
             | declarations { $$ = create_ast_node(NULL,$1,NULL);}
             | methods { $$ = create_ast_node(NULL,NULL,$1);}
@@ -76,48 +76,40 @@ body_program: declarations methods { $$ = create_ast_node(NULL,$1,$2);}
 methods: method_decl methods { $$ = root;}
         |  method_decl { $$ = $1;}
       ;
-
 method_decl:
     type ID param {
-        if(look_and_hook($2) != NULL) 
-            yyerror("Identifier %s already declared", $2);
-        Attributes* info = create_func_attributes($1,$3,$2,yylineno);
-        insert_symbol_in_stack(info);
-        insert_level($3); //push the params and insert into a new level.
+        if(lookup_in_current_level($2) != NULL) 
+            yyerror("Try to declare the method: %s but the identifier already declared", $2);
+        add_func_to_st($1,$2,$3,yylineno,false);
     } 
     block { 
             close_level();
-            Attributes* info = search_symbol($2);
-            ASTNode* temp = create_decl_func(info,$5, yylineno);
+            Attributes* info = lookup_in_all_levels($2);
+            ASTNode* temp = create_decl_func(info,$5);
             $$ = temp;
      }
-
     | TVOID ID param {
-        if(look_and_hook($2) != NULL) 
-            yyerror("Identifier %s already declared", $2);
-        Attributes* info = create_func_attributes(TYPE_VOID,$3,$2,yylineno);
-        insert_symbol_in_stack(info);
-        insert_level($3);
+        if(lookup_in_current_level($2) != NULL) 
+            yyerror("Try to declare the method: %s but the identifier already declared", $2);
+        add_func_to_st(TYPE_VOID,$2,$3,yylineno,false);
     } 
     block {  close_level();
-            Attributes* info = search_symbol($2);
-            ASTNode* temp = create_decl_func(info,$5, yylineno);
+            Attributes* info = lookup_in_all_levels($2);
+            ASTNode* temp = create_decl_func(info,$5);
             $$ = temp; }
 
     | TVOID ID param EXTERN {
-        if(look_and_hook($2) != NULL) 
-            yyerror("Identifier %s already declared", $2);
-        Attributes* info = create_func_attributes(TYPE_VOID,$3,$2,yylineno);
-        insert_symbol_in_stack(info);
+        if(lookup_in_current_level($2) != NULL) 
+            yyerror("Try to declare the method: %s but the identifier already declared", $2);
+        add_func_to_st(TYPE_VOID,$2,$3,yylineno,true);
     } 
     ';' {
          $$ = root; }
 
     | type ID param EXTERN {
-        if(look_and_hook($2) != NULL) 
-            yyerror("Identifier %s already declared", $2);
-        Attributes* info = create_func_attributes(TYPE_VOID,$3,$2,yylineno);
-        insert_symbol_in_stack(info);
+        if(lookup_in_current_level($2) != NULL) 
+            yyerror("Try to declare the method: %s but the identifier already declared", $2);
+        add_func_to_st($1,$2,$3,yylineno,true);
     } 
     ';' { $$ = root; }
 ;
@@ -152,29 +144,27 @@ param_list: type ID {
            }
            ;
 
-
 declarations: declarations var_decl { $$ = create_list_decl_node($1,$2); }
              | var_decl { $$ = $1; }
              ;
 
 var_decl: type ID '=' expr ';' { 
-            Attributes* info = look_and_hook($2);
+            Attributes* info = lookup_in_current_level($2);
             if (info != NULL) 
                 yyerror("Identifier %s already declared", $2);
             else {
                 ASTNode* id = create_id_node($2,yylineno);
-                insert_symbol_in_stack(id->info);
+                add_symbol_to_current_level(id->info);
                 $$ = create_single_decl_node($1,id,$4,yylineno);
             }
      }
         ;
-
 sentence_list: sentence sentence_list { $$ = create_sentence_list_node($1,$2);}
               | sentence { $$ = $1; }
               ;
 
 sentence: ID '=' expr ';' { 
-         Attributes* info = search_symbol($1);
+         Attributes* info = lookup_in_all_levels($1);
          if (info == NULL) yyerror("Identifier %s not declared", $1);
          $$ = create_assign_node((create_ast_node(info,NULL,NULL)), $3, yylineno);
           }
@@ -189,7 +179,7 @@ sentence: ID '=' expr ';' {
         ;
 
 method_call: ID '(' expr_params ')' {
-                Attributes* info = search_symbol($1);
+                Attributes* info = lookup_in_global_level($1);
                 if(info == NULL || info->class_type != CLASS_DECL_FUNCTION)
                     yyerror("Method %s not declared", $1);
                 if(info->parameter_list->length  != count_params){
@@ -198,46 +188,97 @@ method_call: ID '(' expr_params ')' {
                     yyerror("Error with the params on: %s", $1);
                 }
                 count_params = 0;
-                $$ = root;
-
-                 }
+                $$ = root; //esto no se q hacer 
+             }
            | ID '(' ')' { 
-                Attributes* info = search_symbol($1);
+                Attributes* info = lookup_in_global_level($1);
                 if(info == NULL || info->class_type != CLASS_DECL_FUNCTION)
                     yyerror("Method %s not declared", $1);
-
-                $$ = root;
+                $$ = root; //esto no se que hacer
             }
            ;
 
 expr_params: expr{
     count_params++;
 } ',' expr_params { $$ = $1; }
-            | expr { $$ = $1; count_params++;}
+            | expr { $$ = $1; 
+                count_params++;}
             ;
 
 expr: valor { $$ = $1; }
     | ID   { 
-               Attributes* info = search_symbol($1);
+               Attributes* info = lookup_in_all_levels($1);
                if (info == NULL)
                     yyerror("Identifier %s not declared", $1);
                else
                   $$ = create_ast_node(info,NULL,NULL);  
              }
-    | expr '+' expr { $$ = $1; }
-    | expr '*' expr { $$ = $1; }
-    | '(' expr ')' { $$ = $2; }
-    | expr OR expr { $$ = $1; }
-    | expr AND expr { $$ = $1; }
-    | method_call { $$ = $1; }
-    | TMENOS expr { $$ = $2; }
-    | '!' expr { $$ = $2; }
-    | expr '<' expr { $$ = $1; }
-    | expr '>' expr { $$ = $1; }
-    | expr EQUALS expr { $$ = $1; }
-    | expr '-' expr { $$ = $1; }
-    | expr '/' expr { $$ = $1; }
-    | expr '%' expr { $$ = $1; }
+    | expr '+' expr
+            {
+               Attributes* attr = create_op_attributes(TYPE_INT, "+", yylineno, CLASS_ADD);
+               $$ = create_ast_node(attr, $1, $3); 
+            } 
+    | expr '*' expr 
+            { Attributes* attr = create_op_attributes(TYPE_INT, "*",yylineno, CLASS_MUL);
+              $$ = create_ast_node(attr, $1, $3);           
+            }
+    | '(' expr ')'
+        {
+            $$ = $2;
+        }
+    | expr OR expr
+            {
+                Attributes* attr = create_op_attributes(TYPE_BOOL,"||",yylineno,CLASS_OR);
+                $$ = create_ast_node(attr, $1, $3);
+            } 
+    | expr AND expr 
+            {
+                Attributes* attr = create_op_attributes(TYPE_BOOL,"&&",yylineno,CLASS_AND);
+                $$ = create_ast_node(attr, $1, $3);
+            }
+    | method_call {
+        $$ = $1;
+    }
+    | TMENOS expr %prec TMINUS
+    {
+                Attributes* attr = create_op_attributes(TYPE_INT,"-",yylineno,CLASS_MINUS);
+                $$ = create_ast_node(attr, $2, NULL);   
+    } 
+    | '!' expr %prec NOT
+            {
+                Attributes* attr = create_op_attributes(TYPE_BOOL,"!",yylineno,CLASS_NOT);
+                $$ = create_ast_node(attr, $2, NULL);
+            }
+    | expr '<' expr
+            {
+                Attributes* attr = create_op_attributes(TYPE_BOOL,"<",yylineno,CLASS_LESS);
+                $$ = create_ast_node(attr, $1, $3);
+            } 
+    | expr '>' expr 
+            {
+                Attributes* attr = create_op_attributes(TYPE_BOOL,">",yylineno,CLASS_GREATER);
+                $$ = create_ast_node(attr, $1, $3);
+            }
+    | expr EQUALS expr 
+            {
+                Attributes* attr = create_op_attributes(TYPE_BOOL,"==",yylineno,CLASS_EQUALS);
+                $$ = create_ast_node(attr, $1, $3);
+            }
+    | expr '-' expr 
+            {
+                Attributes* attr = create_op_attributes(TYPE_INT,"-",yylineno,CLASS_SUB);
+                $$ = create_ast_node(attr, $1, $3);
+            }
+    | expr '/' expr 
+            {
+                Attributes* attr = create_op_attributes(TYPE_INT,"/",yylineno,CLASS_DIV);
+                $$ = create_ast_node(attr, $1, $3);
+            }
+    | expr '%' expr 
+            {
+                Attributes* attr = create_op_attributes(TYPE_INT,"%",yylineno,CLASS_MOD);
+                $$ = create_ast_node(attr, $1, $3);
+            }
     ;
 
 type: TINT { $$ = TYPE_INT; }

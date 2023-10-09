@@ -20,7 +20,7 @@ ASTNode* create_single_decl_node(ValueType value_type, ASTNode* left, ASTNode* r
 ASTNode* create_list_decl_node(ASTNode* left, ASTNode* right);
 ASTNode* create_program_node(ASTNode* left, ASTNode* right);
 ASTNode* create_if_node(ASTNode* condition, ASTNode* true_branch, ASTNode* false_branch, int line);
-ASTNode* create_decl_func(Attributes* info, ASTNode* body, int line);
+ASTNode* create_decl_func(Attributes* info, ASTNode* body);
 
 int get_next_offset();
 void print_ast(ASTNode* node);

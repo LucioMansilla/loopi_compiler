@@ -1,8 +1,8 @@
 #ifndef STACK_H
 #define STACK_H
+#include "frontend/symbol_table.h"
 #include "stdbool.h"
 #include "stdlib.h"
-#include "frontend/symbol_table.h"
 
 typedef struct SymbolStack {
     SymbolTable *table;
@@ -12,7 +12,9 @@ typedef struct SymbolStack {
 void open_level(/*SymbolStack *stack,*/);
 void close_level(/*SymbolStack *stack*/);
 void insert_level(SymbolTable *table);
-Attributes *search_symbol(char *name);
-void insert_symbol_in_stack(Attributes *info);
-Attributes *look_and_hook(char *name);
+Attributes *lookup_in_all_levels(char *name);
+void add_symbol_to_current_level(Attributes *info);
+Attributes *lookup_in_current_level(char *name);
+Attributes *lookup_in_global_level(char *name);
+void add_func_to_st(ValueType type,char *tag, SymbolTable *param_list, int line, bool isExtern);
 #endif

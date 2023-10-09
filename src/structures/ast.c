@@ -21,7 +21,7 @@ ASTNode* create_ast_node(Attributes* info, ASTNode* left, ASTNode* right) {
     return node;
 }
 
-ASTNode* create_decl_func(Attributes* info, ASTNode* body, int line) {
+ASTNode* create_decl_func(Attributes* info, ASTNode* body) {
     return create_ast_node(info, body, NULL);
 }
 

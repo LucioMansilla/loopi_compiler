@@ -17,6 +17,10 @@ typedef enum {
     CLASS_CONSTANT,
     CLASS_ADD,
     CLASS_MUL,
+    CLASS_SUB,
+    CLASS_DIV,
+    CLASS_MOD,
+    CLASS_MINUS,
     CLASS_ASSIGN,
     CLASS_DECL,
     CLASS_RETURN,
@@ -24,6 +28,11 @@ typedef enum {
     CLASS_DECL_LIST,
     CLASS_PROGRAM,
     CLASS_OR,
+    CLASS_AND,
+    CLASS_NOT,
+    CLASS_LESS,
+    CLASS_GREATER,
+    CLASS_EQUALS,
     CLASS_IF,
     CLASS_FORMAL_PARAM,
 } ClassType;
@@ -39,7 +48,7 @@ typedef struct Attributes {
 } Attributes;
 
 Attributes* create_attributes(ValueType value_type, int value, char* tag, int line, ClassType class_type);
-Attributes* create_op_attributes(ValueType value_type, char op, int line, ClassType class_type);
+Attributes* create_op_attributes(ValueType value_type, char* op, int line, ClassType class_type);
 Attributes* create_func_attributes(ValueType value_type, SymbolTable* parameter_list, char* name, int line);
 
 char* get_type_str(int type);

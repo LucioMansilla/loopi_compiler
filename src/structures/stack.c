@@ -20,11 +20,11 @@ void insert_level(SymbolTable* table) {
     stack = temp;
 }
 
-void insert_symbol_in_stack(Attributes* info) {
+void add_symbol_to_current_level(Attributes* info) {
     insert_symbol(stack->table, info);
 }
 
-Attributes* search_symbol(char* name) {
+Attributes* lookup_in_all_levels(char* name) {
     SymbolStack* temp = stack;
     while (temp != NULL) {
         Attributes* res = lookup_symbol(temp->table, name);
@@ -34,6 +34,22 @@ Attributes* search_symbol(char* name) {
     return NULL;
 }
 
-Attributes* look_and_hook(char* name) {
+Attributes* lookup_in_current_level(char* name) {
     return lookup_symbol(stack->table, name);
+}
+
+Attributes* lookup_in_global_level(char* name) {
+    SymbolStack* temp = stack;
+    while (temp->next != NULL) {
+        temp = temp->next;
+    }
+    return lookup_symbol(temp->table, name);
+}
+
+void add_func_to_st(ValueType type, char* tag, SymbolTable* param_list, int line, bool isExtern) {
+    Attributes* info = create_func_attributes(type, param_list, tag, line);
+    add_symbol_to_current_level(info);
+
+    if (!isExtern) 
+        insert_level(param_list);
 }
