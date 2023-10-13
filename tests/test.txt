@@ -2,8 +2,10 @@ Program
 {
 
 int i = 0;
+int j = 10;
 
-int inc(int x){
+int inc(int x, int y, int z){
+    x = 20;
     return x + 1;
 }
 
@@ -13,14 +15,24 @@ void print_int(int i) extern ;
 
 void main(){
     int y = 0;
+    y = 10;
+    y = 5;
     y = get_int();
     if (y == 1 && 1 > 5) then
         {
             return ;
         }
     else{
-       return print_int(inc(y));
+       return print_int(inc(y,2+i,6%j));
     }   
 }
+
+void inc2(int g){
+    int x = 30;
+    int z = 30;
+    x = 35;
+    return x + 1;
+}
+
 
 } 

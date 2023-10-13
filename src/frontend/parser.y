@@ -66,14 +66,17 @@ int count_params = 0;
 
 init: program 
       ;
-program: PROGRAM '{'{ open_level(); } body_program '}' {$$ = $4;}
+program: PROGRAM '{'{ open_level(); } body_program '}' {
+        $$ = $4;
+        root = $4;
+        }
       ;
-body_program: declarations methods { $$ = create_ast_node(NULL,$1,$2);}
-            | declarations { $$ = create_ast_node(NULL,$1,NULL);}
-            | methods { $$ = create_ast_node(NULL,NULL,$1);}
+body_program: declarations methods { $$ = create_program_node($1,$2);}
+            | declarations { $$ = create_program_node($1,NULL);}
+            | methods { $$ = create_program_node(NULL,$1);}
             ;
             
-methods: method_decl methods { $$ = root;}
+methods: method_decl methods { $$ = create_methods_decl_list_node($1,$2);}
         |  method_decl { $$ = $1;}
       ;
 method_decl:
@@ -102,21 +105,29 @@ method_decl:
         if(lookup_in_current_level($2) != NULL) 
             yyerror("Try to declare the method: %s but the identifier already declared", $2);
         add_func_to_st(TYPE_VOID,$2,$3,yylineno,true);
+        
     } 
     ';' {
-         $$ = root; }
+            Attributes* info = lookup_in_all_levels($2);
+            ASTNode* temp = create_decl_func(info,NULL);
+            $$ = temp;     
+          }
 
     | type ID param EXTERN {
         if(lookup_in_current_level($2) != NULL) 
             yyerror("Try to declare the method: %s but the identifier already declared", $2);
         add_func_to_st($1,$2,$3,yylineno,true);
     } 
-    ';' { $$ = root; }
+    ';' {   Attributes* info = lookup_in_all_levels($2);
+            ASTNode* temp = create_decl_func(info,NULL);
+            $$ = temp;
+    }
 ;
 
-
-block: '{' { open_level(); } declarations sentence_list '}' { close_level(); $$ = $3; }
-        | '{' sentence_list '}' { $$ = $2; }
+block: '{' { open_level(); } declarations sentence_list '}' { close_level(); 
+                $$ = create_block_node($3,$4,yylineno);
+}
+        | '{' sentence_list '}' { $$ = create_block_node(NULL,$2,yylineno); }
         ;
 
 param: '(' ')' { $$ = create_symbol_table(); }
@@ -158,7 +169,7 @@ var_decl: type ID '=' expr ';' {
                 $$ = create_single_decl_node($1,id,$4,yylineno);
             }
      }
-        ;
+     ;
 sentence_list: sentence sentence_list { $$ = create_sentence_list_node($1,$2);}
               | sentence { $$ = $1; }
               ;
@@ -169,12 +180,16 @@ sentence: ID '=' expr ';' {
          $$ = create_assign_node((create_ast_node(info,NULL,NULL)), $3, yylineno);
           }
          | method_call ';' { $$ = $1; }
-         | RETURN expr ';' { $$ = create_return_node($2,yylineno); }
-         | RETURN ';' { $$ = create_return_node(NULL,yylineno); }
-         | IF '(' expr ')' THEN block { $$ = $6; }
-         | IF '(' expr ')' THEN block ELSE block { $$ = $6; }
-         | WHILE '(' expr ')' block { $$ = $5; }
-         | ';' { $$ = root; }
+         | RETURN expr ';' { $$ = create_return_expr_node($2,yylineno); }
+         | RETURN ';' { $$ = create_return_node(yylineno); }
+         | IF '(' expr ')' THEN block { 
+                                    $$ = create_if_node($3,$6,yylineno);
+                                     }
+         | IF '(' expr ')' THEN block ELSE block { 
+                                    $$ = create_if_else_node($3,$6,$8,yylineno); }
+
+         | WHILE '(' expr ')' block { $$ = create_while_node($3,$5,yylineno); }
+         | ';' { $$ = create_empty_node(yylineno); }
          | block { $$ = $1; }
         ;
 
@@ -188,21 +203,22 @@ method_call: ID '(' expr_params ')' {
                     yyerror("Error with the params on: %s", $1);
                 }
                 count_params = 0;
-                $$ = root; //esto no se q hacer 
-             }
+                $$ = create_call_func_node(info,$3,yylineno);
+                }
            | ID '(' ')' { 
                 Attributes* info = lookup_in_global_level($1);
                 if(info == NULL || info->class_type != CLASS_DECL_FUNCTION)
                     yyerror("Method %s not declared", $1);
-                $$ = root; //esto no se que hacer
+                $$ = create_call_func_node(info,NULL,yylineno);
             }
            ;
 
-expr_params: expr{
-    count_params++;
-} ',' expr_params { $$ = $1; }
+
+
+
+expr_params: expr{count_params++;} ',' expr_params { $$ = create_list_call_node($1,$4); }
             | expr { $$ = $1; 
-                count_params++;}
+                    count_params++;}
             ;
 
 expr: valor { $$ = $1; }

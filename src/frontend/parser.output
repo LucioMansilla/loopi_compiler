@@ -127,83 +127,85 @@ Terminales con las reglas donde aparecen
     ELSE (271) 34
     WHILE (272) 35
     EQUALS (273) 55
-    TMENOS (274) 51
+    NOT (274)
+    TMENOS (275) 51
+    TMINUS (276)
 
 
 No terminales con las reglas donde aparecen
 
-    $accept (35)
+    $accept (37)
         on left: 0
-    init (36)
+    init (38)
         on left: 1
         on right: 0
-    program <node> (37)
+    program <node> (39)
         on left: 3
         on right: 1
-    $@1 (38)
+    $@1 (40)
         on left: 2
         on right: 3
-    body_program <node> (39)
+    body_program <node> (41)
         on left: 4 5 6
         on right: 3
-    methods <node> (40)
+    methods <node> (42)
         on left: 7 8
         on right: 4 6 7
-    method_decl <node> (41)
+    method_decl <node> (43)
         on left: 10 12 14 16
         on right: 7 8
-    $@2 (42)
+    $@2 (44)
         on left: 9
         on right: 10
-    $@3 (43)
+    $@3 (45)
         on left: 11
         on right: 12
-    $@4 (44)
+    $@4 (46)
         on left: 13
         on right: 14
-    $@5 (45)
+    $@5 (47)
         on left: 15
         on right: 16
-    block <node> (46)
+    block <node> (48)
         on left: 18 19
         on right: 10 12 33 34 35 37
-    $@6 (47)
+    $@6 (49)
         on left: 17
         on right: 18
-    param <st> (48)
+    param <st> (50)
         on left: 20 21
         on right: 10 12 14 16
-    param_list <st> (49)
+    param_list <st> (51)
         on left: 22 23
         on right: 21 23
-    declarations <node> (50)
+    declarations <node> (52)
         on left: 24 25
         on right: 4 5 18 24
-    var_decl <node> (51)
+    var_decl <node> (53)
         on left: 26
         on right: 24 25
-    sentence_list <node> (52)
+    sentence_list <node> (54)
         on left: 27 28
         on right: 18 19 27
-    sentence <node> (53)
+    sentence <node> (55)
         on left: 29 30 31 32 33 34 35 36 37
         on right: 27 28
-    method_call <node> (54)
+    method_call <node> (56)
         on left: 38 39
         on right: 30 50
-    expr_params <node> (55)
+    expr_params <node> (57)
         on left: 41 42
         on right: 38 41
-    $@7 (56)
+    $@7 (58)
         on left: 40
         on right: 41
-    expr <node> (57)
+    expr <node> (59)
         on left: 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58
         on right: 26 29 31 33 34 35 41 42 45 46 47 48 49 51 52 53 54 55 56 57 58
-    type <type_val> (58)
+    type <type_val> (60)
         on left: 59 60
         on right: 10 16 22 23 26
-    valor <node> (59)
+    valor <node> (61)
         on left: 61 62
         on right: 43
 
@@ -457,9 +459,9 @@ Estado 26
     INT     desplazar e ir al estado 33
     ID      desplazar e ir al estado 34
     BOOL    desplazar e ir al estado 35
-    '!'     desplazar e ir al estado 36
-    TMENOS  desplazar e ir al estado 37
-    '('     desplazar e ir al estado 38
+    TMENOS  desplazar e ir al estado 36
+    '('     desplazar e ir al estado 37
+    '!'     desplazar e ir al estado 38
 
     method_call  ir al estado 39
     expr         ir al estado 40
@@ -546,14 +548,14 @@ Estado 35
 
 Estado 36
 
-   52 expr: '!' • expr
+   51 expr: TMENOS • expr
 
     INT     desplazar e ir al estado 33
     ID      desplazar e ir al estado 34
     BOOL    desplazar e ir al estado 35
-    '!'     desplazar e ir al estado 36
-    TMENOS  desplazar e ir al estado 37
-    '('     desplazar e ir al estado 38
+    TMENOS  desplazar e ir al estado 36
+    '('     desplazar e ir al estado 37
+    '!'     desplazar e ir al estado 38
 
     method_call  ir al estado 39
     expr         ir al estado 51
@@ -562,14 +564,14 @@ Estado 36
 
 Estado 37
 
-   51 expr: TMENOS • expr
+   47 expr: '(' • expr ')'
 
     INT     desplazar e ir al estado 33
     ID      desplazar e ir al estado 34
     BOOL    desplazar e ir al estado 35
-    '!'     desplazar e ir al estado 36
-    TMENOS  desplazar e ir al estado 37
-    '('     desplazar e ir al estado 38
+    TMENOS  desplazar e ir al estado 36
+    '('     desplazar e ir al estado 37
+    '!'     desplazar e ir al estado 38
 
     method_call  ir al estado 39
     expr         ir al estado 52
@@ -578,14 +580,14 @@ Estado 37
 
 Estado 38
 
-   47 expr: '(' • expr ')'
+   52 expr: '!' • expr
 
     INT     desplazar e ir al estado 33
     ID      desplazar e ir al estado 34
     BOOL    desplazar e ir al estado 35
-    '!'     desplazar e ir al estado 36
-    TMENOS  desplazar e ir al estado 37
-    '('     desplazar e ir al estado 38
+    TMENOS  desplazar e ir al estado 36
+    '('     desplazar e ir al estado 37
+    '!'     desplazar e ir al estado 38
 
     method_call  ir al estado 39
     expr         ir al estado 53
@@ -718,10 +720,10 @@ Estado 50
     INT     desplazar e ir al estado 33
     ID      desplazar e ir al estado 34
     BOOL    desplazar e ir al estado 35
-    '!'     desplazar e ir al estado 36
-    TMENOS  desplazar e ir al estado 37
-    '('     desplazar e ir al estado 38
+    TMENOS  desplazar e ir al estado 36
+    '('     desplazar e ir al estado 37
     ')'     desplazar e ir al estado 79
+    '!'     desplazar e ir al estado 38
 
     method_call  ir al estado 39
     expr_params  ir al estado 80
@@ -730,23 +732,6 @@ Estado 50
 
 
 Estado 51
-
-   45 expr: expr • '+' expr
-   46     | expr • '*' expr
-   48     | expr • OR expr
-   49     | expr • AND expr
-   52     | '!' expr •
-   53     | expr • '<' expr
-   54     | expr • '>' expr
-   55     | expr • EQUALS expr
-   56     | expr • '-' expr
-   57     | expr • '/' expr
-   58     | expr • '%' expr
-
-    $default  reduce usando la regla 52 (expr)
-
-
-Estado 52
 
    45 expr: expr • '+' expr
    46     | expr • '*' expr
@@ -763,7 +748,7 @@ Estado 52
     $default  reduce usando la regla 51 (expr)
 
 
-Estado 53
+Estado 52
 
    45 expr: expr • '+' expr
    46     | expr • '*' expr
@@ -790,6 +775,23 @@ Estado 53
     ')'     desplazar e ir al estado 82
 
 
+Estado 53
+
+   45 expr: expr • '+' expr
+   46     | expr • '*' expr
+   48     | expr • OR expr
+   49     | expr • AND expr
+   52     | '!' expr •
+   53     | expr • '<' expr
+   54     | expr • '>' expr
+   55     | expr • EQUALS expr
+   56     | expr • '-' expr
+   57     | expr • '/' expr
+   58     | expr • '%' expr
+
+    $default  reduce usando la regla 52 (expr)
+
+
 Estado 54
 
    48 expr: expr OR • expr
@@ -797,9 +799,9 @@ Estado 54
     INT     desplazar e ir al estado 33
     ID      desplazar e ir al estado 34
     BOOL    desplazar e ir al estado 35
-    '!'     desplazar e ir al estado 36
-    TMENOS  desplazar e ir al estado 37
-    '('     desplazar e ir al estado 38
+    TMENOS  desplazar e ir al estado 36
+    '('     desplazar e ir al estado 37
+    '!'     desplazar e ir al estado 38
 
     method_call  ir al estado 39
     expr         ir al estado 83
@@ -813,9 +815,9 @@ Estado 55
     INT     desplazar e ir al estado 33
     ID      desplazar e ir al estado 34
     BOOL    desplazar e ir al estado 35
-    '!'     desplazar e ir al estado 36
-    TMENOS  desplazar e ir al estado 37
-    '('     desplazar e ir al estado 38
+    TMENOS  desplazar e ir al estado 36
+    '('     desplazar e ir al estado 37
+    '!'     desplazar e ir al estado 38
 
     method_call  ir al estado 39
     expr         ir al estado 84
@@ -829,9 +831,9 @@ Estado 56
     INT     desplazar e ir al estado 33
     ID      desplazar e ir al estado 34
     BOOL    desplazar e ir al estado 35
-    '!'     desplazar e ir al estado 36
-    TMENOS  desplazar e ir al estado 37
-    '('     desplazar e ir al estado 38
+    TMENOS  desplazar e ir al estado 36
+    '('     desplazar e ir al estado 37
+    '!'     desplazar e ir al estado 38
 
     method_call  ir al estado 39
     expr         ir al estado 85
@@ -845,9 +847,9 @@ Estado 57
     INT     desplazar e ir al estado 33
     ID      desplazar e ir al estado 34
     BOOL    desplazar e ir al estado 35
-    '!'     desplazar e ir al estado 36
-    TMENOS  desplazar e ir al estado 37
-    '('     desplazar e ir al estado 38
+    TMENOS  desplazar e ir al estado 36
+    '('     desplazar e ir al estado 37
+    '!'     desplazar e ir al estado 38
 
     method_call  ir al estado 39
     expr         ir al estado 86
@@ -861,9 +863,9 @@ Estado 58
     INT     desplazar e ir al estado 33
     ID      desplazar e ir al estado 34
     BOOL    desplazar e ir al estado 35
-    '!'     desplazar e ir al estado 36
-    TMENOS  desplazar e ir al estado 37
-    '('     desplazar e ir al estado 38
+    TMENOS  desplazar e ir al estado 36
+    '('     desplazar e ir al estado 37
+    '!'     desplazar e ir al estado 38
 
     method_call  ir al estado 39
     expr         ir al estado 87
@@ -877,9 +879,9 @@ Estado 59
     INT     desplazar e ir al estado 33
     ID      desplazar e ir al estado 34
     BOOL    desplazar e ir al estado 35
-    '!'     desplazar e ir al estado 36
-    TMENOS  desplazar e ir al estado 37
-    '('     desplazar e ir al estado 38
+    TMENOS  desplazar e ir al estado 36
+    '('     desplazar e ir al estado 37
+    '!'     desplazar e ir al estado 38
 
     method_call  ir al estado 39
     expr         ir al estado 88
@@ -893,9 +895,9 @@ Estado 60
     INT     desplazar e ir al estado 33
     ID      desplazar e ir al estado 34
     BOOL    desplazar e ir al estado 35
-    '!'     desplazar e ir al estado 36
-    TMENOS  desplazar e ir al estado 37
-    '('     desplazar e ir al estado 38
+    TMENOS  desplazar e ir al estado 36
+    '('     desplazar e ir al estado 37
+    '!'     desplazar e ir al estado 38
 
     method_call  ir al estado 39
     expr         ir al estado 89
@@ -909,9 +911,9 @@ Estado 61
     INT     desplazar e ir al estado 33
     ID      desplazar e ir al estado 34
     BOOL    desplazar e ir al estado 35
-    '!'     desplazar e ir al estado 36
-    TMENOS  desplazar e ir al estado 37
-    '('     desplazar e ir al estado 38
+    TMENOS  desplazar e ir al estado 36
+    '('     desplazar e ir al estado 37
+    '!'     desplazar e ir al estado 38
 
     method_call  ir al estado 39
     expr         ir al estado 90
@@ -925,9 +927,9 @@ Estado 62
     INT     desplazar e ir al estado 33
     ID      desplazar e ir al estado 34
     BOOL    desplazar e ir al estado 35
-    '!'     desplazar e ir al estado 36
-    TMENOS  desplazar e ir al estado 37
-    '('     desplazar e ir al estado 38
+    TMENOS  desplazar e ir al estado 36
+    '('     desplazar e ir al estado 37
+    '!'     desplazar e ir al estado 38
 
     method_call  ir al estado 39
     expr         ir al estado 91
@@ -941,9 +943,9 @@ Estado 63
     INT     desplazar e ir al estado 33
     ID      desplazar e ir al estado 34
     BOOL    desplazar e ir al estado 35
-    '!'     desplazar e ir al estado 36
-    TMENOS  desplazar e ir al estado 37
-    '('     desplazar e ir al estado 38
+    TMENOS  desplazar e ir al estado 36
+    '('     desplazar e ir al estado 37
+    '!'     desplazar e ir al estado 38
 
     method_call  ir al estado 39
     expr         ir al estado 92
@@ -1003,10 +1005,10 @@ Estado 70
     INT     desplazar e ir al estado 33
     ID      desplazar e ir al estado 34
     BOOL    desplazar e ir al estado 35
-    '!'     desplazar e ir al estado 36
-    TMENOS  desplazar e ir al estado 37
+    TMENOS  desplazar e ir al estado 36
     ';'     desplazar e ir al estado 96
-    '('     desplazar e ir al estado 38
+    '('     desplazar e ir al estado 37
+    '!'     desplazar e ir al estado 38
 
     method_call  ir al estado 39
     expr         ir al estado 97
@@ -1389,9 +1391,9 @@ Estado 95
     INT     desplazar e ir al estado 33
     ID      desplazar e ir al estado 34
     BOOL    desplazar e ir al estado 35
-    '!'     desplazar e ir al estado 36
-    TMENOS  desplazar e ir al estado 37
-    '('     desplazar e ir al estado 38
+    TMENOS  desplazar e ir al estado 36
+    '('     desplazar e ir al estado 37
+    '!'     desplazar e ir al estado 38
 
     method_call  ir al estado 39
     expr         ir al estado 107
@@ -1440,9 +1442,9 @@ Estado 98
     INT     desplazar e ir al estado 33
     ID      desplazar e ir al estado 34
     BOOL    desplazar e ir al estado 35
-    '!'     desplazar e ir al estado 36
-    TMENOS  desplazar e ir al estado 37
-    '('     desplazar e ir al estado 38
+    TMENOS  desplazar e ir al estado 36
+    '('     desplazar e ir al estado 37
+    '!'     desplazar e ir al estado 38
 
     method_call  ir al estado 39
     expr         ir al estado 109
@@ -1456,9 +1458,9 @@ Estado 99
     INT     desplazar e ir al estado 33
     ID      desplazar e ir al estado 34
     BOOL    desplazar e ir al estado 35
-    '!'     desplazar e ir al estado 36
-    TMENOS  desplazar e ir al estado 37
-    '('     desplazar e ir al estado 38
+    TMENOS  desplazar e ir al estado 36
+    '('     desplazar e ir al estado 37
+    '!'     desplazar e ir al estado 38
 
     method_call  ir al estado 39
     expr         ir al estado 110
@@ -1639,9 +1641,9 @@ Estado 113
     INT     desplazar e ir al estado 33
     ID      desplazar e ir al estado 34
     BOOL    desplazar e ir al estado 35
-    '!'     desplazar e ir al estado 36
-    TMENOS  desplazar e ir al estado 37
-    '('     desplazar e ir al estado 38
+    TMENOS  desplazar e ir al estado 36
+    '('     desplazar e ir al estado 37
+    '!'     desplazar e ir al estado 38
 
     method_call  ir al estado 39
     expr_params  ir al estado 118

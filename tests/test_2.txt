@@ -1,0 +1,21 @@
+Program
+{
+
+int i = 0;
+int j = 10;
+
+int inc(){
+    return 10;
+}
+
+
+
+void main(){
+    int y = 0;
+    y = 10;
+    y = 5;
+
+    return ;
+}
+
+} 

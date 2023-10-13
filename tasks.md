@@ -46,8 +46,9 @@
         -Por ahora tomamos la convención de dejar todo como está..
 
 
-    - [ ] En parser.y declaramos una variable global count_params para contar la cantidad de parámetros que tiene un método, pero capaz existe una mejor forma de realizarlo.
-     
+    - [x] En parser.y declaramos una variable global count_params para contar la cantidad de parámetros que tiene un método, pero capaz existe una mejor forma de realizarlo.
+        - [ ] por ahora dijo que esa esta bien.. pensar una mejor.
+
     - [ ] Analizar en el no terminal "expr" en la regla "method_call" del mismo si colocar la lógica del method_call ahí o hacerlo en la propia definicion del method_call.
     
 
@@ -56,14 +57,19 @@
             yyerror("Identifier %s already declared", $2);
         Attributes* info = create_func_attributes($1,$3,$2,yylineno);
         add_symbol_to_current_level(info);
-
+        
         A lo sumo cambia el primer parámetro que se envia a create_func_attributes, pero el resto es igual.
         Una primera aproximación es en el stack.h crear un función llamada "insert_function" que reciba como parámetros el tipo, la cantidad de parámetros y el nombre del método y un flag que indique si es externo o no. 
-      Resuelto: al final usamos add_func_to_st..
+      Resuelto: al final usamos add_func_to_st.. 
 
+    - [ ] Analizar method_call por ahora manejamos una lisrta de nodos punto y coma (list_call_node), donde si es unitario no es una lista unitaria(mismo tratamiento que sentence_list y declaration_list).
 
+    - [ ] Cambiar el nombre de la función ASTNode* create_decl_func(Attributes* info, ASTNode* body) por create_decl_func_node.
     
 
+    -[ ] para los extern ver donde creaer los nodos.
+
+    - [ ] Mejorar la funcion generate_dot para mostrar la informacion de los nodos.
 
 
-
+    - [ ] mejorar el chequeo de returns..
