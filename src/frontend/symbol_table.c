@@ -4,6 +4,21 @@
 #include <stdlib.h>
 #include <string.h>
 
+void append_symbol(SymbolTable *table, Attributes *info){
+    Symbol* symbol = (Symbol*)malloc(sizeof(Symbol));
+    symbol->info = info;
+    symbol->next = NULL;
+
+    if (table->head == NULL) {
+        table->head = symbol;
+        table->tail = symbol;
+    } else {
+        table->tail->next = symbol;
+        table->tail = symbol;  
+    }
+    table->length++; 
+}
+
 void insert_symbol(SymbolTable* table, Attributes* info) {
     Symbol* symbol = (Symbol*)malloc(sizeof(Symbol));
     symbol->info = info;

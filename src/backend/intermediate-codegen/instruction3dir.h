@@ -1,27 +1,21 @@
 #ifndef INSTRUCTION3DIR_H
 #define INSTRUCTION3DIR_H
 #include "stdlib.h"
-#include "structures/ast.h"
 #include "structures/attributes.h"
 
-#define FOREACH_OPCOD(COD)  \
-    COD(MOV_C)              \
-    COD(MOV_V)              \
-    COD(RETURN_A)           \
-    COD(ADD)              \
-    COD(MUL)             \
-  
+#define FOREACH_OPCOD(COD) \
+    COD(MOV_C)             \
+    COD(MOV_V)             \
+    COD(RETURN_A)          \
+    COD(ADD)               \
+    COD(MUL)
 
 #define GENERATE_ENUM(ENUM) ENUM,
 #define GENERATE_STRING(STRING) #STRING,
 
-typedef enum {
-    FOREACH_OPCOD(GENERATE_ENUM)
-} CodOp;
+typedef enum { FOREACH_OPCOD(GENERATE_ENUM) } CodOp;
 
-static const char *COD_OP_STRING[] = {
-    FOREACH_OPCOD(GENERATE_STRING)
-};
+static const char* COD_OP_STRING[] = {FOREACH_OPCOD(GENERATE_STRING)};
 
 typedef struct Instruction {
     CodOp op_code;

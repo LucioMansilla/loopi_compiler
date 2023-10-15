@@ -1,6 +1,6 @@
 #ifndef EVAL_H
 #define EVAL_H
-#include "ast.h"
+#include "structures/ast.h"
 
 void eval(ASTNode *node);
 

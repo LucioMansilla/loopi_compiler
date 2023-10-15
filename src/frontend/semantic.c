@@ -1,5 +1,5 @@
 #include "semantic.h"
-
+#include "symbol_table.h"
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -57,6 +57,58 @@ bool check_return_existence(ASTNode* node) {
     return false;
 }
 
+
+bool check_param_types(ASTNode* current_actual_node, Symbol* current_formal_param) {
+    check_types(current_actual_node);         
+    return current_actual_node->info->value_type == current_formal_param->info->value_type;
+}
+
+
+bool check_param_actuals(ASTNode* node_list_param_actual, SymbolTable* list_param_formal) {
+
+    if (list_param_formal->length == 0) {
+        return true;
+    }
+   
+    ASTNode* current_actual_node = node_list_param_actual->left;
+    Symbol* current_formal_param = list_param_formal->head;
+
+    if (current_actual_node->info->class_type != CLASS_ACTUAL_PARAM && node_list_param_actual->right == NULL){
+        return check_param_types(current_actual_node, current_formal_param);
+    }
+
+    bool result = false;
+
+    while (!result) {        
+    
+        if (current_actual_node->right->info->class_type != CLASS_ACTUAL_PARAM) {
+            
+            if(!check_param_types(current_actual_node->left, current_formal_param))
+                return false;
+                        
+            current_formal_param = current_formal_param->next;
+               
+            if(!check_param_types(current_actual_node->right, current_formal_param))
+                return false;   
+                 
+            result = true;       
+        }
+
+        if (!result && current_actual_node->right->info->class_type == CLASS_ACTUAL_PARAM) {   
+            
+            if(!check_param_types(current_actual_node->left, current_formal_param))
+                return false;
+            
+            current_formal_param = current_formal_param->next;
+            current_actual_node = current_actual_node->right;
+            }
+        }
+
+    return true;
+
+}
+
+
 ValueType method_type = TYPE_VOID;
 
 void check_types(ASTNode* node) {
@@ -79,6 +131,11 @@ void check_types(ASTNode* node) {
                 check_types(node->left);
             }
 
+            break;
+
+        case CLASS_CALL_FUNCTION:
+            if(!check_param_actuals(node, node->info->parameter_list))
+                printf("Error de tipo en la linea %d: Los parametros no coinciden con los formales.\n", node->info->line);
             break;
 
         case CLASS_BLOCK:
