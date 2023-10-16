@@ -7,8 +7,18 @@
     COD(MOV_C)             \
     COD(MOV_V)             \
     COD(RETURN_A)          \
+    COD(RETURN_EXPR)       \
     COD(ADD)               \
-    COD(MUL)
+    COD(MUL)               \
+    COD(SUB)               \
+    COD(DIV)               \
+    COD(MOD)               \
+    COD(NOT)               \
+    COD(AND)               \
+    COD(OR)                \
+    COD(LESS)              \
+    COD(GREATER)           \
+    COD(EQUALS)            \
 
 #define GENERATE_ENUM(ENUM) ENUM,
 #define GENERATE_STRING(STRING) #STRING,

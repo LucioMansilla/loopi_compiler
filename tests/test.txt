@@ -27,11 +27,15 @@ void main(){
     }   
 }
 
-void inc2(int g){
+int inc(int g){
     int x = 30;
     int z = 30;
     x = 35;
     return x + 1;
+}
+
+int inc(int f ){
+    return 10;
 }
 
 

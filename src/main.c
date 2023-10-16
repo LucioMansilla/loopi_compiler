@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+
 #include "backend/assembly-codegen/assembly-codegen.h"
 #include "backend/intermediate-codegen/pseudo-codegen.h"
 #include "backend/interpreter/eval.h"
@@ -26,13 +27,13 @@ int main(int argc, char* argv[]) {
         yyin = stdin;
     }
 
-   init_syntax_analysis();
-   init_semantic_analysis();
+    init_syntax_analysis();
+    init_semantic_analysis();
     // eval(root);
-   // InstructionList* list = generate_tac(root);
-   // print_instruction_list(list);
+    // InstructionList* list = generate_tac(root);
+    // print_instruction_list(list);
 
-   // generate_gnu_assembly(list);
+    // generate_gnu_assembly(list);
     generate_dot_file(root, "ast.dot");
 }
 
@@ -45,6 +46,10 @@ void init_syntax_analysis() {
 }
 
 void init_semantic_analysis() {
+    if (!has_main(root)) {
+        printf("Error: No se encontro la funcion main.\n");
+        exit(1);
+    }
     check_types(root);
     if (numErrors) {
         printErrors();

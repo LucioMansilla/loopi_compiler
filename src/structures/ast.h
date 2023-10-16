@@ -22,7 +22,7 @@ ASTNode* create_if_node(ASTNode* condition, ASTNode* block, int line);
 ASTNode* create_if_else_node(ASTNode* condition, ASTNode* true_block, ASTNode* false_block, int line);
 ASTNode* create_while_node(ASTNode* condition, ASTNode* block, int line);
 ASTNode* create_block_node(ASTNode* left, ASTNode* right, int line);
-ASTNode* create_decl_func(Attributes* info, ASTNode* body);
+ASTNode* create_decl_func_node(Attributes* info, ASTNode* body);
 ASTNode* create_call_func_node(Attributes* info, ASTNode* expr_list_params, int line);
 ASTNode* create_empty_node(int line);
 ASTNode* create_sentence_list_node(ASTNode* left, ASTNode* right);

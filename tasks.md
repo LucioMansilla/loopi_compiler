@@ -49,7 +49,7 @@
     - [x] En parser.y declaramos una variable global count_params para contar la cantidad de parámetros que tiene un método, pero capaz existe una mejor forma de realizarlo.
         - [ ] por ahora dijo que esa esta bien.. pensar una mejor.
 
-    - [ ] Analizar en el no terminal "expr" en la regla "method_call" del mismo si colocar la lógica del method_call ahí o hacerlo en la propia definicion del method_call.
+    - [x] Analizar en el no terminal "expr" en la regla "method_call" del mismo si colocar la lógica del method_call ahí o hacerlo en la propia definicion del method_call.
     
 
     - [x] Analizar todo el method_decl ya que esta porción de código se repite:
@@ -64,14 +64,21 @@
 
     - [ ] Analizar method_call por ahora manejamos una lisrta de nodos punto y coma (list_call_node), donde si es unitario no es una lista unitaria(mismo tratamiento que sentence_list y declaration_list).
 
-    - [ ] Cambiar el nombre de la función ASTNode* create_decl_func(Attributes* info, ASTNode* body) por create_decl_func_node.
-    
+    - [X] Cambiar el nombre de la función ASTNode* create_decl_func(Attributes* info, ASTNode* body) por create_decl_func_node.
 
-    -[ ] para los extern ver donde creaer los nodos.
+    - [ ] Para los extern ver donde crear los nodos. <--
 
     - [ ] Mejorar la funcion generate_dot para mostrar la informacion de los nodos.
 
+    - [ ] Mejorar el chequeo de returns..
 
-    - [ ] mejorar el chequeo de returns..
+    - [x] Invertir la lista de parametros formales.
 
-    - [] Invertir la lista de parametros formales.
+    - [X] Hacer chequeo de la funcion main.
+        - [X] Testear que funcione.
+        - [ ] No hay arrastre de errores para la función main. añadirlo
+
+    - [x] Encapsular logica repetida en el codigo de 3 direcciones (operandos binarios: como mul,div,equals,etc..)
+        - Lucio.
+
+    - [ ] Hacer testeos para el chequeo de tipos.

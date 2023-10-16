@@ -82,13 +82,13 @@ methods: method_decl methods { $$ = create_methods_decl_list_node($1,$2);}
 method_decl:
     type ID param {
         if(lookup_in_current_level($2) != NULL) 
-            yyerror("Try to declare the method: %s but the identifier already declared", $2);
+            save_error(yylineno,"Try to declare the method: %s but the identifier already declared", $2);
         add_func_to_st($1,$2,$3,yylineno,false);
     } 
     block { 
             close_level();
             Attributes* info = lookup_in_all_levels($2);
-            ASTNode* temp = create_decl_func(info,$5);
+            ASTNode* temp = create_decl_func_node(info,$5);
             $$ = temp;
      }
     | TVOID ID param {
@@ -98,7 +98,7 @@ method_decl:
     } 
     block {  close_level();
             Attributes* info = lookup_in_all_levels($2);
-            ASTNode* temp = create_decl_func(info,$5);
+            ASTNode* temp = create_decl_func_node(info,$5);
             $$ = temp; }
 
     | TVOID ID param EXTERN {
@@ -109,7 +109,7 @@ method_decl:
     } 
     ';' {
             Attributes* info = lookup_in_all_levels($2);
-            ASTNode* temp = create_decl_func(info,NULL);
+            ASTNode* temp = create_decl_func_node(info,NULL);
             $$ = temp;     
           }
 
@@ -119,7 +119,7 @@ method_decl:
         add_func_to_st($1,$2,$3,yylineno,true);
     } 
     ';' {   Attributes* info = lookup_in_all_levels($2);
-            ASTNode* temp = create_decl_func(info,NULL);
+            ASTNode* temp = create_decl_func_node(info,NULL);
             $$ = temp;
     }
 ;
@@ -217,7 +217,7 @@ method_call: ID '(' expr_params ')' {
 
 
 expr_params: expr{count_params++;} ',' expr_params { $$ = create_list_call_node($1,$4); }
-            | expr { $$ = $1; 
+            | expr { $$ = create_list_call_node($1,NULL); 
                     count_params++;}
             ;
 

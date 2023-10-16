@@ -52,7 +52,7 @@ ASTNode* create_list_call_node(ASTNode* left, ASTNode* right) {
     return create_ast_node(attr, left, right);
 }
 
-ASTNode* create_decl_func(Attributes* info, ASTNode* body) {
+ASTNode* create_decl_func_node(Attributes* info, ASTNode* body) {
     return create_ast_node(info, body, NULL);
 }
 

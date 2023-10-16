@@ -4,5 +4,5 @@
 #include "structures/ast.h"
 
 InstructionList* generate_tac(ASTNode* node);
-
-#endif // PSEUDOCODEGEN_H
+void generate_binary_operator(ASTNode* node, CodOp op, InstructionList* list);
+#endif  // PSEUDOCODEGEN_H
