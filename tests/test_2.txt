@@ -2,7 +2,7 @@ Program
 {
 int i = 0;
 int inc(int x,int y){
-    return 10;
+    return;
 }
 
 
@@ -10,9 +10,10 @@ int inc(int x,int y){
 void main(){
     int y = inc(1,2);
 
-    while(y){
+    while(10>false){
         ;
     }
+
 
     return ;
 }

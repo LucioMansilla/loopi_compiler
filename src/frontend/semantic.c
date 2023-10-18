@@ -1,52 +1,12 @@
+#include "semantic.h"
+
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "semantic.h"
+
 #include "errors.h"
 #include "stack.h"
 #include "symbol_table.h"
-
-void check_binary_operation(ASTNode* node) {
-    if (node->left->info->value_type != node->right->info->value_type) {
-        char* left_type = get_type_str(node->left->info->value_type);
-        char* right_type = get_type_str(node->right->info->value_type);
-
-        switch (node->info->class_type) {
-            case CLASS_ASSIGN:
-                save_error(node->info->line, TYPE_ERROR_ASSIGNMENT, left_type, right_type);
-                break;
-
-            case CLASS_DECL:
-                save_error(node->info->line, TYPE_ERROR_DECLARATION, left_type, right_type);
-                break;
-
-            default:
-                save_error(node->info->line, TYPE_ERROR_OPERATION, node->info->tag, left_type, right_type);
-                break;
-        }
-    }
-}
-
-void check_value_type(ValueType left, ValueType right, ASTNode* node) {
-    if (left != right) {
-        char* left_type = get_type_str(left);
-        char* right_type = get_type_str(right);
-
-        switch (node->info->class_type) {
-            case CLASS_ASSIGN:
-                save_error(node->info->line, TYPE_ERROR_ASSIGNMENT, left_type, right_type);
-                break;
-
-            case CLASS_DECL:
-                save_error(node->info->line, TYPE_ERROR_DECLARATION, left_type, right_type);
-                break;
-
-            default:
-                save_error(node->info->line, TYPE_ERROR_OPERATION, node->info->tag, left_type, right_type);
-                break;
-        }
-    }
-}
 
 bool check_return_existence(ASTNode* node) {
     // Esta funcion chequea si existe un return en el arbol.--
@@ -88,10 +48,9 @@ bool check_param_actuals(ASTNode* node_list_param_actual, Symbol* list_param_for
     Symbol* current_formal_param = list_param_formal;
 
     while (current_actual_node != NULL) {
-           if (!check_param_types(current_actual_node->left, current_formal_param)) 
-                return false;
-            current_formal_param = current_formal_param->next;
-            current_actual_node = current_actual_node->right;
+        if (!check_param_types(current_actual_node->left, current_formal_param)) return false;
+        current_formal_param = current_formal_param->next;
+        current_actual_node = current_actual_node->right;
     }
 
     return true;
@@ -100,6 +59,37 @@ bool check_param_actuals(ASTNode* node_list_param_actual, Symbol* list_param_for
 ValueType method_type = TYPE_VOID;
 bool has_main(ASTNode* node) {
     return lookup_in_global_level("main") != NULL;
+}
+
+void check_value_type(ValueType left, ValueType right, ASTNode* node) {
+    if (left != right) {
+        char* left_type = get_type_str(left);
+        char* right_type = get_type_str(right);
+
+        switch (node->info->class_type) {
+            case CLASS_ASSIGN:
+                save_error(node->info->line, TYPE_ERROR_ASSIGNMENT, left_type, right_type);
+                break;
+
+            case CLASS_DECL:
+                save_error(node->info->line, TYPE_ERROR_DECLARATION, left_type, right_type);
+                break;
+
+            case CLASS_MINUS:
+            case CLASS_NOT:
+                save_error(node->info->line, TYPE_ERROR_UNARY, node->info->tag, left_type);
+                break;
+
+            case CLASS_RETURN:
+            case CLASS_RETURN_EXPR:
+                save_error(node->info->line, TYPE_ERROR_RETURN, left_type, right_type);
+                break;
+
+            default:
+                save_error(node->info->line, TYPE_ERROR_OPERATION, node->info->tag, left_type, right_type);
+                break;
+        }
+    }
 }
 
 void check_types(ASTNode* node) {
@@ -118,7 +108,7 @@ void check_types(ASTNode* node) {
             break;
 
         case CLASS_CALL_FUNCTION:
-            if (!check_param_actuals(node->left, node->info->parameter_list->head)){
+            if (!check_param_actuals(node->left, node->info->parameter_list->head)) {
                 printf("Error de tipo en la linea %d: Los parametros no coinciden con los formales.\n", node->info->line);
                 exit(1);
             }
@@ -127,29 +117,23 @@ void check_types(ASTNode* node) {
         case CLASS_DECL:
             node->left->info->value_type = node->info->value_type;
             check_types(node->right);
-            check_binary_operation(node);
+            check_value_type(node->left->info->value_type, node->right->info->value_type, node);
             break;
 
         case CLASS_ASSIGN:
             check_types(node->right);
-            check_binary_operation(node);
+            check_value_type(node->left->info->value_type, node->right->info->value_type, node);
             node->info->value_type = node->left->info->value_type;
             break;
 
         case CLASS_NOT:
             check_types(node->left);
-            if (node->left->info->value_type != TYPE_BOOL){
-                printf("Error de tipo en la linea %d: El operando del not no es booleano.\n", node->info->line);    
-                exit(1);
-            }
+            check_value_type(node->left->info->value_type, TYPE_BOOL, node);
             break;
-        
+
         case CLASS_MINUS:
             check_types(node->left);
-            if (node->left->info->value_type != TYPE_INT){
-                printf("Error de tipo en la linea %d: El operando del menos no es entero.\n", node->info->line);
-                exit(1);
-            }
+            check_value_type(node->left->info->value_type, TYPE_INT, node);
             break;
 
         case CLASS_OR:
@@ -164,50 +148,35 @@ void check_types(ASTNode* node) {
         case CLASS_MUL:
             check_types(node->left);
             check_types(node->right);
-            check_binary_operation(node);
+            check_value_type(node->left->info->value_type, node->right->info->value_type, node);
             break;
 
         case CLASS_RETURN:
-            if (method_type != node->info->value_type) {
-                printf("Error de tipo en la linea %d: El tipo de retorno no coincide con el tipo de la funcion.\n",
-                       node->info->line);
-                exit(1);
-            }
+            check_value_type(method_type, TYPE_VOID, node);
             break;
 
         case CLASS_RETURN_EXPR:
             check_types(node->left);
             node->info->value_type = node->left->info->value_type;
-            if (method_type != node->info->value_type) {
-                printf("Error de tipo con el return en la linea %d: El tipo de retorno no coincide con el tipo de la funcion.\n",
-                       node->info->line);
-                exit(1);
-            }
+            check_value_type(method_type, node->info->value_type, node);
             break;
 
         case CLASS_IF:
-            if (node->left->info->value_type != TYPE_BOOL) {
-                printf("Error de tipo en la linea %d: La condicion del if no es booleana.\n", node->info->line);
-                exit(1);
-            }
+            check_types(node->left);
+            check_value_type(node->left->info->value_type, TYPE_BOOL, node);
             check_types(node->middle);
             break;
 
         case CLASS_IF_THEN_ELSE:
-            if (node->left->info->value_type != TYPE_BOOL) {
-                printf("Error de tipo en la linea %d: La condicion del if no es booleana.\n", node->info->line);
-                exit(1);
-            }
-
+            check_types(node->left);
+            check_value_type(node->left->info->value_type, TYPE_BOOL, node);
             check_types(node->middle);
             check_types(node->right);
             break;
 
         case CLASS_WHILE:
-            if (node->left->info->value_type != TYPE_BOOL) {
-                printf("Error de tipo en la linea %d: La condicion del while no es booleana.\n", node->info->line);
-                exit(1);
-            }
+            check_types(node->left);
+            check_value_type(node->left->info->value_type, TYPE_BOOL, node);
             check_types(node->right);
             break;
 

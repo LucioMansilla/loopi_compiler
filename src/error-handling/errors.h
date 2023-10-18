@@ -7,6 +7,9 @@
 #define TYPE_ERROR_ASSIGNMENT "Type Error in : variable of type %s cannot be assigned a value of type %s"
 #define TYPE_ERROR_DECLARATION "Type Error in : variable declared as %s but initialized with a value of type %s"
 #define TYPE_ERROR_RETURN "Type Error in : function declared as %s but returns a value of type %s"
+#define TYPE_ERROR_MINUS "Type Error in : cannot apply %s to type %s"
+#define TYPE_ERROR_UNARY "Type Error in : cannot apply %s to type %s"
+
 
 typedef struct {
     char* message;
