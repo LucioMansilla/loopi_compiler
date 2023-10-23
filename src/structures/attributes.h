@@ -42,6 +42,7 @@ typedef enum {
     CLASS_IF_THEN_ELSE,
     CLASS_ACTUAL_PARAM,
     CLASS_FORMAL_PARAM,
+    CLASS_LABEL
 } ClassType;
 
 typedef struct Attributes {

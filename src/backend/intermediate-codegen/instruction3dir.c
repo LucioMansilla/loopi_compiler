@@ -16,19 +16,19 @@ void print_instruction(Instruction* instruction) {
     if (instruction->dir1 != NULL) {
         printf("%p ", instruction->dir1);
         if (instruction->dir1->offset) {
-            printf("OFFSET: %d", instruction->dir1->offset);
+            //printf("OFFSET: %d", instruction->dir1->offset);
         }
     }
     if (instruction->dir2 != NULL) {
         printf("%p ", instruction->dir2);
         if (instruction->dir1->offset) {
-            printf("OFFSET: %d", instruction->dir2->offset);
+            //printf("OFFSET: %d", instruction->dir2->offset);
         }
     }
     if (instruction->res != NULL) {
         printf("%p ", instruction->res);
         if (instruction->res->offset) {
-            printf("OFFSET: %d", instruction->res->offset);
+            //printf("OFFSET: %d", instruction->res->offset);
         }
     }
     printf("\n");

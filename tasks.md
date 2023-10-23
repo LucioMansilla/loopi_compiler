@@ -82,3 +82,5 @@
         - Lucio.
 
     - [ ] Hacer testeos para el chequeo de tipos.
+
+    - [ ] mejorar los switchs cases..

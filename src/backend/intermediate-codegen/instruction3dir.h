@@ -19,6 +19,11 @@
     COD(LESS)              \
     COD(GREATER)           \
     COD(EQUALS)            \
+    COD(DECL_FUNC_INIT)    \
+    COD(DECL_FUNC_END)     \
+    COD(LABEL)             \
+    COD(JMP_F)             \
+    COD(JMP)
 
 #define GENERATE_ENUM(ENUM) ENUM,
 #define GENERATE_STRING(STRING) #STRING,
