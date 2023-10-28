@@ -23,7 +23,8 @@
     COD(DECL_FUNC_END)     \
     COD(LABEL)             \
     COD(JMP_F)             \
-    COD(JMP)
+    COD(JMP)               \
+    COD(CALL)
 
 #define GENERATE_ENUM(ENUM) ENUM,
 #define GENERATE_STRING(STRING) #STRING,

@@ -1,0 +1,24 @@
+Program
+{
+
+int f(int x, int y){
+    x = 10
+    y = 20
+    return x+y;
+
+}
+
+int main(){
+    int i = 1;
+    int res = 1;
+    int n = 4;
+    while (i < n){
+       return i;
+       res = res * i;
+       i = i + 1;
+    }
+
+    return res;
+}
+
+} 

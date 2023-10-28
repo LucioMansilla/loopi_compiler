@@ -46,7 +46,7 @@ bool exists_in_symbol_table(void* memory_address) {
     return false;
 }
 
-void prologue(int offset, FILE* fp) {
+/* void prologue(int offset, FILE* fp) {
     fprintf(fp, "    .text\n");
     fprintf(fp, "    .globl main\n");
     fprintf(fp, "    .type main, @function\n");
@@ -61,34 +61,59 @@ void epilogue(int offset, FILE* fp) {
     fprintf(fp, "    popq  %%rbp\n");
     fprintf(fp, "    ret\n");
     fprintf(fp, "    .section	.note.GNU-stack,\"\",@progbits\n");
+} */
+
+void prologue(const char* function_name, int offset, FILE* fp) {
+    fprintf(fp, "    .text\n");
+    fprintf(fp, "    .globl %s\n", function_name);
+    fprintf(fp, "    .type %s, @function\n", function_name);
+    fprintf(fp, "%s:\n", function_name);
+    fprintf(fp, "    pushq %%rbp\n");
+    fprintf(fp, "    movq %%rsp, %%rbp\n");
+    fprintf(fp, "    subq $%d, %%rsp\n", -1 * offset);
 }
+
+void epilogue(FILE* fp) {
+    fprintf(fp, "    leave\n");
+    fprintf(fp, "    ret\n");
+    fprintf(fp, "    .section .note.GNU-stack,\"\",@progbits\n");
+}
+
 void generate_gnu_assembly(InstructionList* list) {
     FILE* fp = fopen("output.s", "w");
     int max_offset = get_next_offset();
 
-    prologue(max_offset, fp);
+    //   prologue(max_offset, fp);
 
     Instruction* current = list->head;
     while (current != NULL) {
         switch (current->op_code) {
+            case DECL_FUNC_INIT:
+                // int offset = calculate_offset_for_function(current->res->tag);
+                prologue(current->res->tag, max_offset, fp);
+                break;
+
+            case DECL_FUNC_END:
+                break;
+
+            case RETURN_EXPR:
+                fprintf(fp, "    movq %d(%%rbp), %%rdi\n", current->res->offset);
+                fprintf(fp, "    movq $%d, %%rsi\n", current->res->value_type);
+                fprintf(fp, "    call print\n");
+                epilogue(fp);
+                break;
+
+            case RETURN_A:
+                epilogue(fp);
+                break;
+
             case MOV_C:
                 fprintf(fp, "    movq $%d, %d(%%rbp)\n", current->dir1->value, current->res->offset);
                 break;
+
             case MOV_V:
                 fprintf(fp, "    movq %d(%%rbp) , %%rax\n", current->dir1->offset);
-                fprintf(fp, "    movq %%eax, %d(%%rbp)\n", current->res->offset);
-                break;
-            case RETURN_A:
-                if (current->res->class_type == CLASS_CONSTANT)
-                    fprintf(fp, "    movq $%d, %%rax\n", current->res->value);
-                else
-                    fprintf(fp, "    movq %d(%%rbp), %%rax\n", current->res->offset);
-
-                fprintf(fp, "    movq %%rax, %%rdi\n");
-                fprintf(fp, "    movq $%d, %%rsi\n", current->res->value_type);
-                fprintf(fp, "    call print\n");
-
-                epilogue(max_offset, fp);
+                fprintf(fp, "    movq %%rax, %d(%%rbp)\n", current->res->offset);
                 break;
 
             case ADD:
@@ -123,6 +148,41 @@ void generate_gnu_assembly(InstructionList* list) {
                 fprintf(fp, "    movq %%rax, %d(%%rbp)\n", current->res->offset);
                 break;
 
+                // case GREATER:
+                // case EQUALS:
+
+            case LESS:
+
+                if (current->dir1->class_type == CLASS_CONSTANT)
+                    fprintf(fp, "    movq $%d, %%rax\n", current->dir1->value);
+                else
+                    fprintf(fp, "    movq %d(%%rbp), %%rax\n", current->dir1->offset);
+
+                if (current->dir2->class_type == CLASS_CONSTANT)
+                    fprintf(fp, "    cmpq $%d, %%rax\n", current->dir2->value);
+                else
+                    fprintf(fp, "    cmpq %d(%%rbp), %%rax\n", current->dir2->offset);
+
+                fprintf(fp, "    setl %%al\n");
+                fprintf(fp, "    movzbq %%al, %%rax\n");
+                fprintf(fp, "    movq %%rax, %d(%%rbp)\n", current->res->offset);
+                break;
+
+            case JMP_F:
+                fprintf(fp, "    testq %%rax, %%rax\n");
+                fprintf(fp, "    jz LABEL_%d\n", current->res->value);
+                break;
+
+            case JMP:
+                fprintf(fp, "    jmp LABEL_%d\n", current->res->value);
+                break;
+            case LABEL:
+                fprintf(fp, "LABEL_%d:\n", current->res->value);
+                break;
+
+            case CALL:
+                fprintf(fp, "    call %s\n", current->res->tag);
+                break;
             default:
                 break;
         }

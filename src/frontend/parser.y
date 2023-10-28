@@ -140,6 +140,7 @@ param_list: type ID {
                     yyerror("Identifier %s already declared", $2);
                 else {
                     Attributes* info = create_attributes($1,0,$2,yylineno,CLASS_FORMAL_PARAM);
+                    info->offset = get_next_offset();
                     append_symbol(table,info);
                 }
                 $$ = table;
@@ -149,6 +150,7 @@ param_list: type ID {
                     yyerror("Identifier %s already declared", $4);
                 else {
                     Attributes* info = create_attributes($3,0,$4,yylineno,CLASS_FORMAL_PARAM);
+                    info->offset = get_next_offset();
                     append_symbol($1,info);
                 }
                 $$ = $1;

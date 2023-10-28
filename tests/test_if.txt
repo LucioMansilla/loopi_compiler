@@ -1,0 +1,15 @@
+Program
+{
+
+int main(){
+    int x = 2;
+    if (3 < 5) then{
+       int a = 0;
+       x = 20;
+    }
+
+    return x;
+}
+
+
+} 

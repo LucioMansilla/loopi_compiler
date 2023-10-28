@@ -9,7 +9,7 @@
 int curr_offset = 0;
 
 int get_next_offset() {
-    curr_offset -= 8;
+    curr_offset -= 16;
     return curr_offset;
 }
 
@@ -133,7 +133,6 @@ void generate_dot(ASTNode* node, FILE* fp) {
         generate_dot(node->right, fp);
         fprintf(fp, "  %d -> %d;\n", currentId, rightId);
     }
-
 }
 
 void generate_dot_file(ASTNode* root, const char* filename) {
@@ -173,6 +172,6 @@ ASTNode* create_empty_node(int line) {
 
 ASTNode* create_block_node(ASTNode* left, ASTNode* right, int line) {
     Attributes* attr = create_attributes(NOT_TYPE, 0, "BLOCK", line, CLASS_BLOCK);
-    
+
     return create_ast_node(attr, left, right);
 }

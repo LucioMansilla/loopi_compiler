@@ -33,7 +33,7 @@ int main(int argc, char* argv[]) {
     InstructionList* list = generate_tac(root);
     print_instruction_list(list);
 
-    // generate_gnu_assembly(list);
+    generate_gnu_assembly(list);
     generate_dot_file(root, "ast.dot");
 }
 

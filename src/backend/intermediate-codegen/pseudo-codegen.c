@@ -1,5 +1,7 @@
 #include "pseudo-codegen.h"
 
+#include "symbol_table.h"
+
 Attributes* generate_label() {
     int next_label = generate_next_int();
     return create_attributes(TYPE_VOID, next_label, "LABEL", 0, CLASS_LABEL);
@@ -10,6 +12,7 @@ int generate_next_int() {
     actual_label++;
     return actual_label;
 }
+
 void generate_pseudo_assembly(ASTNode* node, InstructionList* list) {
     if (node == NULL) return;
 
@@ -25,6 +28,9 @@ void generate_pseudo_assembly(ASTNode* node, InstructionList* list) {
         case CLASS_DECL_FUNCTION:
             Instruction* init_func_instr = create_instruction(DECL_FUNC_INIT, NULL, NULL, node->info);
             append_instruction(list, init_func_instr);
+
+            //SymbolTable* st_temp = node->info->parameter_list;
+
 
             generate_pseudo_assembly(node->left, list);
             Instruction* end_func_instr = create_instruction(DECL_FUNC_END, NULL, NULL, node->info);
@@ -130,7 +136,7 @@ void generate_pseudo_assembly(ASTNode* node, InstructionList* list) {
             append_instruction(list, create_instruction(LABEL, NULL, NULL, l_final));
             // LABEL FINAL
 
-            /*CONDICION 
+            /*CONDICION
             JMPF t2 l2
             -----
             jmp l_final
@@ -139,6 +145,11 @@ void generate_pseudo_assembly(ASTNode* node, InstructionList* list) {
             ----
             label l_final*/
 
+            break;
+
+        case CLASS_CALL_FUNCTION:
+            Instruction* call_instr = create_instruction(CALL, NULL, NULL, node->info);
+            append_instruction(list, call_instr);
             break;
 
         case CLASS_VAR:
