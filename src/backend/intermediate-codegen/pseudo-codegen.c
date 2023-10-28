@@ -31,7 +31,6 @@ void generate_pseudo_assembly(ASTNode* node, InstructionList* list) {
 
             //SymbolTable* st_temp = node->info->parameter_list;
 
-
             generate_pseudo_assembly(node->left, list);
             Instruction* end_func_instr = create_instruction(DECL_FUNC_END, NULL, NULL, node->info);
             append_instruction(list, end_func_instr);

@@ -9,7 +9,9 @@ int yylex(void);
 void yyerror(const char *format,...);
 extern  ASTNode* root; 
 extern int yylineno; 
+extern int curr_offset;
 int count_params = 0;
+
 %}
 
 %union {
@@ -83,12 +85,16 @@ method_decl:
     type ID param {
         if(lookup_in_current_level($2) != NULL) 
             save_error(yylineno,"Try to declare the method: %s but the identifier already declared", $2);
+        printf("Offset of st: %d\n",$3->tail->info->offset);
         add_func_to_st($1,$2,$3,yylineno,false);
+        curr_offset = $3->tail->info->offset;
     } 
     block { 
             close_level();
             Attributes* info = lookup_in_all_levels($2);
             ASTNode* temp = create_decl_func_node(info,$5);
+            temp->info->offset = curr_offset;
+            curr_offset = 0;
             $$ = temp;
      }
     | TVOID ID param {
@@ -130,7 +136,8 @@ block: '{' { open_level(); } declarations sentence_list '}' { close_level();
         | '{' sentence_list '}' { $$ = create_block_node(NULL,$2,yylineno); }
         ;
 
-param: '(' ')' { $$ = create_symbol_table(); }
+param: '(' ')' { 
+    $$ = create_symbol_table(); }
       | '(' param_list ')' { $$ = $2; }
       ;
 

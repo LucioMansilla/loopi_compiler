@@ -4,6 +4,7 @@
 
 #include "ast.h"
 #include "stdio.h"
+#include "symbol_table.h"
 Attributes* create_attributes(ValueType value_type, int value, char* tag, int line, ClassType class_type) {
     Attributes* attr = (Attributes*)malloc(sizeof(Attributes));
     attr->value_type = value_type;
@@ -19,6 +20,7 @@ Attributes* create_attributes(ValueType value_type, int value, char* tag, int li
 Attributes* create_func_attributes(ValueType value_type, SymbolTable* parameter_list, char* name, int line) {
     Attributes* attr = create_attributes(value_type, 0, name, line, CLASS_DECL_FUNCTION);
     attr->parameter_list = parameter_list;
+    attr->offset = parameter_list->tail->info->offset;
     return attr;
 }
 

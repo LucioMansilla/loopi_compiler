@@ -6,6 +6,8 @@
 #include <string.h>
 
 #include "ast.h"
+#include "symbol_table.h"
+
 typedef struct {
     void* memory_address;
     const char* assembly_register;
@@ -16,6 +18,18 @@ SymbolTableEntry symbol_table[MAX_ENTRIES];
 int symbol_table_count = 0;
 
 const char* available_registers[] = {"%ebx", "%ecx", "%edx", "%esi", "%edi", "%r8d", "%r9d"};
+
+const char* registers_param[] = {
+    "%rdi",
+    "%rsi",
+    "%rdx",
+    "%rcx",
+    "%r8",
+    "%r9"
+};
+
+
+
 int available_register_count = 7;
 
 const char* get_or_add_symbol(void* memory_address) {
@@ -90,7 +104,17 @@ void generate_gnu_assembly(InstructionList* list) {
         switch (current->op_code) {
             case DECL_FUNC_INIT:
                 // int offset = calculate_offset_for_function(current->res->tag);
-                prologue(current->res->tag, max_offset, fp);
+                prologue(current->res->tag, current->res->offset, fp);
+                Symbol* param_list = current->res->parameter_list->head;
+                int i=0;
+                while (param_list != NULL)
+                {
+                    fprintf(fp, "    movq %s, %d(%%rbp)\n", registers_param[i], param_list->info->offset);
+                    param_list = param_list->next;
+                    i++;
+                }
+                
+
                 break;
 
             case DECL_FUNC_END:
