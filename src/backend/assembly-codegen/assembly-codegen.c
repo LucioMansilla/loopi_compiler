@@ -19,16 +19,7 @@ int symbol_table_count = 0;
 
 const char* available_registers[] = {"%ebx", "%ecx", "%edx", "%esi", "%edi", "%r8d", "%r9d"};
 
-const char* registers_param[] = {
-    "%rdi",
-    "%rsi",
-    "%rdx",
-    "%rcx",
-    "%r8",
-    "%r9"
-};
-
-
+const char* registers_param[] = {"%rdi", "%rsi", "%rdx", "%rcx", "%r8", "%r9"};
 
 int available_register_count = 7;
 
@@ -90,7 +81,6 @@ void prologue(const char* function_name, int offset, FILE* fp) {
 void epilogue(FILE* fp) {
     fprintf(fp, "    leave\n");
     fprintf(fp, "    ret\n");
-    fprintf(fp, "    .section .note.GNU-stack,\"\",@progbits\n");
 }
 
 void generate_gnu_assembly(InstructionList* list) {
@@ -106,24 +96,34 @@ void generate_gnu_assembly(InstructionList* list) {
                 // int offset = calculate_offset_for_function(current->res->tag);
                 prologue(current->res->tag, current->res->offset, fp);
                 Symbol* param_list = current->res->parameter_list->head;
-                int i=0;
-                while (param_list != NULL)
-                {
+                int i = 0;
+                while (param_list != NULL) {
                     fprintf(fp, "    movq %s, %d(%%rbp)\n", registers_param[i], param_list->info->offset);
                     param_list = param_list->next;
                     i++;
                 }
-                
 
                 break;
 
             case DECL_FUNC_END:
+                fprintf(fp, "    .section .note.GNU-stack,\"\",@progbits\n");
                 break;
 
             case RETURN_EXPR:
-                fprintf(fp, "    movq %d(%%rbp), %%rdi\n", current->res->offset);
+
+                if (current->res->class_type != CLASS_CONSTANT)    
+                    fprintf(fp, "    movq %d(%%rbp), %%rdi\n", current->res->offset);
+                else
+                    fprintf(fp, "    movq $%d, %%rdi\n", current->res->value);
+                
                 fprintf(fp, "    movq $%d, %%rsi\n", current->res->value_type);
                 fprintf(fp, "    call print\n");
+
+                if (current->res->class_type != CLASS_CONSTANT)    
+                    fprintf(fp, "    movq  %d(%%rbp), %%rax\n", current->res->offset);  
+                else
+                    fprintf(fp, "    movq $%d, %%rax\n", current->res->value);
+                         
                 epilogue(fp);
                 break;
 
@@ -140,6 +140,7 @@ void generate_gnu_assembly(InstructionList* list) {
                 fprintf(fp, "    movq %%rax, %d(%%rbp)\n", current->res->offset);
                 break;
 
+            case OR:
             case ADD:
 
                 if (current->dir1->class_type == CLASS_CONSTANT)
@@ -155,6 +156,7 @@ void generate_gnu_assembly(InstructionList* list) {
                 fprintf(fp, "    movq %%rax, %d(%%rbp)\n", current->res->offset);
                 break;
 
+            case AND:
             case MUL:
 
                 fprintf(fp, "    movq $0, %%rax\n");
@@ -171,6 +173,23 @@ void generate_gnu_assembly(InstructionList* list) {
 
                 fprintf(fp, "    movq %%rax, %d(%%rbp)\n", current->res->offset);
                 break;
+
+
+            case SUB:
+
+                if(current->dir1->class_type == CLASS_CONSTANT)
+                    fprintf(fp, "    movq $%d, %%rax\n", current->dir1->value);
+                else
+                    fprintf(fp, "    movq %d(%%rbp), %%rax\n", current->dir1->offset);
+
+                if(current->dir2->class_type == CLASS_CONSTANT)
+                    fprintf(fp, "    subq $%d, %%rax\n", current->dir2->value);
+                else
+                    fprintf(fp, "    subq %d(%%rbp), %%rax\n", current->dir2->offset);
+                
+                fprintf(fp, "    movq %%rax, %d(%%rbp)\n", current->res->offset);
+                break;
+
 
                 // case GREATER:
                 // case EQUALS:
@@ -206,7 +225,16 @@ void generate_gnu_assembly(InstructionList* list) {
 
             case CALL:
                 fprintf(fp, "    call %s\n", current->res->tag);
+                fprintf(fp, "    movq %%rax, %d(%%rbp)\n", current->res->offset);
                 break;
+
+            case LOAD:
+                if (current->res->class_type != CLASS_CONSTANT)
+                    fprintf(fp, "    movq %d(%%rbp),%s \n", current->res->offset, registers_param[current->dir2->value - 1]);
+                else
+                    fprintf(fp, "    movq $%d,%s \n", current->res->value, registers_param[current->dir2->value - 1]);
+                break;
+
             default:
                 break;
         }

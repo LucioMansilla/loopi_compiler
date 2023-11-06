@@ -85,9 +85,10 @@ method_decl:
     type ID param {
         if(lookup_in_current_level($2) != NULL) 
             save_error(yylineno,"Try to declare the method: %s but the identifier already declared", $2);
-        printf("Offset of st: %d\n",$3->tail->info->offset);
+       
         add_func_to_st($1,$2,$3,yylineno,false);
-        curr_offset = $3->tail->info->offset;
+        if($3->length > 0)
+            curr_offset = $3->tail->info->offset;
     } 
     block { 
             close_level();

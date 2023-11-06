@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-void append_symbol(SymbolTable *table, Attributes *info){
+void append_symbol(SymbolTable* table, Attributes* info) {
     Symbol* symbol = (Symbol*)malloc(sizeof(Symbol));
     symbol->info = info;
     symbol->next = NULL;
@@ -14,9 +14,9 @@ void append_symbol(SymbolTable *table, Attributes *info){
         table->tail = symbol;
     } else {
         table->tail->next = symbol;
-        table->tail = symbol;  
+        table->tail = symbol;
     }
-    table->length++; 
+    table->length++;
 }
 
 void insert_symbol(SymbolTable* table, Attributes* info) {
@@ -49,6 +49,7 @@ void print_symbol_table(SymbolTable* table) {
 SymbolTable* create_symbol_table() {
     SymbolTable* table = (SymbolTable*)malloc(sizeof(SymbolTable));
     table->head = NULL;
+    table->tail = NULL;
     table->length = 0;
     return table;
 }

@@ -24,7 +24,8 @@
     COD(LABEL)             \
     COD(JMP_F)             \
     COD(JMP)               \
-    COD(CALL)
+    COD(CALL)              \
+    COD(LOAD)
 
 #define GENERATE_ENUM(ENUM) ENUM,
 #define GENERATE_STRING(STRING) #STRING,

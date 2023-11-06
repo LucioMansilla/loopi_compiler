@@ -29,7 +29,7 @@ void generate_pseudo_assembly(ASTNode* node, InstructionList* list) {
             Instruction* init_func_instr = create_instruction(DECL_FUNC_INIT, NULL, NULL, node->info);
             append_instruction(list, init_func_instr);
 
-            //SymbolTable* st_temp = node->info->parameter_list;
+            // SymbolTable* st_temp = node->info->parameter_list;
 
             generate_pseudo_assembly(node->left, list);
             Instruction* end_func_instr = create_instruction(DECL_FUNC_END, NULL, NULL, node->info);
@@ -147,8 +147,31 @@ void generate_pseudo_assembly(ASTNode* node, InstructionList* list) {
             break;
 
         case CLASS_CALL_FUNCTION:
+            if (node->left == NULL) {
+                Instruction* call_instr = create_instruction(CALL, NULL, NULL, node->info);
+                append_instruction(list, call_instr);
+                break;
+            }
+
+            ASTNode* curr_param_node = node->left;
+            while (curr_param_node != NULL) {
+                generate_pseudo_assembly(curr_param_node->left, list);
+                curr_param_node = curr_param_node->right;
+            }
+
+            curr_param_node = node->left;
+            int i = 1;
+            while (curr_param_node != NULL) {
+                Instruction* param_instr = create_instruction(LOAD, NULL, create_attribute_order(i),curr_param_node->left->info);
+                append_instruction(list, param_instr);
+                curr_param_node = curr_param_node->right;
+                i++;
+            }
+
             Instruction* call_instr = create_instruction(CALL, NULL, NULL, node->info);
-            append_instruction(list, call_instr);
+                append_instruction(list, call_instr);
+
+
             break;
 
         case CLASS_VAR:

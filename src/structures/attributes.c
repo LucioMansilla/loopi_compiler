@@ -17,10 +17,15 @@ Attributes* create_attributes(ValueType value_type, int value, char* tag, int li
     return attr;
 }
 
+Attributes* create_attribute_order(int order){
+    create_attributes(NOT_TYPE, order, "ORDER", 0, CLASS_ACTUAL_PARAM);
+}
+
 Attributes* create_func_attributes(ValueType value_type, SymbolTable* parameter_list, char* name, int line) {
     Attributes* attr = create_attributes(value_type, 0, name, line, CLASS_DECL_FUNCTION);
     attr->parameter_list = parameter_list;
-    attr->offset = parameter_list->tail->info->offset;
+    if (parameter_list->tail != NULL)
+        attr->offset = parameter_list->tail->info->offset;
     return attr;
 }
 

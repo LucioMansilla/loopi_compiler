@@ -23,7 +23,6 @@ v_bool true|false
 <COMMENT>"*/"                       { BEGIN(INITIAL); }
 <COMMENT>.|\n                       { /* Ignora todo dentro de COMMENT */ }
 
-
 {digito}+                           { yylval.int_val = atoi(yytext); return INT; }
 
 "Program"                           { return PROGRAM; }
@@ -56,14 +55,11 @@ v_bool true|false
 
 &&|and                              { return AND; }
 
+[<>!+*;()={}/%-]                     { return *yytext; }
+
 {letra}({letra}|{digito})*          { yylval.id_val = (char *) malloc(yyleng + 1);
                                       strcpy(yylval.id_val, yytext); 
                                       return ID; }
-
-"-"                                 { return TMENOS; }    
-
-[<>!+*;()={}/%]                     { return *yytext; }
-
 " "|\n                                ;
 
 .                                   { yyerror("Invalid Character %s",yytext); }

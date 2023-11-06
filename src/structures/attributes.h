@@ -58,6 +58,7 @@ typedef struct Attributes {
 Attributes* create_attributes(ValueType value_type, int value, char* tag, int line, ClassType class_type);
 Attributes* create_op_attributes(ValueType value_type, char* op, int line, ClassType class_type);
 Attributes* create_func_attributes(ValueType value_type, SymbolTable* parameter_list, char* name, int line);
+Attributes* create_attribute_order(int order);
 
 char* get_type_str(int type);
 #endif  // ATTRIBUTES_H

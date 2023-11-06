@@ -38,7 +38,9 @@ ASTNode* create_ast_node(Attributes* info, ASTNode* left, ASTNode* right) {
 
 ASTNode* create_call_func_node(Attributes* info, ASTNode* expr_list_params, int line) {
     Attributes* new_info = create_attributes(info->value_type, info->value, info->tag, line, CLASS_CALL_FUNCTION);
+    new_info->offset = get_next_offset();
     new_info->parameter_list = info->parameter_list;
+
     return create_ast_node(new_info, expr_list_params, NULL);
 }
 

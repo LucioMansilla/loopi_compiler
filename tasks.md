@@ -204,18 +204,18 @@ En el proyecto dice que las variables deben inicializarse con 0 sin embargo en l
 
 ----------------------------------------------------------------------
 
-- [ ] Cambiar call en 3 direcciones para quede:
+- [X] Cambiar call en 3 direcciones para quede:
         call g T1 
         -Notas:
 
         En Assembler:
-        -return_expr dividir costante y memoria - falta if 
-        -Mover el resultado de eax a T1
-        -Ver en el return como saber saber el nombre de la funcion que retorna.
+        -[] return_expr dividir costante y memoria - falta if 
+        -[] Mover el resultado de eax a T1
+        -[] Ver en el return como saber el nombre de la funcion que retorna.
 
 - [X] Para los parametros generar el offest en el parser antes de añadir cada parametro a la list_param_formal.
 
-- [ ] Cada funcion debe tener su propio offeset, por lo que se debe reniciar en la declaracion de cada funcion.
+- [X] Cada funcion debe tener su propio offeset, por lo que se debe reniciar en la declaracion de cada funcion.
 
 - [ ] En el codigo de 3 direcciones se debe hacer un
   LOAD_PARAM T1  1
