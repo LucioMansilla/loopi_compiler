@@ -39,7 +39,6 @@ int count_params = 0;
 %token WHILE
 %token EQUALS
 %token NOT
-%token TMENOS
 %type <node> expr
 %type <node> valor
 %type <node> sentence_list
@@ -265,7 +264,7 @@ expr: valor { $$ = $1; }
     | method_call {
         $$ = $1;
     }
-    | TMENOS expr %prec TMINUS
+    | '-' expr %prec TMINUS
     {
                 Attributes* attr = create_op_attributes(TYPE_INT,"-",yylineno,CLASS_MINUS);
                 $$ = create_ast_node(attr, $2, NULL);   
