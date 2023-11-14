@@ -1,0 +1,15 @@
+Program
+{
+
+int main(){
+    int x = -4;
+    int res = x - 2;
+    if (-4 == x) then{
+       x = 10;
+    }
+
+    return res;
+}
+
+
+} 

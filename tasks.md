@@ -240,7 +240,7 @@ En el proyecto dice que las variables deben inicializarse con 0 sin embargo en l
 
 - [ ] función tenga 2 epilogos si hace falta. 
 - [ ] añadir soporte para variables globales solo como literales (modificar el parser y generar three_code adecuado), si no se quiere modificar el parser se puede dejar como esta, pero luego en la parte de chequeo de tipos, verificar que lo de la derecha es una constante. 
-- [ ] añadir soporte para >, == , mod, div, neg, - . 
+- [X] añadir soporte para >, == , mod, div, neg, - . 
 - [ ] reporte.
 - [ ] manejo de errores terminar.
 - [ ] añadir tests.

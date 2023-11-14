@@ -51,23 +51,6 @@ bool exists_in_symbol_table(void* memory_address) {
     return false;
 }
 
-/* void prologue(int offset, FILE* fp) {
-    fprintf(fp, "    .text\n");
-    fprintf(fp, "    .globl main\n");
-    fprintf(fp, "    .type main, @function\n");
-    fprintf(fp, "main:\n");
-    fprintf(fp, "    pushq %%rbp\n");
-    fprintf(fp, "    movq %%rsp, %%rbp\n");
-    fprintf(fp, "    subq $%d, %%rsp\n", offset * -1);
-}
-
-void epilogue(int offset, FILE* fp) {
-    fprintf(fp, "    addq $%d, %%rsp\n", offset * -1);
-    fprintf(fp, "    popq  %%rbp\n");
-    fprintf(fp, "    ret\n");
-    fprintf(fp, "    .section	.note.GNU-stack,\"\",@progbits\n");
-} */
-
 void prologue(const char* function_name, int offset, FILE* fp) {
     fprintf(fp, "    .text\n");
     fprintf(fp, "    .globl %s\n", function_name);
@@ -81,6 +64,43 @@ void prologue(const char* function_name, int offset, FILE* fp) {
 void epilogue(FILE* fp) {
     fprintf(fp, "    leave\n");
     fprintf(fp, "    ret\n");
+}
+
+void generate_div(Instruction* current, FILE* fp) {
+    if (current->dir1->class_type == CLASS_CONSTANT)
+        fprintf(fp, "    movq $%d, %%rax\n", current->dir1->value);
+    else
+        fprintf(fp, "    movq %d(%%rbp), %%rax\n", current->dir1->offset);
+
+    fprintf(fp, "    cqto\n");
+
+    if (current->dir2->class_type == CLASS_CONSTANT) {
+        fprintf(fp, "    movq $%d, %%rcx\n", current->dir2->value);
+        fprintf(fp, "    idivq %%rcx\n");
+    } else
+        fprintf(fp, "    idivq %d(%%rbp)\n", current->dir2->offset);
+}
+
+void generate_rel_operator(Attributes* operator_1, Attributes* operator_2, Attributes* result, FILE* fp, CodOp op_code) {
+    if (operator_1->class_type == CLASS_CONSTANT)
+        fprintf(fp, "    movq $%d, %%rax\n", operator_1->value);
+    else
+        fprintf(fp, "    movq %d(%%rbp), %%rax\n", operator_1->offset);
+
+    if (operator_2->class_type == CLASS_CONSTANT)
+        fprintf(fp, "    cmpq $%d, %%rax\n", operator_2->value);
+    else
+        fprintf(fp, "    cmpq %d(%%rbp), %%rax\n", operator_2->offset);
+
+    if (op_code == EQUALS)
+        fprintf(fp, "    sete %%al\n");
+    else if (op_code == GREATER)
+        fprintf(fp, "    setg %%al\n");
+    else if (op_code == LESS)
+        fprintf(fp, "    setl %%al\n");
+
+    fprintf(fp, "    movzbq %%al, %%rax\n");
+    fprintf(fp, "    movq %%rax, %d(%%rbp)\n", result->offset);
 }
 
 void generate_gnu_assembly(InstructionList* list) {
@@ -111,19 +131,19 @@ void generate_gnu_assembly(InstructionList* list) {
 
             case RETURN_EXPR:
 
-                if (current->res->class_type != CLASS_CONSTANT)    
+                if (current->res->class_type != CLASS_CONSTANT)
                     fprintf(fp, "    movq %d(%%rbp), %%rdi\n", current->res->offset);
                 else
                     fprintf(fp, "    movq $%d, %%rdi\n", current->res->value);
-                
+
                 fprintf(fp, "    movq $%d, %%rsi\n", current->res->value_type);
                 fprintf(fp, "    call print\n");
 
-                if (current->res->class_type != CLASS_CONSTANT)    
-                    fprintf(fp, "    movq  %d(%%rbp), %%rax\n", current->res->offset);  
+                if (current->res->class_type != CLASS_CONSTANT)
+                    fprintf(fp, "    movq  %d(%%rbp), %%rax\n", current->res->offset);
                 else
                     fprintf(fp, "    movq $%d, %%rax\n", current->res->value);
-                         
+
                 epilogue(fp);
                 break;
 
@@ -142,7 +162,6 @@ void generate_gnu_assembly(InstructionList* list) {
 
             case OR:
             case ADD:
-
                 if (current->dir1->class_type == CLASS_CONSTANT)
                     fprintf(fp, "    movq $%d, %%rax\n", current->dir1->value);
                 else
@@ -174,27 +193,7 @@ void generate_gnu_assembly(InstructionList* list) {
                 fprintf(fp, "    movq %%rax, %d(%%rbp)\n", current->res->offset);
                 break;
 
-
             case SUB:
-
-                if(current->dir1->class_type == CLASS_CONSTANT)
-                    fprintf(fp, "    movq $%d, %%rax\n", current->dir1->value);
-                else
-                    fprintf(fp, "    movq %d(%%rbp), %%rax\n", current->dir1->offset);
-
-                if(current->dir2->class_type == CLASS_CONSTANT)
-                    fprintf(fp, "    subq $%d, %%rax\n", current->dir2->value);
-                else
-                    fprintf(fp, "    subq %d(%%rbp), %%rax\n", current->dir2->offset);
-                
-                fprintf(fp, "    movq %%rax, %d(%%rbp)\n", current->res->offset);
-                break;
-
-
-                // case GREATER:
-                // case EQUALS:
-
-            case LESS:
 
                 if (current->dir1->class_type == CLASS_CONSTANT)
                     fprintf(fp, "    movq $%d, %%rax\n", current->dir1->value);
@@ -202,11 +201,55 @@ void generate_gnu_assembly(InstructionList* list) {
                     fprintf(fp, "    movq %d(%%rbp), %%rax\n", current->dir1->offset);
 
                 if (current->dir2->class_type == CLASS_CONSTANT)
-                    fprintf(fp, "    cmpq $%d, %%rax\n", current->dir2->value);
+                    fprintf(fp, "    subq $%d, %%rax\n", current->dir2->value);
                 else
-                    fprintf(fp, "    cmpq %d(%%rbp), %%rax\n", current->dir2->offset);
+                    fprintf(fp, "    subq %d(%%rbp), %%rax\n", current->dir2->offset);
 
-                fprintf(fp, "    setl %%al\n");
+                fprintf(fp, "    movq %%rax, %d(%%rbp)\n", current->res->offset);
+                break;
+
+            case DIV:
+                generate_div(current, fp);
+                fprintf(fp, "    movq %%rax, %d(%%rbp)\n", current->res->offset);
+                break;
+
+            case MOD:
+                generate_div(current, fp);
+                fprintf(fp, "    movq %%rdx, %d(%%rbp)\n", current->res->offset);
+                break;
+
+            case MINUS:
+                if (current->dir1->class_type == CLASS_CONSTANT) {
+                    fprintf(fp, "    movq $%d, %%rax\n", current->dir1->value);
+                } else {
+                    fprintf(fp, "    movq %d(%%rbp), %%rax\n", current->dir1->offset);
+                }
+
+                fprintf(fp, "    negq %%rax\n");
+                fprintf(fp, "    movq %%rax, %d(%%rbp)\n", current->res->offset);
+                break;    
+
+            case EQUALS:
+                generate_rel_operator(current->dir1, current->dir2, current->res, fp, current->op_code);
+                break;
+
+            case GREATER:
+                generate_rel_operator(current->dir1, current->dir2, current->res, fp, current->op_code);
+                break;
+
+            case LESS:
+                generate_rel_operator(current->dir1, current->dir2, current->res, fp, current->op_code);
+                break;
+
+            case NOT:
+                if (current->dir1->class_type == CLASS_CONSTANT) {
+                    fprintf(fp, "    movq $%d, %%rax\n", current->dir1->value);
+                } else {
+                    fprintf(fp, "    movq %d(%%rbp), %%rax\n", current->dir1->offset);
+                }
+
+                fprintf(fp, "    cmpq $0, %%rax\n");
+                fprintf(fp, "    sete %%al\n");
                 fprintf(fp, "    movzbq %%al, %%rax\n");
                 fprintf(fp, "    movq %%rax, %d(%%rbp)\n", current->res->offset);
                 break;

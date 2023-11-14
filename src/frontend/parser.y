@@ -186,7 +186,7 @@ sentence_list: sentence sentence_list { $$ = create_sentence_list_node($1,$2);}
 
 sentence: ID '=' expr ';' { 
          Attributes* info = lookup_in_all_levels($1);
-         if (info == NULL) yyerror("Identifier %s not declared", $1);
+         if (info == NULL) save_error(yylineno,"Identifier %s not declared", $1,2);
          $$ = create_assign_node((create_ast_node(info,NULL,NULL)), $3, yylineno);
           }
          | method_call ';' { $$ = $1; }
@@ -235,7 +235,7 @@ expr: valor { $$ = $1; }
     | ID   { 
                Attributes* info = lookup_in_all_levels($1);
                if (info == NULL)
-                    yyerror("Identifier %s not declared", $1);
+                    save_error(yylineno,"Identifier %s not declared", $1,2);
                else
                   $$ = create_ast_node(info,NULL,NULL);  
              }

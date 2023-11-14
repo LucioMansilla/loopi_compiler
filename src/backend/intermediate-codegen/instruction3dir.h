@@ -13,6 +13,7 @@
     COD(SUB)               \
     COD(DIV)               \
     COD(MOD)               \
+    COD(MINUS)             \
     COD(NOT)               \
     COD(AND)               \
     COD(OR)                \

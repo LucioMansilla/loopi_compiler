@@ -60,6 +60,18 @@ void generate_pseudo_assembly(ASTNode* node, InstructionList* list) {
             generate_binary_operator(node, MOD, list);
             break;
 
+        case CLASS_MINUS:
+            generate_pseudo_assembly(node->left, list);
+            Instruction* minus_instr = create_instruction(MINUS, node->left->info, NULL, node->info);
+            append_instruction(list, minus_instr);
+            break;  
+
+        case CLASS_NOT:
+            generate_pseudo_assembly(node->left, list);
+            Instruction* not_instr = create_instruction(NOT, node->left->info, NULL, node->info);
+            append_instruction(list, not_instr);
+            break;      
+
         case CLASS_GREATER:
             generate_binary_operator(node, GREATER, list);
             break;
@@ -94,7 +106,7 @@ void generate_pseudo_assembly(ASTNode* node, InstructionList* list) {
             Instruction* ret_instr = create_instruction(RETURN_A, NULL, NULL, NULL);
             append_instruction(list, ret_instr);
             break;
-
+        
         case CLASS_WHILE:
             Attributes* label = generate_label();
             Instruction* label_first = create_instruction(LABEL, NULL, NULL, label);

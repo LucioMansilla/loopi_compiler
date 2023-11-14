@@ -39,6 +39,8 @@ v_bool true|false
 
 "int"                               { return TINT; }
 
+"-"                                 { return TMENOS; }
+
 ","                                 { return ','; }
 
 "=="                                { return EQUALS; }
