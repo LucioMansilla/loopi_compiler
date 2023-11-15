@@ -12,7 +12,7 @@ jobs:
 
     # Install CMake, Bison, and Flex
     - name: Install dependencies
-      run: sudo apt-get update && sudo apt-get install -y cmake bison flex
+      run: sudo apt-get update && sudo apt-get install -y cmake bison flex libfl-dev
 
     # Cache the build directory to speed up builds
     - name: Cache CMake build
