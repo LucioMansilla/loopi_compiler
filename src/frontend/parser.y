@@ -204,7 +204,7 @@ sentence: ID '=' expr ';' {
 
 method_call: ID '(' expr_params ')' {
                 Attributes* info = lookup_in_global_level($1);
-                if(info == NULL || info->class_type != CLASS_DECL_FUNCTION)
+                if(info == NULL || (info->class_type != CLASS_DECL_FUNCTION && info->class_type != CLASS_EXTERN))
                     yyerror("Method %s not declared", $1);
                 if(info->parameter_list->length  != count_params){
                     printf("CountParams: %d",count_params);
@@ -216,7 +216,7 @@ method_call: ID '(' expr_params ')' {
                 }
            | ID '(' ')' { 
                 Attributes* info = lookup_in_global_level($1);
-                if(info == NULL || info->class_type != CLASS_DECL_FUNCTION)
+                if(info == NULL || (info->class_type != CLASS_DECL_FUNCTION && info->class_type != CLASS_EXTERN))
                     yyerror("Method %s not declared", $1);
                 $$ = create_call_func_node(info,NULL,yylineno);
             }
