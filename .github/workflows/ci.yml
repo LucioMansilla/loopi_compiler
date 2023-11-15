@@ -1,6 +1,6 @@
 name: CI
 
-# Define cuándo se ejecutará el flujo de trabajo
+# Define when the workflow should run
 on: [push]
 
 jobs:
@@ -9,11 +9,24 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Install dependencies
-      run: sudo apt-get install -y gcc make # Asegúrate de incluir aquí todas las dependencias necesarias
 
+    # Install CMake, Bison, and Flex
+    - name: Install dependencies
+      run: sudo apt-get update && sudo apt-get install -y cmake bison flex
+
+    # Cache the build directory to speed up builds
+    - name: Cache CMake build
+      uses: actions/cache@v2
+      with:
+        path: build
+        key: ${{ runner.os }}-cmake-${{ hashFiles('**/CMakeLists.txt', '**/*.l', '**/*.y') }}
+        restore-keys: |
+          ${{ runner.os }}-cmake-
+
+    # Run the build script
     - name: Run build script
       run: ./build.sh
 
+    # Run tests
     - name: Run tests
       run: ./test.sh
