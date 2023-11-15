@@ -1,0 +1,17 @@
+# expected =-14
+
+Program
+{
+
+int main(){
+    int x = -4;
+    int res = x - 2 * 5;
+    if (-4 == 2) then{
+       return x;
+    }
+    
+    return res;
+}
+
+
+} 

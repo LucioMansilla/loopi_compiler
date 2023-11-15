@@ -14,21 +14,21 @@ Instruction* create_instruction(CodOp op_code, Attributes* dir1, Attributes* dir
 void print_instruction(Instruction* instruction) {
     printf("%s ", COD_OP_STRING[instruction->op_code]);
     if (instruction->dir1 != NULL) {
-        printf("%p ", instruction->dir1);
+        printf(" %p", instruction->dir1);
         if (instruction->dir1->offset) {
-            printf("OFFSET: %d", instruction->dir1->offset);
+            printf(": OFFSET(id: %s ,val: %d) |", instruction->dir1->tag, instruction->dir1->offset);
         }
     }
     if (instruction->dir2 != NULL) {
-        printf("%p ", instruction->dir2);
-        if (instruction->dir1->offset) {
-            printf("OFFSET: %d", instruction->dir2->offset);
+        printf(" %p", instruction->dir2);
+        if (instruction->dir2->offset) {
+            printf(": OFFSET(id: %s ,val: %d) | ", instruction->dir2->tag, instruction->dir2->offset);
         }
     }
     if (instruction->res != NULL) {
-        printf("%p ", instruction->res);
+        printf(" %p", instruction->res);
         if (instruction->res->offset) {
-            printf("OFFSET: %d", instruction->res->offset);
+            printf(": OFFSET(id: %s ,val: %d)| ", instruction->res->tag, instruction->res->offset);
         }
     }
     printf("\n");

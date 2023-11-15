@@ -1,11 +1,3 @@
 \contentsline {section}{\numberline {1}Introducción}{1}{}%
-\contentsline {section}{\numberline {2}Requisitos}{2}{}%
-\contentsline {section}{\numberline {3}Tipos de datos}{2}{}%
-\contentsline {section}{\numberline {4}Declaración de Variables}{2}{}%
-\contentsline {section}{\numberline {5}Operaciones}{2}{}%
-\contentsline {section}{\numberline {6}Sentencias}{2}{}%
-\contentsline {subsection}{\numberline {6.1}Asignación}{2}{}%
-\contentsline {subsection}{\numberline {6.2}Retorno}{2}{}%
-\contentsline {section}{\numberline {7}Errores Comunes}{3}{}%
-\contentsline {section}{\numberline {8}Ejemplos}{3}{}%
-\contentsline {subsection}{\numberline {8.1}Programa Simple}{3}{}%
+\contentsline {section}{\numberline {2}Descripción del Lenguaje}{1}{}%
+\contentsline {subsection}{\numberline {2.1}Variables y Tipos de Datos}{1}{}%

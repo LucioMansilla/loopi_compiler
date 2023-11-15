@@ -14,6 +14,7 @@ void print(int x, int type) {
             break;
 
         default:
+            printf("..");
             break;
     }
 }

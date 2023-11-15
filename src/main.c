@@ -34,7 +34,7 @@ int main(int argc, char* argv[]) {
     print_instruction_list(list);
 
     generate_gnu_assembly(list);
-    // generate_dot_file(root, "ast.dot");
+    generate_dot_file(root, "ast.dot");
 }
 
 void init_syntax_analysis() {
@@ -46,6 +46,10 @@ void init_syntax_analysis() {
 }
 
 void init_semantic_analysis() {
+    if (!has_main(root)) {
+        printf("Error: No se encontro la funcion main.\n");
+        exit(1);
+    }
     check_types(root);
     if (numErrors) {
         printErrors();

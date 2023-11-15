@@ -7,10 +7,12 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "stack.h"
 #include "symbol_table.h"
 
 Error errors[MAX_ERRORS];
 int numErrors = 0;
+extern SymbolStack* stack;
 
 void printErrors() {
     for (int i = 0; i < numErrors; i++) {
@@ -34,9 +36,9 @@ void save_error(int lineno, const char* format, ...) {
     va_start(args, format);
 
     const char* var_name = va_arg(args, const char*);
-    SymbolTable* table = va_arg(args, SymbolTable*);
     int error_code = va_arg(args, int);
-    if (error_code == UNDECLARED_VARIABLE_CODE) suggestion = find_closest_match(table, var_name);
+
+    if (error_code == UNDECLARED_CODE) suggestion = find_closest_match(stack->table, var_name);
     va_end(args);
 
     if (suggestion) {
@@ -47,6 +49,8 @@ void save_error(int lineno, const char* format, ...) {
     }
     store_error(lineno, msg);
 }
+
+// void undeclared_error(int lineno,
 
 void store_error(int lineno, const char* msg) {
     if (numErrors < MAX_ERRORS) {

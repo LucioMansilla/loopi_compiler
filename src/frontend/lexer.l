@@ -11,17 +11,37 @@ void yyerror(const char* format, ...);
 
 %option noyywrap
 %option yylineno
+%x COMMENT
 
-letra [a-zA-Z]      
+letra [a-zA-Z_]     
 digito [0-9]
 v_bool true|false
 
 %%
 "#"[^\n]*                           { /* Ignora todo desde '#' hasta el final de la línea */ }
+"/*"                                { BEGIN(COMMENT); }
+<COMMENT>"*/"                       { BEGIN(INITIAL); }
+<COMMENT>.|\n                       { /* Ignora todo dentro de COMMENT */ }
 
 {digito}+                           { yylval.int_val = atoi(yytext); return INT; }
 
+"Program"                           { return PROGRAM; }
+
+"extern"                            { return EXTERN; }
+
+"void"                              { return TVOID; }
+
+"while"                             { return WHILE; }
+
+"then"                              { return THEN; }
+
+"else"                              { return ELSE; }
+
 "int"                               { return TINT; }
+
+","                                 { return ','; }
+
+"=="                                { return EQUALS; }
 
 {v_bool}                            { yylval.int_val = strcmp(yytext, "true") == 0 ? 1 : 0; return BOOL; }
 			  
@@ -35,14 +55,11 @@ v_bool true|false
 
 &&|and                              { return AND; }
 
+[<>!+*;()={}/%-]                     { return *yytext; }
+
 {letra}({letra}|{digito})*          { yylval.id_val = (char *) malloc(yyleng + 1);
                                       strcpy(yylval.id_val, yytext); 
                                       return ID; }
-
-"-"                                 { return TMENOS; }    
-
-[+*;()={}]                          { return *yytext; }
-
 " "|\n                                ;
 
 .                                   { yyerror("Invalid Character %s",yytext); }
