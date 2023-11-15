@@ -18,7 +18,7 @@ digito [0-9]
 v_bool true|false
 
 %%
-"//"[^\n]*                           { /* Ignora todo desde '#' hasta el final de la línea */ }
+"#"[^\n]*                           { /* Ignora todo desde '#' hasta el final de la línea */ }
 "/*"                                { BEGIN(COMMENT); }
 <COMMENT>"*/"                       { BEGIN(INITIAL); }
 <COMMENT>.|\n                       { /* Ignora todo dentro de COMMENT */ }

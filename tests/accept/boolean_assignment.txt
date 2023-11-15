@@ -1,4 +1,0 @@
-# expected = true
-bool x = true;
-bool y = false;
-return x;

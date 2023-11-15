@@ -1,3 +1,4 @@
+# expected =10
 Program {
 
 int sum(int a, int b){

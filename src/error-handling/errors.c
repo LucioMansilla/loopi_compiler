@@ -10,7 +10,6 @@
 #include "stack.h"
 #include "symbol_table.h"
 
-
 Error errors[MAX_ERRORS];
 int numErrors = 0;
 extern SymbolStack* stack;
@@ -39,7 +38,6 @@ void save_error(int lineno, const char* format, ...) {
     const char* var_name = va_arg(args, const char*);
     int error_code = va_arg(args, int);
 
-    print_symbol_table(stack->table);
     if (error_code == UNDECLARED_CODE) suggestion = find_closest_match(stack->table, var_name);
     va_end(args);
 

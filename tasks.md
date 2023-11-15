@@ -238,10 +238,10 @@ En el proyecto dice que las variables deben inicializarse con 0 sin embargo en l
 - [ ] Las variables globales se deben inicializar en 0 en el data y para ejecutar su valor moves todo al main para cambiar el valor de la variable otro enfoque mas simple es semanticamente las variables globales solo pueden ser inicializadas con constantes.
 
 
-- [ ] función tenga 2 epilogos si hace falta. 
+- [x] función tenga 2 epilogos si hace falta. 
 - [ ] añadir soporte para variables globales solo como literales (modificar el parser y generar three_code adecuado), si no se quiere modificar el parser se puede dejar como esta, pero luego en la parte de chequeo de tipos, verificar que lo de la derecha es una constante. 
 - [X] añadir soporte para >, == , mod, div, neg, - . 
 - [ ] reporte.
-- [ ] manejo de errores terminar.
-- [ ] añadir tests.
+- [x] manejo de errores terminar.
+- [x] añadir tests.
 

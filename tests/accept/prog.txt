@@ -1,9 +1,0 @@
-# expected = 5
-bool a = true;
-bool b = false;
-int c = 0;
-if (a * b){ 
-    c = 10;
-    }
-c =5;
-return c;
