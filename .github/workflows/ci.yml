@@ -1,0 +1,19 @@
+name: CI
+
+# Define cuándo se ejecutará el flujo de trabajo
+on: [push]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install dependencies
+      run: sudo apt-get install -y gcc make # Asegúrate de incluir aquí todas las dependencias necesarias
+
+    - name: Run build script
+      run: ./build.sh
+
+    - name: Run tests
+      run: ./test.sh
