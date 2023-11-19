@@ -29,17 +29,33 @@ void generate_pseudo_assembly(ASTNode* node, InstructionList* list) {
             Instruction* init_func_instr = create_instruction(DECL_FUNC_INIT, NULL, NULL, node->info);
             append_instruction(list, init_func_instr);
 
-            // SymbolTable* st_temp = node->info->parameter_list;
-
             generate_pseudo_assembly(node->left, list);
             Instruction* end_func_instr = create_instruction(DECL_FUNC_END, NULL, NULL, node->info);
             append_instruction(list, end_func_instr);
             break;
 
         case CLASS_DECL:
-        case CLASS_ASSIGN:
+            CodOp op_code_decl;
+
+            if(node->left->info->class_type == CLASS_GLOBAL)
+                op_code_decl = GLOBAL;
+            else
+                op_code_decl = node->right->info->class_type == CLASS_CONSTANT ? MOV_C : MOV_V;
+
             generate_pseudo_assembly(node->right, list);
-            CodOp op_code = node->right->info->class_type == CLASS_CONSTANT ? MOV_C : MOV_V;
+            Instruction* declInstr = create_instruction(op_code_decl, node->right->info, NULL, node->left->info);
+            append_instruction(list, declInstr);
+            break;
+
+        case CLASS_ASSIGN:
+            CodOp op_code;
+
+            if(node->left->info->class_type == CLASS_GLOBAL)
+                op_code = MOV_G;
+            else
+                op_code = node->right->info->class_type == CLASS_CONSTANT ? MOV_C : MOV_V;
+
+            generate_pseudo_assembly(node->right, list);
             Instruction* movInstr = create_instruction(op_code, node->right->info, NULL, node->left->info);
             append_instruction(list, movInstr);
             break;
@@ -142,20 +158,9 @@ void generate_pseudo_assembly(ASTNode* node, InstructionList* list) {
             generate_pseudo_assembly(node->middle, list);
             append_instruction(list, create_instruction(JMP, NULL, NULL, l_final));
             append_instruction(list, create_instruction(LABEL, NULL, NULL, l_else));
-            // LABEL ELSE
+
             generate_pseudo_assembly(node->right, list);
             append_instruction(list, create_instruction(LABEL, NULL, NULL, l_final));
-            // LABEL FINAL
-
-            /*CONDICION
-            JMPF t2 l2
-            -----
-            jmp l_final
-
-            label l_else 12
-            ----
-            label l_final*/
-
             break;
 
         case CLASS_CALL_FUNCTION:
@@ -182,8 +187,6 @@ void generate_pseudo_assembly(ASTNode* node, InstructionList* list) {
 
             Instruction* call_instr = create_instruction(CALL, NULL, NULL, node->info);
                 append_instruction(list, call_instr);
-
-
             break;
 
         case CLASS_VAR:

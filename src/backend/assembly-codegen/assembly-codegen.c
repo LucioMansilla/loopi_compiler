@@ -8,6 +8,8 @@
 #include "ast.h"
 #include "symbol_table.h"
 
+char* name_func = NULL;
+
 typedef struct {
     void* memory_address;
     const char* assembly_register;
@@ -103,17 +105,31 @@ void generate_rel_operator(Attributes* operator_1, Attributes* operator_2, Attri
     fprintf(fp, "    movq %%rax, %d(%%rbp)\n", result->offset);
 }
 
+void generate_global(Instruction* current, FILE* fp) {
+    Instruction* aux = current;
+    fprintf(fp, ".data\n");
+
+    while (aux != NULL && aux->op_code == GLOBAL) {
+        fprintf(fp, "%s:\n", aux->res->tag);
+        fprintf(fp, "    .long %d\n", aux->dir1->value);
+        aux = aux->next;
+    }
+}
+
 void generate_gnu_assembly(InstructionList* list) {
     FILE* fp = fopen("output.s", "w");
     int max_offset = get_next_offset();
-
-    //   prologue(max_offset, fp);
-
     Instruction* current = list->head;
+
+    generate_global(current, fp);
+
     while (current != NULL) {
         switch (current->op_code) {
+            case GLOBAL:
+                break;
+
             case DECL_FUNC_INIT:
-                // int offset = calculate_offset_for_function(current->res->tag);
+                name_func = current->res->tag;
                 prologue(current->res->tag, current->res->offset, fp);
                 Symbol* param_list = current->res->parameter_list->head;
                 int i = 0;
@@ -122,16 +138,19 @@ void generate_gnu_assembly(InstructionList* list) {
                     param_list = param_list->next;
                     i++;
                 }
-
                 break;
 
             case DECL_FUNC_END:
+                fprintf(fp, "LABEL_RET_%s:\n", name_func);
+                epilogue(fp);
                 fprintf(fp, "    .section .note.GNU-stack,\"\",@progbits\n");
                 break;
 
             case RETURN_EXPR:
 
-                if (current->res->class_type != CLASS_CONSTANT)
+                if (current->res->class_type == CLASS_GLOBAL)
+                    fprintf(fp, "    movq %s(%%rip), %%rdi\n", current->res->tag);
+                else if (current->res->class_type != CLASS_CONSTANT)
                     fprintf(fp, "    movq %d(%%rbp), %%rdi\n", current->res->offset);
                 else
                     fprintf(fp, "    movq $%d, %%rdi\n", current->res->value);
@@ -139,16 +158,26 @@ void generate_gnu_assembly(InstructionList* list) {
                 fprintf(fp, "    movq $%d, %%rsi\n", current->res->value_type);
                 fprintf(fp, "    call print\n");
 
-                if (current->res->class_type != CLASS_CONSTANT)
+                if (current->res->class_type == CLASS_GLOBAL)
+                    fprintf(fp, "    movq %s(%%rip), %%rax\n", current->res->tag);
+                else if (current->res->class_type != CLASS_CONSTANT)
                     fprintf(fp, "    movq  %d(%%rbp), %%rax\n", current->res->offset);
                 else
                     fprintf(fp, "    movq $%d, %%rax\n", current->res->value);
 
-                epilogue(fp);
+                fprintf(fp, "    jmp LABEL_RET_%s\n", name_func);
                 break;
 
             case RETURN_A:
-                epilogue(fp);
+                fprintf(fp, "    jmp LABEL_RET_%s\n", name_func);
+                break;
+
+            case MOV_G:
+                if (current->dir1->value_type == CLASS_CONSTANT)
+                    fprintf(fp, "    movq $%d, %s(%%rip)\n", current->dir1->value, current->res->tag);
+                else
+                    fprintf(fp, "    movq %d(%%rbp), %%rax\n", current->dir1->offset);
+                    fprintf(fp, "    movq %%rax, %s(%%rip)\n", current->res->tag);
                 break;
 
             case MOV_C:
@@ -162,22 +191,25 @@ void generate_gnu_assembly(InstructionList* list) {
 
             case OR:
             case ADD:
-                if (current->dir1->class_type == CLASS_CONSTANT)
+                if (current->dir1->class_type == CLASS_GLOBAL)
+                    fprintf(fp, "    movq %s(%%rip), %%rax\n", current->dir1->tag);
+                else if (current->dir1->class_type == CLASS_CONSTANT)
                     fprintf(fp, "    movq $%d, %%rax\n", current->dir1->value);
                 else
                     fprintf(fp, "    movq %d(%%rbp), %%rax\n", current->dir1->offset);
 
-                if (current->dir2->class_type == CLASS_CONSTANT)
+                if (current->dir2->class_type == CLASS_GLOBAL)
+                    fprintf(fp, "    addq %s(%%rip), %%rax\n", current->dir2->tag);
+                else if (current->dir2->class_type == CLASS_CONSTANT)
                     fprintf(fp, "    addq $%d, %%rax\n", current->dir2->value);
                 else
                     fprintf(fp, "    addq %d(%%rbp), %%rax\n", current->dir2->offset);
 
-                fprintf(fp, "    movq %%rax, %d(%%rbp)\n", current->res->offset);
+                    fprintf(fp, "    movq %%rax, %d(%%rbp)\n", current->res->offset);
                 break;
-
+         
             case AND:
             case MUL:
-
                 fprintf(fp, "    movq $0, %%rax\n");
 
                 if (current->dir1->class_type == CLASS_CONSTANT)
@@ -194,7 +226,6 @@ void generate_gnu_assembly(InstructionList* list) {
                 break;
 
             case SUB:
-
                 if (current->dir1->class_type == CLASS_CONSTANT)
                     fprintf(fp, "    movq $%d, %%rax\n", current->dir1->value);
                 else
@@ -227,7 +258,7 @@ void generate_gnu_assembly(InstructionList* list) {
 
                 fprintf(fp, "    negq %%rax\n");
                 fprintf(fp, "    movq %%rax, %d(%%rbp)\n", current->res->offset);
-                break;    
+                break;
 
             case EQUALS:
                 generate_rel_operator(current->dir1, current->dir2, current->res, fp, current->op_code);
@@ -247,7 +278,6 @@ void generate_gnu_assembly(InstructionList* list) {
                 } else {
                     fprintf(fp, "    movq %d(%%rbp), %%rax\n", current->dir1->offset);
                 }
-
                 fprintf(fp, "    cmpq $0, %%rax\n");
                 fprintf(fp, "    sete %%al\n");
                 fprintf(fp, "    movzbq %%al, %%rax\n");
@@ -262,6 +292,7 @@ void generate_gnu_assembly(InstructionList* list) {
             case JMP:
                 fprintf(fp, "    jmp LABEL_%d\n", current->res->value);
                 break;
+
             case LABEL:
                 fprintf(fp, "LABEL_%d:\n", current->res->value);
                 break;

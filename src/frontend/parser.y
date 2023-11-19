@@ -11,6 +11,7 @@ extern  ASTNode* root;
 extern int yylineno; 
 extern int curr_offset;
 int count_params = 0;
+bool is_global = true;
 
 %}
 
@@ -130,7 +131,7 @@ method_decl:
     }
 ;
 
-block: '{' { open_level(); } declarations sentence_list '}' { close_level(); 
+block: '{' { open_level(); is_global=false; } declarations sentence_list '}' { close_level(); 
                 $$ = create_block_node($3,$4,yylineno);
 }
         | '{' sentence_list '}' { $$ = create_block_node(NULL,$2,yylineno); }
@@ -173,9 +174,16 @@ var_decl: type ID '=' expr ';' {
             if (info != NULL) 
                 yyerror("Identifier %s already declared", $2);
             else {
-                ASTNode* id = create_id_node($2,yylineno);
-                add_symbol_to_current_level(id->info);
-                $$ = create_single_decl_node($1,id,$4,yylineno);
+                
+                if(is_global){
+                    ASTNode* id = create_id_global($2,yylineno);
+                    add_symbol_to_current_level(id->info);
+                    $$ = create_global_decl_node($1,id,$4,yylineno);
+                }    
+                else{
+                    ASTNode* id = create_id_node($2,yylineno);
+                    add_symbol_to_current_level(id->info);
+                    $$ = create_single_decl_node($1,id,$4,yylineno);}
             }
      }
      ;
@@ -221,9 +229,6 @@ method_call: ID '(' expr_params ')' {
                 $$ = create_call_func_node(info,NULL,yylineno);
             }
            ;
-
-
-
 
 expr_params: expr{count_params++;} ',' expr_params { $$ = create_list_call_node($1,$4); }
             | expr { $$ = create_list_call_node($1,NULL); 

@@ -6,6 +6,7 @@
 #define FOREACH_OPCOD(COD) \
     COD(MOV_C)             \
     COD(MOV_V)             \
+    COD(MOV_G)             \
     COD(RETURN_A)          \
     COD(RETURN_EXPR)       \
     COD(ADD)               \
@@ -26,7 +27,8 @@
     COD(JMP_F)             \
     COD(JMP)               \
     COD(CALL)              \
-    COD(LOAD)
+    COD(LOAD)              \
+    COD(GLOBAL)
 
 #define GENERATE_ENUM(ENUM) ENUM,
 #define GENERATE_STRING(STRING) #STRING,

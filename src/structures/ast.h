@@ -29,6 +29,8 @@ ASTNode* create_sentence_list_node(ASTNode* left, ASTNode* right);
 ASTNode* create_list_decl_node(ASTNode* left, ASTNode* right);
 ASTNode* create_list_call_node(ASTNode* left, ASTNode* right);
 ASTNode* create_methods_decl_list_node(ASTNode* left, ASTNode* right);
+ASTNode* create_global_decl_node(ValueType value_type, ASTNode* left, ASTNode* right, int line);
+ASTNode* create_id_global(char* id, int line);
 
 int get_next_offset();
 void print_ast(ASTNode* node);

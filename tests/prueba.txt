@@ -1,11 +1,16 @@
 Program
 {
 
-int main(){
-    
-    int xasd = 2;
+int y = 5 + 1;
 
-    return xasb;
+int sum(int a, int b){
+    return a + b;
+}
+
+int main(){
+    int x = 0;
+    x = sum(1, 2) + y;
+    return x;
 }
 
 
