@@ -1,32 +1,15 @@
-Program
-{
+Program {
+  void print_bool(bool b) extern;
 
-int i = 0;
-int j = 10;
+  int main() {
+      int a = 0;
+      int b = 1;
 
-int inc(int x, int y, int z){
-    x = 20;
-    return x + 1;
+      print_bool(a == b);
+      print_bool(a == 1);
+      print_bool(2 == b);
+      print_bool(1 == 2);
+
+      return 0;
+    }
 }
-
-int get_int() extern;
-
-void print_int(int i) extern ;
-
-void main(){
-    int y = 0;
-    y = 10;
-    y = 5;
-    y = get_int();
-    if (y == 1 && 1 > 5) then
-        {
-            get_int();
-            return ;
-        }
-    else{
-       return print_int(inc(y,2+i,6%j));
-    }   
-}
-
-
-} 
