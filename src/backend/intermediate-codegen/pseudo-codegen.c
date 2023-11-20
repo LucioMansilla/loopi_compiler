@@ -2,15 +2,15 @@
 
 #include "symbol_table.h"
 
-Attributes* generate_label() {
-    int next_label = generate_next_int();
-    return create_attributes(TYPE_VOID, next_label, "LABEL", 0, CLASS_LABEL);
-}
-
 int actual_label = 0;
 int generate_next_int() {
     actual_label++;
     return actual_label;
+}
+
+Attributes* generate_label() {
+    int next_label = generate_next_int();
+    return create_attributes(TYPE_VOID, next_label, "LABEL", 0, CLASS_LABEL);
 }
 
 void generate_pseudo_assembly(ASTNode* node, InstructionList* list) {
