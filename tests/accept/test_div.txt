@@ -1,4 +1,6 @@
-Program{
+# expected = 4
+Program
+{
 
     int main(){
         int a = 8;

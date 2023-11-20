@@ -1,5 +1,6 @@
 #ifndef ATTRIBUTES_H
 #define ATTRIBUTES_H
+#include <stdbool.h>
 
 typedef struct SymbolTable SymbolTable;
 typedef enum {
@@ -43,7 +44,8 @@ typedef enum {
     CLASS_IF_THEN_ELSE,
     CLASS_ACTUAL_PARAM,
     CLASS_FORMAL_PARAM,
-    CLASS_LABEL
+    CLASS_LABEL,
+    CLASS_EXTERN
 } ClassType;
 
 typedef struct Attributes {
@@ -58,7 +60,7 @@ typedef struct Attributes {
 
 Attributes* create_attributes(ValueType value_type, int value, char* tag, int line, ClassType class_type);
 Attributes* create_op_attributes(ValueType value_type, char* op, int line, ClassType class_type);
-Attributes* create_func_attributes(ValueType value_type, SymbolTable* parameter_list, char* name, int line);
+Attributes* create_func_attributes(ValueType value_type, SymbolTable* parameter_list, char* name, int line, bool isExtern);
 Attributes* create_attribute_order(int order);
 
 char* get_type_str(int type);

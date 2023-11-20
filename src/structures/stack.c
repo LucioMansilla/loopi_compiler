@@ -47,7 +47,7 @@ Attributes* lookup_in_global_level(char* name) {
 }
 
 void add_func_to_st(ValueType type, char* tag, SymbolTable* param_list, int line, bool isExtern) {
-    Attributes* info = create_func_attributes(type, param_list, tag, line);
+    Attributes* info = create_func_attributes(type, param_list, tag, line, isExtern);
     add_symbol_to_current_level(info);
     if (!isExtern) 
         insert_level(param_list);

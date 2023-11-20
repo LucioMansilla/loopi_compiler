@@ -1,3 +1,5 @@
+# expected =12
+
 Program
 {
 

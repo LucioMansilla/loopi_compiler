@@ -156,7 +156,7 @@ void generate_gnu_assembly(InstructionList* list) {
                     fprintf(fp, "    movq $%d, %%rdi\n", current->res->value);
 
                 fprintf(fp, "    movq $%d, %%rsi\n", current->res->value_type);
-                fprintf(fp, "    call print\n");
+                 fprintf(fp, "    call print\n");
 
                 if (current->res->class_type == CLASS_GLOBAL)
                     fprintf(fp, "    movq %s(%%rip), %%rax\n", current->res->tag);

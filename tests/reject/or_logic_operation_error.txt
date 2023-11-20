@@ -1,3 +1,12 @@
-# expected =Type Error in operation || : left-hand side has type int but right-hand side has type bool at line 3
-int x = 1;
-return x || false;
+# expected =Type Error in operation || : left-hand side has type int but right-hand side has type bool at line 6
+Program {
+
+bool main(){
+
+    bool x = 10 || false;
+    return x;
+
+}
+
+
+}

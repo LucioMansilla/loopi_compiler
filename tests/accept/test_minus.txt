@@ -1,3 +1,5 @@
+# expected =-14
+
 Program
 {
 
@@ -9,8 +11,13 @@ int main(){
     if (x == 2) then{
        return x;
     }
+<<<<<<< HEAD:tests/test_minus.txt
     x = x * -1;
     return x;
+=======
+    
+    return res;
+>>>>>>> origin/feature/project:tests/accept/test_minus.txt
 }
 
 } 
