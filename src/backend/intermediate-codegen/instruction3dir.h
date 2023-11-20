@@ -28,7 +28,7 @@
     COD(JMP)               \
     COD(CALL)              \
     COD(LOAD)              \
-    COD(GLOBAL)
+    COD(GLOBL_DECL)
 
 #define GENERATE_ENUM(ENUM) ENUM,
 #define GENERATE_STRING(STRING) #STRING,

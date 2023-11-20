@@ -1,13 +1,14 @@
 {
     "version": "0.2.0",
     "configurations": [
+
         {
             "name": "Debug",
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/build/Compiler",
             "args": [
-                "${workspaceFolder}/tests/accept/test_change_var_global.txt"
+                "${workspaceFolder}/tests/test.txt"
             ],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",

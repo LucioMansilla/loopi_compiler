@@ -212,16 +212,18 @@ sentence: ID '=' expr ';' {
 
 method_call: ID '(' expr_params ')' {
                 Attributes* info = lookup_in_global_level($1);
-                if(info == NULL || (info->class_type != CLASS_DECL_FUNCTION && info->class_type != CLASS_EXTERN))
+                if(info == NULL || (info->class_type != CLASS_DECL_FUNCTION && info->class_type != CLASS_EXTERN)){
                     yyerror("Method %s not declared", $1);
-                if(info->parameter_list->length  != count_params){
-                    printf("CountParams: %d",count_params);
-                    printf("\nst_length: %d",info->parameter_list->length);
-                    yyerror("Error with the params on: %s", $1);
+                }else{
+                    if(info->parameter_list->length  != count_params){
+                        printf("CountParams: %d",count_params);
+                        printf("\nst_length: %d",info->parameter_list->length);
+                        yyerror("Error with the params on: %s", $1);
+                    }
+                    $$ = create_call_func_node(info,$3,yylineno);
                 }
                 count_params = 0;
-                $$ = create_call_func_node(info,$3,yylineno);
-                }
+}
            | ID '(' ')' { 
                 Attributes* info = lookup_in_global_level($1);
                 if(info == NULL || (info->class_type != CLASS_DECL_FUNCTION && info->class_type != CLASS_EXTERN))

@@ -109,7 +109,7 @@ void generate_global(Instruction* current, FILE* fp) {
     Instruction* aux = current;
     fprintf(fp, ".data\n");
 
-    while (aux != NULL && aux->op_code == GLOBAL) {
+    while (aux != NULL && aux->op_code == GLOBL_DECL) {
         fprintf(fp, "%s:\n", aux->res->tag);
         fprintf(fp, "    .long %d\n", aux->dir1->value);
         aux = aux->next;
@@ -125,7 +125,7 @@ void generate_gnu_assembly(InstructionList* list) {
 
     while (current != NULL) {
         switch (current->op_code) {
-            case GLOBAL:
+            case GLOBL_DECL:
                 break;
 
             case DECL_FUNC_INIT:
@@ -148,7 +148,7 @@ void generate_gnu_assembly(InstructionList* list) {
 
             case RETURN_EXPR:
 
-                if (current->res->class_type == CLASS_GLOBAL)
+                if (current->res->class_type == CLASS_GLOBL_VAR)
                     fprintf(fp, "    movq %s(%%rip), %%rdi\n", current->res->tag);
                 else if (current->res->class_type != CLASS_CONSTANT)
                     fprintf(fp, "    movq %d(%%rbp), %%rdi\n", current->res->offset);
@@ -156,9 +156,9 @@ void generate_gnu_assembly(InstructionList* list) {
                     fprintf(fp, "    movq $%d, %%rdi\n", current->res->value);
 
                 fprintf(fp, "    movq $%d, %%rsi\n", current->res->value_type);
-                 fprintf(fp, "    call print\n");
+                fprintf(fp, "    call print\n");
 
-                if (current->res->class_type == CLASS_GLOBAL)
+                if (current->res->class_type == CLASS_GLOBL_VAR)
                     fprintf(fp, "    movq %s(%%rip), %%rax\n", current->res->tag);
                 else if (current->res->class_type != CLASS_CONSTANT)
                     fprintf(fp, "    movq  %d(%%rbp), %%rax\n", current->res->offset);
@@ -173,11 +173,12 @@ void generate_gnu_assembly(InstructionList* list) {
                 break;
 
             case MOV_G:
-                if (current->dir1->class_type == CLASS_CONSTANT){
+                if (current->dir1->class_type == CLASS_CONSTANT) {
                     fprintf(fp, "    movq $%d, %s(%%rip)\n", current->dir1->value, current->res->tag);
-                }else{
+                } else {
                     fprintf(fp, "    movq %d(%%rbp), %%rax\n", current->dir1->offset);
-                    fprintf(fp, "    movq %%rax, %s(%%rip)\n", current->res->tag);}
+                    fprintf(fp, "    movq %%rax, %s(%%rip)\n", current->res->tag);
+                }
                 break;
 
             case MOV_C:
@@ -191,23 +192,23 @@ void generate_gnu_assembly(InstructionList* list) {
 
             case OR:
             case ADD:
-                if (current->dir1->class_type == CLASS_GLOBAL)
+                if (current->dir1->class_type == CLASS_GLOBL_VAR)
                     fprintf(fp, "    movq %s(%%rip), %%rax\n", current->dir1->tag);
                 else if (current->dir1->class_type == CLASS_CONSTANT)
                     fprintf(fp, "    movq $%d, %%rax\n", current->dir1->value);
                 else
                     fprintf(fp, "    movq %d(%%rbp), %%rax\n", current->dir1->offset);
 
-                if (current->dir2->class_type == CLASS_GLOBAL)
+                if (current->dir2->class_type == CLASS_GLOBL_VAR)
                     fprintf(fp, "    addq %s(%%rip), %%rax\n", current->dir2->tag);
                 else if (current->dir2->class_type == CLASS_CONSTANT)
                     fprintf(fp, "    addq $%d, %%rax\n", current->dir2->value);
                 else
                     fprintf(fp, "    addq %d(%%rbp), %%rax\n", current->dir2->offset);
 
-                    fprintf(fp, "    movq %%rax, %d(%%rbp)\n", current->res->offset);
+                fprintf(fp, "    movq %%rax, %d(%%rbp)\n", current->res->offset);
                 break;
-         
+
             case AND:
             case MUL:
                 fprintf(fp, "    movq $0, %%rax\n");

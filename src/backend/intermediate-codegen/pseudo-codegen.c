@@ -37,8 +37,8 @@ void generate_pseudo_assembly(ASTNode* node, InstructionList* list) {
         case CLASS_DECL:
             CodOp op_code_decl;
 
-            if(node->left->info->class_type == CLASS_GLOBAL)
-                op_code_decl = GLOBAL;
+            if (node->left->info->class_type == CLASS_GLOBL_VAR)
+                op_code_decl = GLOBL_DECL;
             else
                 op_code_decl = node->right->info->class_type == CLASS_CONSTANT ? MOV_C : MOV_V;
 
@@ -50,7 +50,7 @@ void generate_pseudo_assembly(ASTNode* node, InstructionList* list) {
         case CLASS_ASSIGN:
             CodOp op_code;
 
-            if(node->left->info->class_type == CLASS_GLOBAL)
+            if (node->left->info->class_type == CLASS_GLOBL_VAR)
                 op_code = MOV_G;
             else
                 op_code = node->right->info->class_type == CLASS_CONSTANT ? MOV_C : MOV_V;
@@ -80,13 +80,13 @@ void generate_pseudo_assembly(ASTNode* node, InstructionList* list) {
             generate_pseudo_assembly(node->left, list);
             Instruction* minus_instr = create_instruction(MINUS, node->left->info, NULL, node->info);
             append_instruction(list, minus_instr);
-            break;  
+            break;
 
         case CLASS_NOT:
             generate_pseudo_assembly(node->left, list);
             Instruction* not_instr = create_instruction(NOT, node->left->info, NULL, node->info);
             append_instruction(list, not_instr);
-            break;      
+            break;
 
         case CLASS_GREATER:
             generate_binary_operator(node, GREATER, list);
@@ -122,7 +122,7 @@ void generate_pseudo_assembly(ASTNode* node, InstructionList* list) {
             Instruction* ret_instr = create_instruction(RETURN_A, NULL, NULL, NULL);
             append_instruction(list, ret_instr);
             break;
-        
+
         case CLASS_WHILE:
             Attributes* label = generate_label();
             Instruction* label_first = create_instruction(LABEL, NULL, NULL, label);
@@ -179,14 +179,14 @@ void generate_pseudo_assembly(ASTNode* node, InstructionList* list) {
             curr_param_node = node->left;
             int i = 1;
             while (curr_param_node != NULL) {
-                Instruction* param_instr = create_instruction(LOAD, NULL, create_attribute_order(i),curr_param_node->left->info);
+                Instruction* param_instr = create_instruction(LOAD, NULL, create_attribute_order(i), curr_param_node->left->info);
                 append_instruction(list, param_instr);
                 curr_param_node = curr_param_node->right;
                 i++;
             }
 
             Instruction* call_instr = create_instruction(CALL, NULL, NULL, node->info);
-                append_instruction(list, call_instr);
+            append_instruction(list, call_instr);
             break;
 
         case CLASS_VAR:

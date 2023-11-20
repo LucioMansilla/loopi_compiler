@@ -100,8 +100,7 @@ void check_types(ASTNode* node) {
             if (node->left != NULL) {  // Un caso donde no es extern.
                 method_type = node->info->value_type;
                 if (!check_return_existence(node->left)) {
-                    printf("Error de tipo en la linea %d: La funcion no tiene un return.\n", node->info->line);
-                    exit(1);
+                    save_error(node->info->line, TYPE_ERROR_NOT_RETURN, node->info->tag);
                 }
                 check_types(node->left);
             }
@@ -116,10 +115,10 @@ void check_types(ASTNode* node) {
 
         case CLASS_DECL:
             node->left->info->value_type = node->info->value_type;
-            if (node->left->info->class_type == CLASS_GLOBAL && node->right->info->class_type != CLASS_CONSTANT) {
+            if (node->left->info->class_type == CLASS_GLOBL_VAR && node->right->info->class_type != CLASS_CONSTANT) {
                 save_error(node->info->line, GLOBL_ERROR_DECLARATION, node->left->info->tag);
             }
-         
+
             check_types(node->right);
             check_value_type(node->left->info->value_type, node->right->info->value_type, node);
             break;

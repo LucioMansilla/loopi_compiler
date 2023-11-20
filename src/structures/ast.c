@@ -1,7 +1,9 @@
 #include "ast.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
 #include "symbol_table.h"
 
 int curr_offset = 0;
@@ -73,7 +75,7 @@ ASTNode* create_id_node(char* id, int line) {
 }
 
 ASTNode* create_id_global(char* id, int line) {
-    Attributes* attr = create_attributes(NOT_TYPE, 0, id, line, CLASS_GLOBAL);
+    Attributes* attr = create_attributes(NOT_TYPE, 0, id, line, CLASS_GLOBL_VAR);
     return create_ast_node(attr, NULL, NULL);
 }
 
@@ -111,11 +113,10 @@ void generate_dot(ASTNode* node, FILE* fp) {
     fprintf(fp, "  %d [label=\"", currentId);
 
     switch (node->info->class_type) {
-
-        case CLASS_GLOBAL:
-            fprintf(fp, "GLOBAL");
+        case CLASS_GLOBL_VAR:
+            fprintf(fp, "GLOBL");
             break;
-        
+
         case CLASS_DECL:
             fprintf(fp, "DECL");
             break;

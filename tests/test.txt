@@ -1,0 +1,9 @@
+Program{
+    void print(int x, int type) extern;
+    int main(){
+        int x = 0;
+        x = 9;
+        print(x,0);
+        return 0;
+    }
+}
