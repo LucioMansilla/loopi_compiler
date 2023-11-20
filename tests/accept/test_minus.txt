@@ -1,17 +1,18 @@
-# expected =-14
+# expected =-4
 
 Program
 {
 
+int x = 0;
+int y = 0;
+
 int main(){
     int x = -4;
-    int res = x - 2 * 5;
-    if (-4 == 2) then{
+    if (x == 2) then{
        return x;
     }
     
-    return res;
+    return x;
 }
-
 
 } 

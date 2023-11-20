@@ -1,9 +1,7 @@
 #include "ast.h"
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
 #include "symbol_table.h"
 
 int curr_offset = 0;
@@ -74,12 +72,22 @@ ASTNode* create_id_node(char* id, int line) {
     return create_ast_node(attr, NULL, NULL);
 }
 
+ASTNode* create_id_global(char* id, int line) {
+    Attributes* attr = create_attributes(NOT_TYPE, 0, id, line, CLASS_GLOBAL);
+    return create_ast_node(attr, NULL, NULL);
+}
+
 ASTNode* create_assign_node(ASTNode* left, ASTNode* right, int line) {
     Attributes* attr = create_attributes(NOT_TYPE, 0, "=", line, CLASS_ASSIGN);
     return create_ast_node(attr, left, right);
 }
 
 ASTNode* create_single_decl_node(ValueType value_type, ASTNode* left, ASTNode* right, int line) {
+    Attributes* attr = create_attributes(value_type, 0, "=", line, CLASS_DECL);
+    return create_ast_node(attr, left, right);
+}
+
+ASTNode* create_global_decl_node(ValueType value_type, ASTNode* left, ASTNode* right, int line) {
     Attributes* attr = create_attributes(value_type, 0, "=", line, CLASS_DECL);
     return create_ast_node(attr, left, right);
 }
@@ -103,6 +111,19 @@ void generate_dot(ASTNode* node, FILE* fp) {
     fprintf(fp, "  %d [label=\"", currentId);
 
     switch (node->info->class_type) {
+
+        case CLASS_GLOBAL:
+            fprintf(fp, "GLOBAL");
+            break;
+        
+        case CLASS_DECL:
+            fprintf(fp, "DECL");
+            break;
+
+        case CLASS_VAR:
+            fprintf(fp, "VAR\\nNombre: %s", node->info->tag);
+            break;
+
         case CLASS_CONSTANT:
             fprintf(fp, "CONSTANT\\nValor: %d\\nTipo: ", node->info->value);
             if (node->info->value_type == TYPE_INT) {

@@ -18,3 +18,7 @@ void print(int x, int type) {
             break;
     }
 }
+
+void print_bool(int x) {
+    printf("%s\n", x ? "true" : "false");
+}
