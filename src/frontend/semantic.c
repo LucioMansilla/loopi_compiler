@@ -90,25 +90,20 @@ void check_types(ASTNode* node) {
         case CLASS_DECL_FUNCTION:
             if (node->left != NULL) {
                 method_type = node->info->value_type;
-                if (!check_return_existence(node->left)) {
-                    save_error(node->info->line, TYPE_ERROR_NOT_RETURN, node->info->tag);
-                }
+                if (!check_return_existence(node->left)) save_error(node->info->line, TYPE_ERROR_NOT_RETURN, node->info->tag);
                 check_types(node->left);
             }
             break;
 
         case CLASS_CALL_FUNCTION:
-            if (!check_param_actuals(node->left, node->info->parameter_list->head)) {
-                printf("Error de tipo en la linea %d: Los parametros no coinciden con los formales.\n", node->info->line);
-                exit(1);
-            }
+            if (!check_param_actuals(node->left, node->info->parameter_list->head))
+                save_error(node->info->line, TYPE_PARAM_ERROR, node->info->tag);
             break;
 
         case CLASS_DECL:
             node->left->info->value_type = node->info->value_type;
-            if (node->left->info->class_type == CLASS_GLOBL_VAR && node->right->info->class_type != CLASS_CONSTANT) {
+            if (node->left->info->class_type == CLASS_GLOBL_VAR && node->right->info->class_type != CLASS_CONSTANT)
                 save_error(node->info->line, GLOBL_ERROR_DECLARATION, node->left->info->tag);
-            }
 
             check_types(node->right);
             check_value_type(node->left->info->value_type, node->right->info->value_type, node);

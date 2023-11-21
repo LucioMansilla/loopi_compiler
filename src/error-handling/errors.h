@@ -12,6 +12,8 @@
 #define TYPE_ERROR_MINUS "Type Error in : cannot apply %s to type %s"
 #define TYPE_ERROR_UNARY "Type Error in : cannot apply %s to type %s"
 #define TYPE_ERROR_NOT_RETURN "Function declared as %s expects a return"
+#define TYPE_PARAM_ERROR "The type of the parameters do not match the formal in the function %s"
+#define MISSING_MAIN "The main function must be declared"
 
 typedef struct {
     char* message;
