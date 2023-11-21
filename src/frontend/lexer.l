@@ -18,10 +18,10 @@ digito [0-9]
 v_bool true|false
 
 %%
-"#"[^\n]*                           { /* Ignora todo desde '#' hasta el final de la línea */ }
+"#"[^\n]*                           { /* Ignore everything from '#' to the end of the line */ }
 "/*"                                { BEGIN(COMMENT); }
 <COMMENT>"*/"                       { BEGIN(INITIAL); }
-<COMMENT>.|\n                       { /* Ignora todo dentro de COMMENT */ }
+<COMMENT>.|\n                       { /* Ignore everything inside COMMENT */ }
 
 {digito}+                           { yylval.int_val = atoi(yytext); return INT; }
 

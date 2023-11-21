@@ -57,7 +57,6 @@ bool is_global = true;
 %type <node> body_program
 %type <type_val> type
 
-
 %left OR
 %left AND
 %nonassoc EQUALS '<' '>' 
@@ -133,19 +132,16 @@ method_decl:
             ASTNode* temp = create_decl_func_node(info,NULL);
             $$ = temp;
     }
-;
-
+      ;
 block: '{' { open_level(); is_global=false; } declarations sentence_list '}' { close_level(); 
                 $$ = create_block_node($3,$4,yylineno);
 }
         | '{' sentence_list '}' { $$ = create_block_node(NULL,$2,yylineno); }
-        ;
-
+      ;
 param: '(' ')' { 
     $$ = create_symbol_table(); }
       | '(' param_list ')' { $$ = $2; }
       ;
-
 param_list: type ID { 
                 SymbolTable* table = create_symbol_table();
                 if(lookup_symbol(table,$2) != NULL) 
@@ -167,12 +163,10 @@ param_list: type ID {
                 }
                 $$ = $1;
            }
-           ;
-
+      ;
 declarations: declarations var_decl { $$ = create_list_decl_node($1,$2); }
              | var_decl { $$ = $1; }
-             ;
-
+      ;
 var_decl: type ID '=' expr ';' { 
             Attributes* info = lookup_in_current_level($2);
             if (info != NULL) 
@@ -193,8 +187,7 @@ var_decl: type ID '=' expr ';' {
      ;
 sentence_list: sentence sentence_list { $$ = create_sentence_list_node($1,$2);}
               | sentence { $$ = $1; }
-              ;
-
+     ;
 sentence: ID '=' expr ';' { 
          Attributes* info = lookup_in_all_levels($1);
          if (info == NULL) save_error(yylineno,"Identifier %s not declared", $1,2);
@@ -212,8 +205,7 @@ sentence: ID '=' expr ';' {
          | WHILE '(' expr ')' block { $$ = create_while_node($3,$5,yylineno); }
          | ';' { $$ = create_empty_node(yylineno); }
          | block { $$ = $1; }
-        ;
-
+     ;
 method_call: ID '(' expr_params ')' {
                 Attributes* info = lookup_in_global_level($1);
                 if(info == NULL || (info->class_type != CLASS_DECL_FUNCTION && info->class_type != CLASS_EXTERN)){
@@ -227,20 +219,18 @@ method_call: ID '(' expr_params ')' {
                     $$ = create_call_func_node(info,$3,yylineno);
                 }
                 count_params = 0;
-}
-           | ID '(' ')' { 
+            }
+            | ID '(' ')' { 
                 Attributes* info = lookup_in_global_level($1);
                 if(info == NULL || (info->class_type != CLASS_DECL_FUNCTION && info->class_type != CLASS_EXTERN))
                     yyerror("Method %s not declared", $1);
                 $$ = create_call_func_node(info,NULL,yylineno);
             }
-           ;
-
+     ;
 expr_params: expr{count_params++;} ',' expr_params { $$ = create_list_call_node($1,$4); }
             | expr { $$ = create_list_call_node($1,NULL); 
                     count_params++;}
             ;
-
 expr: valor { $$ = $1; }
     | ID   { 
                Attributes* info = lookup_in_all_levels($1);
@@ -316,11 +306,9 @@ expr: valor { $$ = $1; }
                 $$ = create_ast_node(attr, $1, $3);
             }
     ;
-
 type: TINT { $$ = TYPE_INT; }
     | TBOOL { $$ = TYPE_BOOL; }
     ;
-
 valor: INT { $$ = create_int_node($1,yylineno); }
       | BOOL { $$ = create_bool_node($1,yylineno); }
     ;

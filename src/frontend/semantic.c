@@ -9,7 +9,6 @@
 #include "symbol_table.h"
 
 bool check_return_existence(ASTNode* node) {
-    // Esta funcion chequea si existe un return en el arbol.--
     if (node == NULL) return false;
 
     switch (node->info->class_type) {
@@ -19,20 +18,12 @@ bool check_return_existence(ASTNode* node) {
             break;
 
         default:
-            // Chequea en el nodo izquierdo
-            if (node->left != NULL && check_return_existence(node->left)) {
-                return true;
-            }
+            if (node->left != NULL && check_return_existence(node->left)) return true;
 
-            // Chequea en el nodo del medio
-            if (node->middle != NULL && check_return_existence(node->middle)) {
-                return true;
-            }
+            if (node->middle != NULL && check_return_existence(node->middle)) return true;
 
-            // Chequea en el nodo derecho
-            if (node->right != NULL && check_return_existence(node->right)) {
-                return true;
-            }
+            if (node->right != NULL && check_return_existence(node->right)) return true;
+
             break;
     }
     return false;
@@ -97,7 +88,7 @@ void check_types(ASTNode* node) {
 
     switch (node->info->class_type) {
         case CLASS_DECL_FUNCTION:
-            if (node->left != NULL) {  // Un caso donde no es extern.
+            if (node->left != NULL) {
                 method_type = node->info->value_type;
                 if (!check_return_existence(node->left)) {
                     save_error(node->info->line, TYPE_ERROR_NOT_RETURN, node->info->tag);

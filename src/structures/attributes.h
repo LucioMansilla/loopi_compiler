@@ -64,4 +64,4 @@ Attributes* create_func_attributes(ValueType value_type, SymbolTable* parameter_
 Attributes* create_attribute_order(int order);
 
 char* get_type_str(int type);
-#endif  // ATTRIBUTES_H
+#endif

@@ -9,7 +9,7 @@ typedef struct Symbol {
 
 typedef struct SymbolTable {
     Symbol *head;
-    Symbol *tail;  // Puntero al último elemento de la lista
+    Symbol *tail;  // Pointer to the last element of the list
     int length;
 } SymbolTable;
 
@@ -18,4 +18,4 @@ void append_symbol(SymbolTable *table, Attributes *info);
 Attributes *lookup_symbol(SymbolTable *table, char *id);
 void print_symbol_table(SymbolTable *table);
 SymbolTable *create_symbol_table();
-#endif  // SYMBOL_TABLE_H
+#endif

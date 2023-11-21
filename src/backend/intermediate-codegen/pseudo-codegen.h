@@ -5,4 +5,4 @@
 
 InstructionList* generate_tac(ASTNode* node);
 void generate_binary_operator(ASTNode* node, CodOp op, InstructionList* list);
-#endif  // PSEUDOCODEGEN_H
+#endif

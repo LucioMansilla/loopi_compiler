@@ -1,5 +1,5 @@
-#include <stdio.h>
 #include <stdbool.h>
+#include <stdio.h>
 
 void print(int x, int type) {
     switch (type) {
@@ -32,8 +32,7 @@ bool equals(int x, int y) {
     return x == y;
 }
 
-
 bool compare_fib_result(int num, int result) {
-    int array[13] = {0,1,1,2,3,5,8,13,21,34,55,89,144};
+    int array[13] = {0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144};
     return array[num] == result;
 }

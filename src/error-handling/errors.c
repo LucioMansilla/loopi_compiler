@@ -50,8 +50,6 @@ void save_error(int lineno, const char* format, ...) {
     store_error(lineno, msg);
 }
 
-// void undeclared_error(int lineno,
-
 void store_error(int lineno, const char* msg) {
     if (numErrors < MAX_ERRORS) {
         errors[numErrors].message = strdup(msg);

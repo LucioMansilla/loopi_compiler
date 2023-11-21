@@ -1,8 +1,10 @@
 #include "assembly-codegen.h"
+
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
 #include "ast.h"
 #include "symbol_table.h"
 
@@ -263,7 +265,7 @@ void generate_gnu_assembly(InstructionList* list) {
                 const char* param = registers_param[current->dir2->value - 1];
 
                 if (current->res->class_type == CLASS_GLOBL_VAR)
-                    fprintf(fp, "    movq %s(%%rip), %s\n", current->res->tag,param);
+                    fprintf(fp, "    movq %s(%%rip), %s\n", current->res->tag, param);
                 else if (current->res->class_type != CLASS_CONSTANT)
                     fprintf(fp, "    movq %d(%%rbp), %s\n", current->res->offset, param);
                 else

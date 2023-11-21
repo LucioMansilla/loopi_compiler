@@ -10,7 +10,7 @@ int multiply(int a, int b){
 
 int main(){
     int y = 3;
-    y = multiply(x, y);
+    x = multiply(x, y);
     return x;
 }
 

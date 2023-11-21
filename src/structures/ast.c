@@ -103,9 +103,7 @@ ASTNode* create_program_node(ASTNode* left, ASTNode* right) {
     return create_ast_node(attr, left, right);
 }
 
-// Utilizaremos esta variable para asignar IDs únicos a los nodos
 int nodeId = 0;
-
 void generate_dot(ASTNode* node, FILE* fp) {
     if (node == NULL) return;
 
@@ -122,11 +120,11 @@ void generate_dot(ASTNode* node, FILE* fp) {
             break;
 
         case CLASS_VAR:
-            fprintf(fp, "VAR\\nNombre: %s", node->info->tag);
+            fprintf(fp, "VAR\\nName: %s", node->info->tag);
             break;
 
         case CLASS_CONSTANT:
-            fprintf(fp, "CONSTANT\\nValor: %d\\nTipo: ", node->info->value);
+            fprintf(fp, "CONSTANT\\nValue: %d\\nType: ", node->info->value);
             if (node->info->value_type == TYPE_INT) {
                 fprintf(fp, "int");
             } else if (node->info->value_type == TYPE_BOOL) {
@@ -196,6 +194,5 @@ ASTNode* create_empty_node(int line) {
 
 ASTNode* create_block_node(ASTNode* left, ASTNode* right, int line) {
     Attributes* attr = create_attributes(NOT_TYPE, 0, "BLOCK", line, CLASS_BLOCK);
-
     return create_ast_node(attr, left, right);
 }

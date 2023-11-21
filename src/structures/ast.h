@@ -36,4 +36,4 @@ int get_next_offset();
 void print_ast(ASTNode* node);
 void generate_dot_file(ASTNode* root, const char* filename);
 
-#endif  // AST_H
+#endif
