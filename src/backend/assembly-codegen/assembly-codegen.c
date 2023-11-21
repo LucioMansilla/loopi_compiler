@@ -133,6 +133,9 @@ void generate_gnu_assembly(InstructionList* list) {
             case MOV_G:
                 if (current->dir1->class_type == CLASS_CONSTANT) {
                     fprintf(fp, "    movq $%d, %s(%%rip)\n", current->dir1->value, current->res->tag);
+                } else if (current->dir1->class_type == CLASS_GLOBL_VAR) {
+                    fprintf(fp, "    movq %s(%%rip), %%rax\n", current->dir1->tag);
+                    fprintf(fp, "    movq %%rax, %s(%%rip)\n", current->res->tag);
                 } else {
                     fprintf(fp, "    movq %d(%%rbp), %%rax\n", current->dir1->offset);
                     fprintf(fp, "    movq %%rax, %s(%%rip)\n", current->res->tag);
