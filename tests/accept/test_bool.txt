@@ -6,6 +6,4 @@ bool main(){
     bool x = 3 < 5;
     return x;
 }
-
-
 } 

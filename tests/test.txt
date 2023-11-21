@@ -1,9 +1,17 @@
-Program{
-    void print(int x, int type) extern;
-    int main(){
-        int x = 0;
-        x = 9;
-        print(x,0);
-        return 0;
-    }
+# expected = true
+Program
+{
+int x = 5;
+
+int multiply(int a, int b){
+    x = 50;
+    return a * b;
 }
+
+int main(){
+    int y = 3;
+    y = multiply(x, y);
+    return x;
+}
+
+} 

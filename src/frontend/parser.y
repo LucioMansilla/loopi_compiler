@@ -102,10 +102,14 @@ method_decl:
         if(lookup_in_current_level($2) != NULL) 
             yyerror("Try to declare the method: %s but the identifier already declared", $2);
         add_func_to_st(TYPE_VOID,$2,$3,yylineno,false);
+        if($3->length > 0)
+            curr_offset = $3->tail->info->offset;
     } 
     block {  close_level();
             Attributes* info = lookup_in_all_levels($2);
             ASTNode* temp = create_decl_func_node(info,$5);
+            temp->info->offset = curr_offset;
+            curr_offset = 0;
             $$ = temp; }
 
     | TVOID ID param EXTERN {

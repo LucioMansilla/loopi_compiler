@@ -1,57 +1,13 @@
 #include "assembly-codegen.h"
-
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
 #include "ast.h"
 #include "symbol_table.h"
 
 char* name_func = NULL;
-
-typedef struct {
-    void* memory_address;
-    const char* assembly_register;
-} SymbolTableEntry;
-
-#define MAX_ENTRIES 7
-SymbolTableEntry symbol_table[MAX_ENTRIES];
-int symbol_table_count = 0;
-
-const char* available_registers[] = {"%ebx", "%ecx", "%edx", "%esi", "%edi", "%r8d", "%r9d"};
-
 const char* registers_param[] = {"%rdi", "%rsi", "%rdx", "%rcx", "%r8", "%r9"};
-
-int available_register_count = 7;
-
-const char* get_or_add_symbol(void* memory_address) {
-    for (int i = 0; i < symbol_table_count; ++i) {
-        if (symbol_table[i].memory_address == memory_address) {
-            return symbol_table[i].assembly_register;
-        }
-    }
-
-    if (symbol_table_count >= MAX_ENTRIES) {
-        exit(1);
-    }
-
-    const char* new_register = available_registers[symbol_table_count];
-    symbol_table[symbol_table_count].memory_address = memory_address;
-    symbol_table[symbol_table_count].assembly_register = new_register;
-    symbol_table_count++;
-
-    return new_register;
-}
-
-bool exists_in_symbol_table(void* memory_address) {
-    for (int i = 0; i < symbol_table_count; ++i) {
-        if (symbol_table[i].memory_address == memory_address) {
-            return true;
-        }
-    }
-    return false;
-}
 
 void prologue(const char* function_name, int offset, FILE* fp) {
     fprintf(fp, "    .text\n");
@@ -118,7 +74,6 @@ void generate_global(Instruction* current, FILE* fp) {
 
 void generate_gnu_assembly(InstructionList* list) {
     FILE* fp = fopen("output.s", "w");
-    int max_offset = get_next_offset();
     Instruction* current = list->head;
 
     generate_global(current, fp);
@@ -147,16 +102,17 @@ void generate_gnu_assembly(InstructionList* list) {
                 break;
 
             case RETURN_EXPR:
+                if (strcmp(name_func, "main") == 0) {
+                    if (current->res->class_type == CLASS_GLOBL_VAR)
+                        fprintf(fp, "    movq %s(%%rip), %%rdi\n", current->res->tag);
+                    else if (current->res->class_type != CLASS_CONSTANT)
+                        fprintf(fp, "    movq %d(%%rbp), %%rdi\n", current->res->offset);
+                    else
+                        fprintf(fp, "    movq $%d, %%rdi\n", current->res->value);
 
-                if (current->res->class_type == CLASS_GLOBL_VAR)
-                    fprintf(fp, "    movq %s(%%rip), %%rdi\n", current->res->tag);
-                else if (current->res->class_type != CLASS_CONSTANT)
-                    fprintf(fp, "    movq %d(%%rbp), %%rdi\n", current->res->offset);
-                else
-                    fprintf(fp, "    movq $%d, %%rdi\n", current->res->value);
-
-                fprintf(fp, "    movq $%d, %%rsi\n", current->res->value_type);
-                fprintf(fp, "    call print\n");
+                    fprintf(fp, "    movq $%d, %%rsi\n", current->res->value_type);
+                    fprintf(fp, "    call print\n");
+                }
 
                 if (current->res->class_type == CLASS_GLOBL_VAR)
                     fprintf(fp, "    movq %s(%%rip), %%rax\n", current->res->tag);
@@ -304,10 +260,15 @@ void generate_gnu_assembly(InstructionList* list) {
                 break;
 
             case LOAD:
-                if (current->res->class_type != CLASS_CONSTANT)
-                    fprintf(fp, "    movq %d(%%rbp),%s \n", current->res->offset, registers_param[current->dir2->value - 1]);
+                const char* param = registers_param[current->dir2->value - 1];
+
+                if (current->res->class_type == CLASS_GLOBL_VAR)
+                    fprintf(fp, "    movq %s(%%rip), %s\n", current->res->tag,param);
+                else if (current->res->class_type != CLASS_CONSTANT)
+                    fprintf(fp, "    movq %d(%%rbp), %s\n", current->res->offset, param);
                 else
-                    fprintf(fp, "    movq $%d,%s \n", current->res->value, registers_param[current->dir2->value - 1]);
+                    fprintf(fp, "    movq $%d, %s\n", current->res->value, param);
+
                 break;
 
             default:
