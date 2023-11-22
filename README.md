@@ -1,62 +1,67 @@
-# Compilador para el Lenguaje LP
+# LP Language Compiler
 
-Este proyecto consiste en un compilador desarrollado en C como trabajo práctico para la materia "Taller de Diseño de Software". El compilador toma como entrada programas escritos en el Lenguaje LP y genera codigo ensamblador para la arquitectura x86-64.
+This project consists of a compiler developed in C as a practical work for the "Software Design Workshop" course. The compiler takes as input programs written in the LP Language and generates x86-64 assembly code.
 
-## Estructura del Proyecto
+## Project Structure
 
-El proyecto tiene la siguiente estructura de carpetas:
+The project has the following folder structure:
 
-- **src/**: Contiene el codigo fuente del compilador dividido por modulos
-  - **backend/**: Generación de codigo intermedio y assembly.
-  - **error-handling/**: Manejador de errores
-  - **frontend/**: Analisis lexico, sintactico y semantico
-  - **structures/**: Estructuras de datos utilizadas
-- **tests/**: Suite de pruebas unitarias
-  - **accept/**: Casos validos que debe aceptar
-  - **reject/**: Casos invalidos que debe rechazar
-- **build.sh**: Script para construir el compilador
-- **test.sh**: Script para ejecutar la test suite.
-- **loopi.sh**: Script para compilar, linkear y ejecutar programas .lp
-- **report/**: Documentación y reporte del proyecto
+- **src/**: Source code of the compiler divided into modules
+  - **backend/**: Intermediate and assembly code generation 
+  - **error-handling/**: Error handler
+  - **frontend/**: Lexical, syntactic and semantic analysis
+  - **structures/**: Data structures used
+- **tests/**: Test suite
+  - **accept/**: Valid test cases that should be accepted
+  - **reject/**: Invalid test cases that should be rejected   
+- **build.sh**: Script to build the compiler  
+- **test.sh**: Script to execute the test suite
+- **loopi.sh**: Script to compile, link and execute .lp programs
+- **report/**: Documentation and project report   
 
-## Dependencias
+## Dependencies   
 
-Para construir y ejecutar el compilador se requiere:
+The following dependencies are required to build and execute the compiler:
 
 - [CMake >= 3.10](https://cmake.org/)
-- Compilador C (Recomendado GCC)
-- En algunos casos g++
+- C Compiler (GCC recommended)  
+- In some cases g++
 
-## Compilación y Ejecución
+## Compilation and Execution
 
-### Para construir el compilador ejecutar:
+### To build the compiler execute:   
+
 ```bash
-./build.sh
+./build.sh  
 ```
-Esto generará el ejecutable **Compiler** en la carpeta **build/** que podrá ser utilizado para compilar programas .lp
 
+This will generate the **Compiler** executable inside **build/** that can be used to compile .lp programs.
 
-### Para ejecutar todas las pruebas:
-```bash
+### To execute the test suite:  
+
+```bash   
 ./test.sh
-```
+```  
 
-Cada caso de prueba será informado por la salida estandar stderr.
+Test results will be informed via standard error output.
 
-### Para compilar y ejecutar un programa .lp:
+### To compile and execute a .lp program:
+
 ```bash
-./loopi.sh ruta/al/programa.lp
-```
-Por ejemplo para ejecutar el programa **tests/accept/test_fib.lp**:
-```bash
-./loopi.sh tests/accept/test_fib.lp
+./loopi.sh path/to/program.lp  
 ```
 
-## Documentación
+For example, to execute **tests/accept/test_fib.lp**:
 
-En la carpeta **report/** se encuentra un informe detallado del desarrollo del proyecto, configuraciones, toma de decisiones relevantes y limitaciones.
+```bash   
+./loopi.sh tests/accept/test_fib.lp   
+```
 
-## Autores
+## Documentation   
+
+The **report/** folder contains a detailed report of the project development, configurations, relevant decisions and limitations.  
+
+## Authors   
 
 - Brenda Dichiara
 - Lucio Mansilla
