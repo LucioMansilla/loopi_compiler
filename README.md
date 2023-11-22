@@ -1,4 +1,4 @@
-# LP Language Compiler
+# LooPi Language - TDS
 
 This project consists of a compiler developed in C as a practical work for the "Software Design Workshop" course. The compiler takes as input programs written in the LP Language and generates x86-64 assembly code.
 
