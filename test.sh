@@ -5,7 +5,7 @@
 failed=0
 
 # Loop through all test files in both directories
-for example in tests/accept/*.txt tests/reject/*.txt; do
+for example in tests/accept/*.lp tests/reject/*.lp; do
 
     # Extract the expected value from the first line of the test file
     expected_output=$(grep '^# expected =' $example | cut -d'=' -f2- | sed 's/^ *//;s/ *$//')
